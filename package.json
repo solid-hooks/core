@@ -1,0 +1,73 @@
+{
+  "name": "@solid-hooks/core",
+  "type": "module",
+  "version": "0.0.3",
+  "description": "useful hooks for solid.js",
+  "author": "subframe7536",
+  "license": "MIT",
+  "repository": "https://github.com/solid-hooks/core",
+  "bugs": "https://github.com/solid-hooks/core/issue",
+  "keywords": [
+    "typescript"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.cjs",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "tsc --noEmit && eslint . --max-warnings 0",
+    "format": "eslint . --fix",
+    "build": "tsup",
+    "release": "pnpm lint && pnpm test && pnpm run build && bumpp --all && npm publish",
+    "test": "vitest --run"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.7 || ^1.8"
+  },
+  "dependencies": {
+    "@solid-primitives/event-listener": "^2.3.0",
+    "@solid-primitives/utils": "^6.2.1",
+    "@subframe7536/type-utils": "^0.1.4",
+    "object-path-access": "^3.0.0"
+  },
+  "devDependencies": {
+    "@subframe7536/eslint-config": "^0.5.9",
+    "@types/node": "^20.11.0",
+    "bumpp": "^9.2.1",
+    "eslint": "^8.56.0",
+    "eslint-plugin-solid": "^0.13.1",
+    "jsdom": "^23.2.0",
+    "solid-js": "^1.8.11",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11",
+    "vite-plugin-solid": "^2.8.0",
+    "vitest": "^1.2.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "array-includes": "npm:@nolyfill/array-includes@latest",
+      "array.prototype.flat": "npm:@nolyfill/array.prototype.flat@latest",
+      "has": "npm:@nolyfill/has@latest",
+      "object.assign": "npm:@nolyfill/object.assign@latest",
+      "object.values": "npm:@nolyfill/object.values@latest"
+    }
+  }
+}
