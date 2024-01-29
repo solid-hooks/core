@@ -9,13 +9,13 @@ useful hooks for solid.js
 ## Install
 
 ```shell
-npm i @solid-hooks/hooks
+npm i @solid-hooks/core
 ```
 ```shell
-yarn add @solid-hooks/hooks
+yarn add @solid-hooks/core
 ```
 ```shell
-pnpm add @solid-hooks/hooks
+pnpm add @solid-hooks/core
 ```
 
 ## Usage
