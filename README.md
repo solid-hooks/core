@@ -42,6 +42,31 @@ const [source, setMediaSource, cleanupSource] = createObjectURL(new MediaSource(
 const [url, setURL, cleanupURL] = createObjectURL(new Uint8Array(8), { type: 'image/png' })
 ```
 
+### `createDirective`
+
+manually create directive
+
+```tsx
+import { createDirective } from '@solid-hooks/hooks'
+import { createRenderEffect, createSignal } from 'solid-js'
+
+function TextInput() {
+  const [text, setText] = createSignal('')
+  const model = createDirective((ref: Element, initialValue: string) => {
+    (ref as HTMLInputElement).value = value
+    setText(initialValue)
+    createRenderEffect(() => ((ref as HTMLInputElement).value = text()))
+    ref.addEventListener('input', e => setText((e.target as HTMLInputElement | null)?.value ?? ''))
+  })
+  return (
+    <>
+      <input type="text" ref={model('test')} />
+      <div>{text()}</div>
+    </>
+  )
+}
+```
+
 ### `watch`
 
 filterable and pausable `createEffect(on())` like, defer by default
