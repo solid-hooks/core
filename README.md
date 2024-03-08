@@ -44,28 +44,29 @@ const [url, setURL, cleanupURL] = createObjectURL(new Uint8Array(8), { type: 'im
 
 ### `createDirective`
 
-manually create directive
+another way to create directive
 
 ```tsx
 import { createDirective } from '@solid-hooks/hooks'
-import { createRenderEffect, createSignal } from 'solid-js'
+import { type Accessor, type Setter, createRenderEffect, createSignal } from 'solid-js'
+
+const model = createDirective((ref: Element, getter: Accessor<string>, setter: Setter<string>) => {
+  createRenderEffect(() => ((ref as HTMLInputElement).value = getter()))
+  ref.addEventListener('input', e => setter((e.target as HTMLInputElement | null)?.value ?? ''))
+})
 
 function TextInput() {
   const [text, setText] = createSignal('')
-  const model = createDirective((ref: Element, initialValue: string) => {
-    (ref as HTMLInputElement).value = value
-    setText(initialValue)
-    createRenderEffect(() => ((ref as HTMLInputElement).value = text()))
-    ref.addEventListener('input', e => setText((e.target as HTMLInputElement | null)?.value ?? ''))
-  })
   return (
     <>
-      <input type="text" ref={model('test')} />
+      <input type="text" ref={model(text, setText)} />
       <div>{text()}</div>
     </>
   )
 }
 ```
+
+reference from [voby](https://github.com/vobyjs/voby?tab=readme-ov-file#createdirective)
 
 ### `watch`
 
