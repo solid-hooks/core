@@ -10,7 +10,7 @@ type App = {
    * @param provider provider to add to the list
    * @param options provider options
    */
-  use<Props>(provider: Component<FlowProps<Props>>, options?: Props): App
+  use: <Props>(provider: Component<FlowProps<Props>>, options?: Props) => App
 
   /**
    * merges all the Providers and then uses the `render` function
@@ -18,7 +18,7 @@ type App = {
    *
    * @param domElement HTML Element or selector
    */
-  mount(domElement: string): ReturnType<typeof render>
+  mount: (domElement: string) => ReturnType<typeof render>
 }
 
 type Provider<Props extends Record<string, any>> = {
