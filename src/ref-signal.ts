@@ -32,7 +32,6 @@ export function createRefSignal<T extends object, P extends Path<T>>(
       : () => equals
 
   return [
-
     () => {
       track()
       return get()
