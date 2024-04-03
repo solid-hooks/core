@@ -139,6 +139,26 @@ function baseWatch<T>(
  * @param deps Accessor that need to be watch
  * @param fn {@link WatchCallback callback function}
  * @param options watch options
+ * @example
+ * ```ts
+ * import { throttle } from '@solid-primitives/scheduled'
+ * import { watch } from '@solid-hooks/hooks'
+ *
+ * const [count, setCount] = createSignal(0)
+ * const { pause, resume, isWatching, callTimes, ignoreUpdate } = watch(
+ *   count,
+ *   (value, oldValue, callTimes) => {
+ *     console.log(value, oldValue, callTimes)
+ *     const cleanup = () => {}
+ *     return cleanup
+ *   },
+ *   {
+ *     eventFilter: fn => throttle(fn, 100),
+ *     count: 5,
+ *     defer: false // true by default
+ *   }
+ * )
+ * ```
  */
 export function watch<T>(
   deps: Accessor<T> | AccessorArray<T>,

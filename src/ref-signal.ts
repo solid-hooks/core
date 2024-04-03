@@ -8,6 +8,13 @@ import type { AnyFunction } from '@subframe7536/type-utils'
  * @param data source object
  * @param path object access path, support array access
  * @param options signal options
+ * @example
+ * ```ts
+ * import { createRefSignal } from '@solid-hooks/hooks'
+ *
+ * const audio = new Audio()
+ * const [time, setCurrentTime] = createRefSignal(audio, 'currentTime')
+ * ```
  */
 export function createRefSignal<T extends object, P extends Path<T>>(
   data: T,

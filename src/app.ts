@@ -49,6 +49,32 @@ function mergeProviders({ app, props = {}, providers }: MergeParams) {
  * Vue's `createApp` like initialization
  * @param app App component
  * @param props App params
+ * @example
+ * ```ts
+ * import { createApp } from '@solid-hooks/hooks'
+ * import App from './App'
+ *
+ * createApp(App)
+ *   .use(RouterProvider, { props })
+ *   .use(I18nProvider)
+ *   .use(GlobalStoreProvider)
+ *   .mount('#app')
+ * ```
+ *
+ * is equal to:
+ *
+ * ```tsx
+ * render(
+ *   <RouterProvider props={props}>
+ *     <I18nProvider>
+ *       <GlobalStoreProvider>
+ *         <App />
+ *       </GlobalStoreProvider>
+ *     </I18nProvider>
+ *   </RouterProvider>,
+ *   document.querySelector('#app')
+ * )
+ * ```
  */
 export function createApp<AppProps extends Record<string, any> = {}>(
   app: (props?: AppProps) => JSX.Element,

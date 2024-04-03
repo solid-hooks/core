@@ -4,14 +4,14 @@ import { createRenderEffect } from 'solid-js'
 import { spread } from 'solid-js/web'
 
 export type ScriptOptions = Pick<
-ComponentProps<'script'>,
-| 'defer'
-| 'crossOrigin'
-| 'noModule'
-| 'referrerPolicy'
-| 'type'
-| 'async'
-| 'onLoad'
+  ComponentProps<'script'>,
+  | 'defer'
+  | 'crossOrigin'
+  | 'noModule'
+  | 'referrerPolicy'
+  | 'type'
+  | 'async'
+  | 'onLoad'
 >
 
 export type StyleOption = Pick<
@@ -25,6 +25,13 @@ export type StyleOption = Pick<
  * @param type script tag
  * @param content js content
  * @param options other options
+ * @example
+ * ```ts
+ * import { useResourceTag } from '@solid-hooks/hooks'
+ *
+ * const script = 'console.log(`test load script`)'
+ * const [element, cleanup] = useResourceTag(script, { options })
+ * ```
  */
 export function useResourceTag(
   type: 'script',

@@ -206,14 +206,10 @@ reference from [@solid-primitives/context](https://github.com/solidjs-community/
 ```ts
 import { createContextProvider } from '@solid-hooks/hooks'
 
-const [useDateContext, DateProvider] = createContextProvider(
-  'date',
-  () => new Date()
-)
+const [useDateContext, DateProvider] = createContextProvider(() => new Date())
 
 // with default value
 const [useDateContext, DateProvider] = createContextProvider(
-  'date',
   (args: { date: string }) => new Date(args.date),
   new Date()
 )

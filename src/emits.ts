@@ -50,6 +50,50 @@ export type EmitsReturn<PropsWithEmits, Emits extends Record<string, any>> = {
 /**
  * like `defineEmit` in `Vue`, emit event from child component, auto handle optional prop
  * @param props conponents props
+ * @example
+ * ```tsx
+ * import { useEmits } from '@solid-hooks/hooks'
+ * import type { EmitProps } from '@solid-hooks/hooks'
+ *
+ * type Emits = {
+ *   var: number
+ *   update: [d1: string, d2?: string, d3?: string]
+ *   optional?: { test: number }
+ * }
+ *
+ * type BaseProps = { num: number }
+ *
+ * function Child(props: EmitProps<Emits, BaseProps>) {
+ *   const { emit, createEmitSignal } = useEmits<Emits>(props)
+ *
+ *   // auto emit after value changing, like `defineModel` in Vue
+ *   const [variable, setVariable] = createEmitSignal('var', 1)
+ *   const handleClick = () => {
+ *     setVariable(v => v + 1)
+ *
+ *     // manully emit
+ *     emit('update', `emit from child: ${props.num}`, 'second')
+ *     emit('optional', { test: 1 })
+ *   }
+ *   return (
+ *     <div>
+ *       child:
+ *       {props.num}
+ *       <button onClick={handleClick}>+</button>
+ *     </div>
+ *   )
+ * }
+ * function Father() {
+ *   const [count] = createSignal('init')
+ *   return (
+ *     <Child
+ *       num={count()}
+ *       $update={console.log}
+ *       $var={e => console.log('useEmits:', e)}
+ *     />
+ *   )
+ * }
+ * ```
  */
 export function useEmits<
   Emits extends Record<string, any>,

@@ -14,6 +14,12 @@ export type ObjectURLSignal = [
  * convert `blob` / `File` / `MediaSource` to signal URL, auto revoke on cleanup
  * @param value initial value
  * @param options signal options
+ * @example
+ * ```ts
+ * import { createObjectURL } from '@solid-hooks/hooks'
+ *
+ * const [source, setMediaSource, cleanupSource] = createObjectURL(new MediaSource())
+ * ```
  */
 export function createObjectURL(
   value: Blob | File | MediaSource,
@@ -23,6 +29,12 @@ export function createObjectURL(
  * convert `ArrayBuffer` / `ArrayBufferView` / `string` to signal URL, auto revoke on cleanup
  * @param value initial value
  * @param options signal options
+ * @example
+ * ```ts
+ * import { createObjectURL } from '@solid-hooks/hooks'
+ *
+ * const [url, setURL, cleanupURL] = createObjectURL(new Uint8Array(8), { type: 'image/png' })
+ * ```
  */
 export function createObjectURL(
   value: ArrayBuffer | ArrayBufferView | string,

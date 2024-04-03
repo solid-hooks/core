@@ -95,10 +95,43 @@ type DragResult = {
 }
 
 /**
- * make element draggable
+ * make element draggable, recommend to add `touch-action: none` on element
  * @param el target element
  * @param options drag options
- * @description recommend to add `touch-action: none` on element
+ * @example
+ * ```tsx
+ * import { useDraggable } from '@solid-hooks/hooks'
+ *
+ * const [el, setEl] = createSignal<HTMLElement>()
+ * const [handler, setHandler] = createSignal<HTMLElement>()
+ *
+ * const {
+ *   position,
+ *   resetPosition,
+ *   enable,
+ *   disable,
+ *   isDragging,
+ *   isDraggable,
+ * } = useDraggable(el, {
+ *   initialPosition: { x: 200, y: 80 },
+ *   addStyle: true, // auto update el's left and top
+ *   handleEl: handle,
+ * })
+ * return (
+ *   <div
+ *     ref={setEl}
+ *     style={{ position: 'fixed' }}
+ *   >
+ *     I am at {Math.round(position().x)}, {Math.round(position().y)}
+ *     <div
+ *       ref={setHandler}
+ *       style={{ position: 'fixed' }}
+ *     >
+ *       drag me
+ *     </div>
+ *   </div>
+ * )
+ * ```
  */
 export function useDraggable(
   el: MaybeAccessor<DraggableElement>,

@@ -14,6 +14,11 @@ export type ContextProvider<
  * if call useContext outside Provider, throw error when DEV
  *
  * @param setup setup context function
+ * ```ts
+ * import { createContextProvider } from '@solid-hooks/hooks'
+ *
+ * const [useDateContext, DateProvider] = createContextProvider(() => new Date())
+ * ```
  */
 export function createContextProvider<T, Props extends Record<string, unknown>>(
   setup: (props?: Props) => T,
@@ -23,6 +28,15 @@ export function createContextProvider<T, Props extends Record<string, unknown>>(
  *
  * @param setup setup context function
  * @param initialValue fallback value when context is not provided
+ * @example
+ * ```ts
+ * import { createContextProvider } from '@solid-hooks/hooks'
+ *
+ * const [useDateContext, DateProvider] = createContextProvider(
+ *   (args: { date: string }) => new Date(args.date),
+ *   new Date()
+ * )
+ * ```
  */
 export function createContextProvider<T, Props extends Record<string, unknown>>(
   setup: (props: Props) => T,
