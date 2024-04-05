@@ -31,7 +31,7 @@
     "lint": "tsc --noEmit && eslint . --max-warnings 0",
     "format": "eslint . --fix",
     "build": "tsup",
-    "release": "pnpm lint && pnpm test && pnpm run build && bumpp --all && npm publish",
+    "release": "bun run lint && bun run test && bun run build && bumpp --all && npm publish",
     "test": "vitest --run"
   },
   "publishConfig": {
