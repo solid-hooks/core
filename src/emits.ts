@@ -1,5 +1,5 @@
 import type { ParseFunction, ParseParameters, StringKeys } from '@subframe7536/type-utils'
-import { type Signal, type SignalOptions, createEffect, createSignal, on } from 'solid-js'
+import { type Signal, type SignalOptions, createSignal } from 'solid-js'
 
 type FilterKeys<T> = keyof T extends `$${infer EventName}` ? EventName : never
 type ParseKey<T extends Record<string, any>> = {
@@ -101,14 +101,21 @@ export function useEmits<
 >(props: PropsWithEmits): EmitsReturn<PropsWithEmits, Emits> {
   const emit = (e: string, ...args: any[]) => {
     // @ts-expect-error emit
-    props[`$${e}`]?.(...args)
+    // eslint-disable-next-line prefer-template
+    props['$' + e]?.(...args)
   }
   return {
     emit,
     createEmitSignal: (e, value, options) => {
       const [val, setVal] = createSignal(value, options)
-      createEffect(on(val, value => emit(e, value), { defer: true }))
-      return [val, setVal]
+      return [
+        val,
+        (args) => {
+          const value = setVal(args as any)
+          emit(e, value)
+          return value
+        },
+      ] as Signal<any>
     },
   }
 }
