@@ -221,44 +221,6 @@ auto cleanup event listener
 
 use [@solid-primitives/event-listener](https://github.com/solidjs-community/solid-primitives/tree/main/packages/event-listener)
 
-### `useDraggable`
-
-make element draggable
-
-```tsx
-import { useDraggable } from '@solid-hooks/hooks'
-
-const [el, setEl] = createSignal<HTMLElement>()
-const [handler, setHandler] = createSignal<HTMLElement>()
-
-const {
-  position,
-  resetPosition,
-  enable,
-  disable,
-  isDragging,
-  isDraggable,
-} = useDraggable(el, {
-  initialPosition: { x: 200, y: 80 },
-  addStyle: true, // auto update el's left and top
-  handleEl: handle,
-})
-return (
-  <div
-    ref={setEl}
-    style={{ position: 'fixed' }}
-  >
-    I am at {Math.round(position().x)}, {Math.round(position().y)}
-    <div
-      ref={setHandler}
-      style={{ position: 'fixed' }}
-    >
-      drag me
-    </div>
-  </div>
-)
-```
-
 ### `useResourceTag`
 
 load external CSS/JS
@@ -284,3 +246,7 @@ const handleClick = useCallback(() => {
 })
 setTimeOut(handleClick, 100)
 ```
+
+## License
+
+MIT
