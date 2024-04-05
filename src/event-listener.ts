@@ -1,6 +1,12 @@
 import { makeEventListener } from '@solid-primitives/event-listener'
 
-// more alias export at ./index.ts
+export {
+  createEventListener as useEventListener,
+  createEventListenerMap as useEventListenerMap,
+  preventDefault,
+  stopImmediatePropagation,
+  stopPropagation,
+} from '@solid-primitives/event-listener'
 
 /**
  * listen event on `window`, auto cleanup
