@@ -51,7 +51,7 @@ function mergeProviders({ app, props = {}, providers }: MergeParams) {
  * @param props App params
  * @example
  * ```ts
- * import { createApp } from '@solid-hooks/hooks'
+ * import { createApp } from '@solid-hooks/core'
  * import App from './App'
  *
  * createApp(App)

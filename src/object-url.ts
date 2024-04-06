@@ -16,7 +16,7 @@ export type ObjectURLSignal = [
  * @param options signal options
  * @example
  * ```ts
- * import { createObjectURL } from '@solid-hooks/hooks'
+ * import { createObjectURL } from '@solid-hooks/core'
  *
  * const [source, setMediaSource, cleanupSource] = createObjectURL(new MediaSource())
  * ```
@@ -31,7 +31,7 @@ export function createObjectURL(
  * @param options signal options
  * @example
  * ```ts
- * import { createObjectURL } from '@solid-hooks/hooks'
+ * import { createObjectURL } from '@solid-hooks/core'
  *
  * const [url, setURL, cleanupURL] = createObjectURL(new Uint8Array(8), { type: 'image/png' })
  * ```

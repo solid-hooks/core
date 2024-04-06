@@ -8,7 +8,7 @@ import { getOwner, runWithOwner } from 'solid-js'
  * @param owner owner that run with
  * @example
  * ```ts
- * import { useCallback } from '@solid-hooks/hooks'
+ * import { useCallback } from '@solid-hooks/core'
  *
  * const handleClick = useCallback(() => {
  *   console.log('after 100 ms!')

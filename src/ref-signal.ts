@@ -10,7 +10,7 @@ import type { AnyFunction } from '@subframe7536/type-utils'
  * @param options signal options
  * @example
  * ```ts
- * import { createRefSignal } from '@solid-hooks/hooks'
+ * import { createRefSignal } from '@solid-hooks/core'
  *
  * const audio = new Audio()
  * const [time, setCurrentTime] = createRefSignal(audio, 'currentTime')

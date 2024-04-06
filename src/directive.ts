@@ -3,7 +3,7 @@ type DirectiveFunction<Args extends unknown[] = []> = (ref: globalThis.Element, 
 /**
  * another way to create directive
  * @example
- * import { createDirective } from '@solid-hooks/hooks'
+ * import { createDirective } from '@solid-hooks/core'
  * import { type Accessor, type Setter, createRenderEffect, createSignal } from 'solid-js'
  *
  * const model = createDirective((ref: Element, getter: Accessor<string>, setter: Setter<string>) => {

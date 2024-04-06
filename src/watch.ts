@@ -142,7 +142,7 @@ function baseWatch<T>(
  * @example
  * ```ts
  * import { throttle } from '@solid-primitives/scheduled'
- * import { watch } from '@solid-hooks/hooks'
+ * import { watch } from '@solid-hooks/core'
  *
  * const [count, setCount] = createSignal(0)
  * const { pause, resume, isWatching, callTimes, ignoreUpdate } = watch(
