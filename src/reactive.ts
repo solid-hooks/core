@@ -10,13 +10,13 @@ import type { AnyFunction } from '@subframe7536/type-utils'
  * @param options signal options
  * @example
  * ```ts
- * import { createRefSignal } from '@solid-hooks/core'
+ * import { createReactive } from '@solid-hooks/core'
  *
  * const audio = new Audio()
- * const [time, setCurrentTime] = createRefSignal(audio, 'currentTime')
+ * const [time, setCurrentTime] = createReactive(audio, 'currentTime')
  * ```
  */
-export function createRefSignal<T extends object, P extends Path<T>>(
+export function createReactive<T extends object, P extends Path<T>>(
   data: T,
   path: P,
   options: SignalOptions<PathValue<T, P>> = {},
