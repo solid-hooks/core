@@ -1,6 +1,7 @@
 export * from './app'
 export * from './callback'
 export * from './context-provider'
+export * from './directive'
 export * from './emits'
 export * from './event-listener'
 export * from './object-url'

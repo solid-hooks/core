@@ -47,6 +47,7 @@ export type EmitsReturn<Events extends EmitEvents> = {
  * @param props conponents props
  * @example
  * ```tsx
+ * import { createSignal } from 'solid-js'
  * import { useEmits } from '@solid-hooks/core'
  *
  * // must start with `$`
@@ -71,12 +72,17 @@ export type EmitsReturn<Events extends EmitEvents> = {
  *     emit('optional', { test: 1 })
  *   }
  *   return (
- *     <button onClick={handleClick}>+</button>
+ *     <div>
+ *       child: {props.num}
+ *       <button onClick={handleClick}>+</button>
+ *     </div>
  *   )
  * }
  * function Father() {
+ *   const [count] = createSignal('init')
  *   return (
  *     <Child
+ *       num={count()}
  *       $update={console.log}
  *       $var={e => console.log('useEmits:', e)}
  *     />

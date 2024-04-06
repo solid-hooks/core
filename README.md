@@ -20,15 +20,15 @@ pnpm add @solid-hooks/core
 
 ## Usage
 
-### `createRefSignal`
+### `createReactive`
 
 make plain object props reactive
 
 ```ts
-import { createRefSignal } from '@solid-hooks/hooks'
+import { createReactive } from '@solid-hooks/core'
 
 const audio = new Audio()
-const [time, setCurrentTime] = createRefSignal(audio, 'currentTime')
+const [time, setCurrentTime] = createReactive(audio, 'currentTime')
 ```
 
 ### `createObjectURL`
@@ -36,7 +36,7 @@ const [time, setCurrentTime] = createRefSignal(audio, 'currentTime')
 convert `blob` / `File` / `MediaSource` / `ArrayBuffer` / `ArrayBufferView` / `string` to signal URL, auto revoke on cleanup
 
 ```ts
-import { createObjectURL } from '@solid-hooks/hooks'
+import { createObjectURL } from '@solid-hooks/core'
 
 const [source, setMediaSource, cleanupSource] = createObjectURL(new MediaSource())
 const [url, setURL, cleanupURL] = createObjectURL(new Uint8Array(8), { type: 'image/png' })
@@ -47,7 +47,7 @@ const [url, setURL, cleanupURL] = createObjectURL(new Uint8Array(8), { type: 'im
 another way to create directive
 
 ```tsx
-import { createDirective } from '@solid-hooks/hooks'
+import { createDirective } from '@solid-hooks/core'
 import { type Accessor, type Setter, createRenderEffect, createSignal } from 'solid-js'
 
 const model = createDirective((ref: Element, getter: Accessor<string>, setter: Setter<string>) => {
@@ -74,7 +74,7 @@ filterable and pausable `createEffect(on())` like, defer by default
 
 ```ts
 import { throttle } from '@solid-primitives/scheduled'
-import { watch } from '@solid-hooks/hooks'
+import { watch } from '@solid-hooks/core'
 
 const [count, setCount] = createSignal(0)
 const { pause, resume, isWatching, callTimes, ignoreUpdate } = watch(
@@ -97,7 +97,7 @@ const { pause, resume, isWatching, callTimes, ignoreUpdate } = watch(
 watch once, using `createReaction`
 
 ```ts
-import { watchOnce } from '@solid-hooks/hooks'
+import { watchOnce } from '@solid-hooks/core'
 
 const [count, setCount] = createSignal(0)
 watchOnce(count, (value))
@@ -116,18 +116,19 @@ like `watch`, use `createRendered`
 like `defineEmit` in `Vue`, emit event from child component, auto handle optional prop
 
 ```tsx
-import { useEmits } from '@solid-hooks/hooks'
-import type { EmitProps } from '@solid-hooks/hooks'
+import { createSignal } from 'solid-js'
+import { useEmits } from '@solid-hooks/core'
 
+// must start with `$`
 type Emits = {
-  var: number
-  update: [d1: string, d2?: string, d3?: string]
-  optional?: { test: number }
+  $var: (num: number) => void
+  $update: (d1: string, d2?: string, d3?: string) => void
+  $optional?: (data: { test: number }) => void
 }
 
 type BaseProps = { num: number }
 
-function Child(props: EmitProps<Emits, BaseProps>) {
+function Child(props: Emits & BaseProps) {
   const { emit, createEmitSignal } = useEmits<Emits>(props)
 
   // auto emit after value changing, like `defineModel` in Vue
@@ -141,8 +142,7 @@ function Child(props: EmitProps<Emits, BaseProps>) {
   }
   return (
     <div>
-      child:
-      {props.num}
+      child: {props.num}
       <button onClick={handleClick}>+</button>
     </div>
   )
@@ -159,16 +159,12 @@ function Father() {
 }
 ```
 
-### `useTick`
-
-like `nextTick()` in `Vue` , reference from [solidjs-use](https://github.com/solidjs-use/solidjs-use/blob/main/packages/solid-to-vue/src/scheduler.ts)
-
 ### `createApp`
 
 like `createApp()` in `Vue`
 
 ```ts
-import { createApp } from '@solid-hooks/hooks'
+import { createApp } from '@solid-hooks/core'
 import App from './App'
 
 createApp(App)
@@ -203,16 +199,42 @@ if default value is not defined and use context outside provider, throw `Error` 
 
 reference from [@solid-primitives/context](https://github.com/solidjs-community/solid-primitives/tree/main/packages/context#createcontextprovider)
 
-```ts
-import { createContextProvider } from '@solid-hooks/hooks'
+```tsx
+import { createSignal } from 'solid-js'
+import { createContextProvider } from '@solid-hooks/core'
 
-const [useDateContext, DateProvider] = createContextProvider(() => new Date())
+export const [TestProvider, useTestContext] = createContextProvider((param: { initial: number }) => {
+  const [count, setCount] = createSignal(param.initial)
+  const increment = () => setCount(count() + 1)
 
-// with default value
-const [useDateContext, DateProvider] = createContextProvider(
-  (args: { date: string }) => new Date(args.date),
-  new Date()
-)
+  return {
+    count,
+    increment,
+  }
+})
+
+function Child() {
+  const { count, increment } = useTestContext()
+  return (
+    <>
+      <button class="btn" onClick={increment}>
+        {count()}
+      </button>
+    </>
+  )
+}
+
+export function TestContextProvider() {
+  console.log('call useTestContext() outside provider:', useTestContext())
+  return (
+    <>
+      <h1>Test <code>createContextProvider</code> :</h1>
+      <TestProvider initial={0}>
+        <Child />
+      </TestProvider>
+    </>
+  )
+}
 ```
 
 ### `useEventListener` / `useEventListenerMap` / `useDocumentListener` / `useWindowListener`
@@ -226,10 +248,11 @@ use [@solid-primitives/event-listener](https://github.com/solidjs-community/soli
 load external CSS/JS
 
 ```ts
-import { useResourceTag } from '@solid-hooks/hooks'
+import { useResourceTag } from '@solid-hooks/core'
 
 const script = 'console.log(`test load script`)'
-const [element, cleanup] = useResourceTag(script, {/* options */})
+const [scriptElement, cleanupScript] = useResourceTag('script', script, {/* options */})
+const [styleElement, cleanupStyle] = useResourceTag('style', style, {/* options */})
 ```
 
 ### `useCallback`
@@ -239,12 +262,32 @@ create callbacks with `runWithOwner`, auto get current owner
 reference from [@solid-primitives/rootless](https://github.com/solidjs-community/solid-primitives/tree/main/packages/rootless#createcallback)
 
 ```ts
-import { useCallback } from '@solid-hooks/hooks'
+import { useCallback } from '@solid-hooks/core'
 
 const handleClick = useCallback(() => {
   console.log('after 100 ms!')
 })
 setTimeOut(handleClick, 100)
+```
+
+### `withEffect`
+
+add callback for setter
+
+```tsx
+import { createSignal } from 'solid-js'
+import { withEffect } from '@solid-hooks/core'
+
+export function TestWithEffect() {
+  const [count, setCount] = withEffect(createSignal(1), value => console.log('[withEffect] value:', value))
+  return (
+    <>
+      <h1>Test <code>withEffect</code> :</h1>
+      <button onClick={() => setCount(c => c + 1)}>click and see console</button>
+      <div>count: {count()}</div>
+    </>
+  )
+}
 ```
 
 ## License

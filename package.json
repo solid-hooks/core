@@ -28,6 +28,7 @@
     "dist"
   ],
   "scripts": {
+    "dev": "bun --bunx vite serve dev",
     "lint": "tsc --noEmit && eslint . --max-warnings 0",
     "format": "eslint . --fix",
     "build": "tsup",

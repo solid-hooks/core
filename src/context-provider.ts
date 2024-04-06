@@ -11,10 +11,43 @@ export type ContextProvider<T, Props extends Record<string, unknown> = {}> = [
  * if call useContext outside Provider, return `undefined` when DEV
  *
  * @param setup setup context function
- * ```ts
+ * @example
+ * ```tsx
+ * import { createSignal } from 'solid-js'
  * import { createContextProvider } from '@solid-hooks/core'
  *
- * const [DateProvider, useDateContext] = createContextProvider(() => new Date())
+ * export const [TestProvider, useTestContext] = createContextProvider((param: { initial: number }) => {
+ *   const [count, setCount] = createSignal(param.initial)
+ *   const increment = () => setCount(count() + 1)
+ *
+ *   return {
+ *     count,
+ *     increment,
+ *   }
+ * })
+ *
+ * function Child() {
+ *   const { count, increment } = useTestContext()
+ *   return (
+ *     <>
+ *       <button class="btn" onClick={increment}>
+ *         {count()}
+ *       </button>
+ *     </>
+ *   )
+ * }
+ *
+ * export function TestContextProvider() {
+ *   console.log('call useTestContext() outside provider:', useTestContext())
+ *   return (
+ *     <>
+ *       <h1>Test <code>createContextProvider</code> :</h1>
+ *       <TestProvider initial={0}>
+ *         <Child />
+ *       </TestProvider>
+ *     </>
+ *   )
+ * }
  * ```
  */
 export function createContextProvider<T, Props extends Record<string, unknown>>(
