@@ -1,35 +1,30 @@
-import type { ParseFunction, ParseParameters, StringKeys } from '@subframe7536/type-utils'
-import { type Signal, type SignalOptions, createSignal } from 'solid-js'
+import type { AnyFunction, RemoveNeverProps, StringKeys } from '@subframe7536/type-utils'
+import { type NoInfer, type Signal, type SignalOptions, createSignal } from 'solid-js'
 
-type FilterKeys<T> = keyof T extends `$${infer EventName}` ? EventName : never
-type ParseKey<T extends Record<string, any>> = {
-  [K in keyof T as `$${K & string}`]: T[K]
-}
-type FilterOneParameterEvents<
-  Events extends Record<string, any>,
-  EventKeys extends string = StringKeys<Events>,
-> = {
-  [K in EventKeys]: ParseParameters<Required<Events>[K]>['length'] extends 1 ? K : never
-}[EventKeys]
-/**
- * utility type for function emitting
- */
-export type EmitProps<
-  Events extends Record<string, any>,
-  Props extends Record<string, any> = {},
-> = Props & ParseKey<{
-  [K in keyof Events]: ParseFunction<Events[K]>
+type Non$Keys<Emits extends EmitEvents> = StringKeys<Emits> extends `$${infer EventName}` ? EventName : never
+
+type EmitEvents = Record<`$${string}`, AnyFunction>
+
+type FilterOneParameterEvents<Emits extends EmitEvents> = RemoveNeverProps<{
+  [K in StringKeys<Emits>]: Parameters<Extract<Required<Emits>[K], AnyFunction>>['length'] extends 1
+    ? Emits[K]
+    : never
 }>
 
-export type EmitsReturn<PropsWithEmits, Emits extends Record<string, any>> = {
+type EventArgsWithout$<
+  Events extends EmitEvents,
+  K extends Non$Keys<Events> | Non$Keys<FilterOneParameterEvents<Events>>,
+> = Parameters<Extract<Required<Events>[`$${K}`], AnyFunction>>
+
+export type EmitsReturn<Events extends EmitEvents> = {
   /**
    * trigger event
    * @param event trigger event
    * @param ...data event data
    */
-  emit: <K extends FilterKeys<PropsWithEmits>>(
+  emit: <K extends Non$Keys<Events>>(
     event: K,
-    ...data: ParseParameters<Required<Emits>[K]>
+    ...data: EventArgsWithout$<Events, K>
   ) => void
   /**
    * create a {@link SignalObject} that trigger event after value is set
@@ -38,11 +33,11 @@ export type EmitsReturn<PropsWithEmits, Emits extends Record<string, any>> = {
    * @param options emit options
    */
   createEmitSignal: <
-    K extends FilterOneParameterEvents<Emits, FilterKeys<PropsWithEmits>>,
-    V = ParseParameters<Required<Emits>[K]>[0],
+    K extends Non$Keys<FilterOneParameterEvents<Events>>,
+    V extends EventArgsWithout$<Events, K>[0],
   >(
     event: K,
-    value: V,
+    value: NoInfer<V>,
     options?: SignalOptions<V>
   ) => Signal<V>
 }
@@ -52,18 +47,18 @@ export type EmitsReturn<PropsWithEmits, Emits extends Record<string, any>> = {
  * @param props conponents props
  * @example
  * ```tsx
- * import { useEmits } from '@solid-hooks/hooks'
- * import type { EmitProps } from '@solid-hooks/hooks'
+ * import { useEmits } from '@solid-hooks/core'
  *
+ * // must start with `$`
  * type Emits = {
- *   var: number
- *   update: [d1: string, d2?: string, d3?: string]
- *   optional?: { test: number }
+ *   $var: (num: number) => void
+ *   $update: (d1: string, d2?: string, d3?: string) => void
+ *   $optional?: (data: { test: number }) => void
  * }
  *
  * type BaseProps = { num: number }
  *
- * function Child(props: EmitProps<Emits, BaseProps>) {
+ * function Child(props: Emits & BaseProps) {
  *   const { emit, createEmitSignal } = useEmits<Emits>(props)
  *
  *   // auto emit after value changing, like `defineModel` in Vue
@@ -76,18 +71,12 @@ export type EmitsReturn<PropsWithEmits, Emits extends Record<string, any>> = {
  *     emit('optional', { test: 1 })
  *   }
  *   return (
- *     <div>
- *       child:
- *       {props.num}
- *       <button onClick={handleClick}>+</button>
- *     </div>
+ *     <button onClick={handleClick}>+</button>
  *   )
  * }
  * function Father() {
- *   const [count] = createSignal('init')
  *   return (
  *     <Child
- *       num={count()}
  *       $update={console.log}
  *       $var={e => console.log('useEmits:', e)}
  *     />
@@ -95,10 +84,7 @@ export type EmitsReturn<PropsWithEmits, Emits extends Record<string, any>> = {
  * }
  * ```
  */
-export function useEmits<
-  Emits extends Record<string, any>,
-  PropsWithEmits = EmitProps<Emits>,
->(props: PropsWithEmits): EmitsReturn<PropsWithEmits, Emits> {
+export function useEmits<Emits extends EmitEvents>(props: EmitEvents): EmitsReturn<Emits> {
   const emit = (e: string, ...args: any[]) => {
     // @ts-expect-error emit
     // eslint-disable-next-line prefer-template
