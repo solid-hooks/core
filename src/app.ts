@@ -1,6 +1,11 @@
-import type { Component, FlowProps, JSX } from 'solid-js'
+import type { RemoveNeverProps, StringKeys } from '@subframe7536/type-utils'
+import type { FlowComponent, JSX } from 'solid-js'
 import { DEV } from 'solid-js'
 import { createComponent, render } from 'solid-js/web'
+
+type RequiredKeysOfObject<T> = StringKeys<RemoveNeverProps<{
+  [K in keyof T]-?: {} extends Pick<T, K> ? never : K
+}>>
 
 type App = {
   /**
@@ -8,9 +13,12 @@ type App = {
    * at mount time.
    *
    * @param provider provider to add to the list
-   * @param options provider options
+   * @param props provider options
    */
-  use: <Props>(provider: Component<FlowProps<Props>>, options?: Props) => App
+  use: <Props>(
+    provider: FlowComponent<Props>,
+    ...props: RequiredKeysOfObject<Props> extends never ? [props?: Props] : [props: Props]
+  ) => App
 
   /**
    * merges all the Providers and then uses the `render` function
@@ -21,10 +29,10 @@ type App = {
   mount: (domElement: string) => ReturnType<typeof render>
 }
 
-type Provider<Props extends Record<string, any>> = {
-  provider: Component<FlowProps<Props>>
-  opts?: Props
-}
+type Provider<Props extends Record<string, any>> = [
+  provider: FlowComponent<Props>,
+  props?: Props,
+]
 
 type MergeParams = {
   app: (props?: any) => JSX.Element
@@ -34,7 +42,7 @@ type MergeParams = {
 
 function mergeProviders({ app, props = {}, providers }: MergeParams) {
   return providers.reduce(
-    (application, { provider, opts = {} }) => () =>
+    (application, [provider, opts = {}]) => () =>
       createComponent(provider, {
         ...opts,
         get children() {
@@ -48,7 +56,7 @@ function mergeProviders({ app, props = {}, providers }: MergeParams) {
 /**
  * Vue's `createApp` like initialization
  * @param app App component
- * @param props App params
+ * @param appProps App params
  * @example
  * ```ts
  * import { createApp } from '@solid-hooks/core'
@@ -77,19 +85,19 @@ function mergeProviders({ app, props = {}, providers }: MergeParams) {
  * ```
  */
 export function createApp<AppProps extends Record<string, any> = {}>(
-  app: (props?: AppProps) => JSX.Element,
-  props?: AppProps,
+  app: FlowComponent<AppProps>,
+  ...appProps: RequiredKeysOfObject<AppProps> extends never ? [appProps?: AppProps] : [appProps: AppProps]
 ): App {
   const providers: Provider<any>[] = []
 
   const _app: App = {
-    use(provider, opts) {
-      providers.push({ provider, opts })
+    use: (provider, ...props) => {
+      providers.push([provider, props[0]])
       return _app
     },
 
-    mount(dom) {
-      const application = mergeProviders({ app, props, providers })
+    mount: (dom) => {
+      const application = mergeProviders({ app, props: appProps[0], providers })
       const root = document.querySelector(dom)
       if (DEV && !root) {
         throw new Error(`root node "${dom}" is null`)
