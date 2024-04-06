@@ -1,27 +1,24 @@
 import { DEV, createComponent, createContext, useContext } from 'solid-js'
 import type { Accessor, FlowProps, JSXElement } from 'solid-js'
 
-export type ContextProvider<
-  T,
-  Props extends Record<string, unknown> = {},
-> = [
+export type ContextProvider<T, Props extends Record<string, unknown> = {}> = [
   Provider: (props: FlowProps<Props>) => JSXElement,
   useContext: Accessor<T>,
 ]
 
 /**
  * create Provider and useContext,
- * if call useContext outside Provider, throw error when DEV
+ * if call useContext outside Provider, return `undefined` when DEV
  *
  * @param setup setup context function
  * ```ts
- * import { createContextProvider } from '@solid-hooks/hooks'
+ * import { createContextProvider } from '@solid-hooks/core'
  *
- * const [useDateContext, DateProvider] = createContextProvider(() => new Date())
+ * const [DateProvider, useDateContext] = createContextProvider(() => new Date())
  * ```
  */
 export function createContextProvider<T, Props extends Record<string, unknown>>(
-  setup: (props?: Props) => T,
+  setup: (props: Props) => T,
 ): ContextProvider<T, Props>
 /**
  * create Provider and useContext with initial value
@@ -30,9 +27,9 @@ export function createContextProvider<T, Props extends Record<string, unknown>>(
  * @param initialValue fallback value when context is not provided
  * @example
  * ```ts
- * import { createContextProvider } from '@solid-hooks/hooks'
+ * import { createContextProvider } from '@solid-hooks/core'
  *
- * const [useDateContext, DateProvider] = createContextProvider(
+ * const [DateProvider, useDateContext] = createContextProvider(
  *   (args: { date: string }) => new Date(args.date),
  *   new Date()
  * )
@@ -58,7 +55,8 @@ export function createContextProvider<T, Props extends Record<string, unknown>>(
       ? () => {
           const _ctx = useContext(ctx)
           if (_ctx === undefined) {
-            throw new Error(`Provider is not set in component tree!`)
+            console.error(`Provider is not set in component tree!`)
+            return undefined as any
           }
           return _ctx
         }
