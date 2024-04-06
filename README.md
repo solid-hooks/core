@@ -279,6 +279,7 @@ import { createSignal } from 'solid-js'
 import { withEffect } from '@solid-hooks/core'
 
 export function TestWithEffect() {
+  // eslint-disable-next-line solid/reactivity
   const [count, setCount] = withEffect(createSignal(1), value => console.log('[withEffect] value:', value))
   return (
     <>
