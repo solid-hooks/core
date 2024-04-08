@@ -1,7 +1,19 @@
 import { type Path, type PathValue, pathGet, pathSet } from 'object-path-access'
 import type { Signal, SignalOptions } from 'solid-js'
 import { createSignal } from 'solid-js'
-import type { AnyFunction } from '@subframe7536/type-utils'
+
+type ReactiveOptions<T extends object, P extends Path<T>> = SignalOptions<PathValue<T, P>> & {
+  /**
+   * custom setter to set original property to new value, useful for handle readonly properties
+   * @param source source data
+   * @param newValue new value
+   * @returns if return value, it will be used to check equal, if return nothing, it will always to update
+   */
+  setter?: (
+    source: T,
+    newValue: PathValue<T, P>,
+  ) => PathValue<T, P> | void
+}
 
 /**
  * make plain object props reactive
@@ -16,12 +28,15 @@ import type { AnyFunction } from '@subframe7536/type-utils'
  * const [time, setCurrentTime] = createReactive(audio, 'currentTime')
  * ```
  */
-export function createReactive<T extends object, P extends Path<T>>(
+export function createReactive<
+  T extends object,
+  P extends Path<T>,
+>(
   data: T,
   path: P,
-  options: SignalOptions<PathValue<T, P>> = {},
+  options?: ReactiveOptions<T, P>,
 ): Signal<PathValue<T, P>> {
-  const { equals, ...rest } = options
+  const { equals, setter, ...rest } = options || {}
   const [track, trigger] = createSignal(undefined, { ...rest, equals: false })
   const get = () => pathGet(data, path)
 
@@ -31,20 +46,21 @@ export function createReactive<T extends object, P extends Path<T>>(
       ? (result: any) => get() === result
       : () => equals
 
+  const _setter = setter
+    ? (newValue: any) => setter(data, newValue)
+    : (newValue: any) => pathSet(data, path, newValue)
   return [
     () => {
       track()
       return get()
     },
-    (arg?) => {
-      const result = typeof arg === 'function'
-        ? (arg as AnyFunction)(get())
-        : arg
-      if (!_equals(result)) {
-        pathSet(data, path, result)
+    (arg) => {
+      const newValue = typeof arg === 'function' ? arg(get()) : arg
+      if (!_equals(newValue)) {
+        _setter(newValue)
         trigger()
       }
-      return result
+      return newValue
     },
-  ]
+  ] as Signal<PathValue<T, P>>
 }
