@@ -35,13 +35,10 @@ function Child(prop: Emits & { num: number }) {
 
 export default function TestEmit() {
   return (
-    <>
-      <h1>Test <code>useEmits</code> :</h1>
-      <Child
-        num={1}
-        $update={(e, e1) => console.log(`[emit] $update:`, e, e1)}
-        $var={e => console.log('[emit] $var:', e)}
-      />
-    </>
+    <Child
+      num={1}
+      $update={(e, e1) => console.log(`[emit] $update:`, e, e1)}
+      $var={e => console.log('[emit] $var:', e)}
+    />
   )
 }

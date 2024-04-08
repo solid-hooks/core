@@ -10,7 +10,6 @@ export default function TestDirective() {
   const [text, setText] = createSignal('synchronized value')
   return (
     <>
-      <h1>Test <code>createDirective</code> :</h1>
       <input type="text" ref={model(text, setText)} />
       <div>{text()}</div>
     </>

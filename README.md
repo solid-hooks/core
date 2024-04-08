@@ -237,7 +237,7 @@ export function TestContextProvider() {
 }
 ```
 
-### `useEventListener` / `useEventListenerMap` / `useDocumentListener` / `useWindowListener`
+### `useEventListener` / `useEventListenerStack` / `useDocumentListener` / `useWindowListener`
 
 auto cleanup event listener
 
@@ -268,6 +268,37 @@ const handleClick = useCallback(() => {
   console.log('after 100 ms!')
 })
 setTimeOut(handleClick, 100)
+```
+
+### `useWorkerFn`
+
+run function in worker
+
+reference from [vueuse](https://vueuse.org/core/useWebWorkerFn/)
+
+```tsx
+import { createMemo, createSignal } from 'solid-js'
+import { useWebWorkerFn } from '@solid-hooks/core'
+
+function heavyTask() {
+  const randomNumber = () => Math.trunc(Math.random() * 5_000_00)
+  const numbers: number[] = Array(5_000_000).fill(undefined).map(randomNumber)
+  numbers.sort()
+  return numbers.slice(0, 5)
+}
+
+export default function TestWorker() {
+  const [fn, status, terminate] = useWebWorkerFn(heavyTask)
+  const isRunning = createMemo(() => status() === 'RUNNING')
+  return (
+    <>
+      <div>Status: {status()}</div>
+      <button onClick={() => isRunning() ? terminate() : fn().then(setData)}>
+        {isRunning() ? 'terminate' : 'sort in worker'}
+      </button>
+    </>
+  )
+}
 ```
 
 ### `withEffect`

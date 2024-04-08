@@ -17,7 +17,6 @@ export default function TestWatch() {
   })
   return (
     <>
-      <h1>Test <code>watch</code> :</h1>
       <div>count: {count()}</div>
       <div>callTimes: {callTimes()}</div>
       <div>isWatching: {`${isWatching()}`}</div>

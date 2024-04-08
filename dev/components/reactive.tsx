@@ -12,7 +12,6 @@ export default function TestReactive() {
   }, { defer: true }))
   return (
     <>
-      <h1>Test <code>reactive</code> :</h1>
       <div>Foo.bar: {obj()}</div>
       <button onClick={() => setObj(data => data * 2)}>click and see console</button>
     </>

@@ -25,11 +25,8 @@ function Child() {
 export function TestContextProvider() {
   console.log('call useTestContext() outside provider:', useTestContext())
   return (
-    <>
-      <h1>Test <code>createContextProvider</code> :</h1>
-      <TestProvider initial={0}>
-        <Child />
-      </TestProvider>
-    </>
+    <TestProvider initial={0}>
+      <Child />
+    </TestProvider>
   )
 }
