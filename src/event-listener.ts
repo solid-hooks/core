@@ -1,8 +1,8 @@
 import { makeEventListener } from '@solid-primitives/event-listener'
 
 export {
-  createEventListener as useEventListener,
-  createEventListenerMap as useEventListenerMap,
+  makeEventListener as useEventListener,
+  makeEventListenerStack as useEventListenerStack,
   preventDefault,
   stopImmediatePropagation,
   stopPropagation,
