@@ -1,4 +1,4 @@
-import { makeEventListener } from '@solid-primitives/event-listener'
+import { type EventMapOf, makeEventListener } from '@solid-primitives/event-listener'
 
 export {
   makeEventListener as useEventListener,
@@ -13,11 +13,29 @@ export {
  *
  * return cleanup function
  */
-export const useWindowListener = makeEventListener.bind(makeEventListener, window)
+export function useWindowListener<
+  EventMap extends WindowEventMap,
+  EventType extends keyof EventMap,
+>(
+  type: EventType,
+  handler: (event: EventMap[EventType]) => void,
+  options?: EventListenerOptions,
+): VoidFunction {
+  return makeEventListener(window, type, handler, options)
+}
 
 /**
  * listen event on `document`, auto cleanup
  *
  * return cleanup function
  */
-export const useDocumentListener = makeEventListener.bind(makeEventListener, document)
+export function useDocumentListener<
+  EventMap extends DocumentEventMap,
+  EventType extends keyof EventMap,
+>(
+  type: EventType,
+  handler: (event: EventMap[EventType]) => void,
+  options?: EventListenerOptions,
+): VoidFunction {
+  return makeEventListener(document, type, handler, options)
+}
