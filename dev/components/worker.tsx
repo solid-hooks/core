@@ -1,5 +1,5 @@
 import { createMemo, createSignal } from 'solid-js'
-import { useWebWorkerFn } from '../../src'
+import { useWebWorkerFn } from '../../src/web'
 
 function heavyTask() {
   const randomNumber = () => Math.trunc(Math.random() * 5_000_00)

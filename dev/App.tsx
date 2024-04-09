@@ -1,5 +1,5 @@
 import type { FlowProps } from 'solid-js'
-import { useResourceTag } from '../src'
+import { useResourceTag } from '../src/web'
 import { TestContextProvider } from './components/context-provider'
 import TestDirective from './components/directive'
 import TestEmit from './components/emit'
@@ -7,6 +7,7 @@ import TestReactive from './components/reactive'
 import TestWatch from './components/watch'
 import { TestWithEffect } from './components/with-effect'
 import TestWorker from './components/worker'
+import TestDark from './components/dark'
 
 function Card(props: FlowProps<{ title: string }>) {
   return (
@@ -41,6 +42,9 @@ export default function App() {
       </Card>
       <Card title="useWebWorkerFn">
         <TestWorker />
+      </Card>
+      <Card title="useDark">
+        <TestDark />
       </Card>
     </div>
   )
