@@ -1,15 +1,43 @@
 import { type Accessor, createSignal } from 'solid-js'
 import { useEventListener, useWindowListener } from './event-listener'
 
+type NetworkType = 'bluetooth' | 'cellular' | 'ethernet' | 'none' | 'wifi' | 'wimax' | 'other' | 'unknown'
+
+type EffectiveType = 'slow-2g' | '2g' | '3g' | '4g'
+
 export type NetworkState = {
+  /**
+   * the time at which the connection was changed
+   */
   since?: Date
+  /**
+   * whether the device is online
+   */
   online?: boolean
+  /**
+   * the estimated effective round-trip time of the current connection
+   */
   rtt?: number
-  type?: string
+  /**
+   * type of connection a device is using to communicate with the network
+   */
+  type?: NetworkType
+  /**
+   * true if the user has set a reduced data usage option on the user agent
+   */
   saveData?: boolean
+  /**
+   * the estimated effective bandwidth (Mb/s)
+   */
   downlink?: number
+  /**
+   * maximum downlink speed (Mb/s)
+   */
   downlinkMax?: number
-  effectiveType?: string
+  /**
+   * the effective type of the connection
+   */
+  effectiveType?: EffectiveType
 }
 
 function getConnection() {
@@ -17,7 +45,7 @@ function getConnection() {
   return navigator?.connection || navigator?.mozConnection || navigator?.webkitConnection
 }
 
-function get(): NetworkState {
+function getState(): NetworkState {
   const c = getConnection()
   if (!c) {
     return {}
@@ -33,15 +61,25 @@ function get(): NetworkState {
 }
 
 export function useNetwork(): Accessor<NetworkState> {
-  const [state, set] = createSignal({
+  const [state, setState] = createSignal({
     since: undefined,
     online: navigator?.onLine,
-    ...get(),
+    ...getState(),
   })
 
-  useWindowListener('online', () => set(prev => ({ ...prev, online: true, since: new Date() })))
-  useWindowListener('offline', () => set(prev => ({ ...prev, online: false, since: new Date() })))
-  useEventListener(getConnection(), 'change', () => set(prev => ({ ...prev, ...get() })))
+  useWindowListener(
+    'online',
+    () => setState(prev => ({ ...prev, online: true, since: new Date() })),
+  )
+  useWindowListener(
+    'offline',
+    () => setState(prev => ({ ...prev, online: false, since: new Date() })),
+  )
+  useEventListener(
+    getConnection(),
+    'change',
+    () => setState(prev => ({ ...prev, ...getState(), online: navigator?.onLine })),
+  )
 
   return state
 }
