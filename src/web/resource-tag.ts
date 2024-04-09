@@ -27,7 +27,7 @@ export type StyleOption = Pick<
  * @param options other options
  * @example
  * ```ts
- * import { useResourceTag } from '@solid-hooks/core'
+ * import { useResourceTag } from '@solid-hooks/core/web'
  *
  * const script = 'console.log(`test load script`)'
  * const [scriptElement, cleanupScript] = useResourceTag('script', script, { options })
@@ -45,7 +45,7 @@ export function useResourceTag(
  * @param options other options
  * @example
  * ```ts
- * import { useResourceTag } from '@solid-hooks/core'
+ * import { useResourceTag } from '@solid-hooks/core/web'
  *
  * const style = 'div { color: red }'
  * const [styleElement, cleanupStyle] = useResourceTag('style', style, { options })

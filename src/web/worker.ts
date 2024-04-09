@@ -62,7 +62,7 @@ export type UseWebWorkerOptions = {
  * @example
  * ```tsx
  * import { createMemo, createSignal } from 'solid-js'
- * import { useWebWorkerFn } from '@solid-hooks/core'
+ * import { useWebWorkerFn } from '@solid-hooks/core/web'
  *
  * function heavyTask() {
  *   const randomNumber = () => Math.trunc(Math.random() * 5_000_00)

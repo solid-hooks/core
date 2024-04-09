@@ -1,4 +1,4 @@
-import { type EventMapOf, makeEventListener } from '@solid-primitives/event-listener'
+import { makeEventListener } from '@solid-primitives/event-listener'
 
 export {
   makeEventListener as useEventListener,
