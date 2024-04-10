@@ -1,4 +1,4 @@
-import { type Accessor, createMemo, createSignal } from 'solid-js'
+import { type Accessor, createSignal } from 'solid-js'
 import { useEventListener, useWindowListener } from './event-listener'
 
 type NetworkType = 'bluetooth' | 'cellular' | 'ethernet' | 'none' | 'wifi' | 'wimax' | 'other' | 'unknown'
