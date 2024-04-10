@@ -343,6 +343,59 @@ export default function TestDark() {
 }
 ```
 
+### `useNetwork` / `useOnline`
+
+signals of network status, with `onChanges` callback
+
+```ts
+type NetworkType = 'bluetooth' | 'cellular' | 'ethernet' | 'none' | 'wifi' | 'wimax' | 'other' | 'unknown'
+
+type EffectiveType = 'slow-2g' | '2g' | '3g' | '4g'
+
+export type NetworkState = {
+  /**
+   * the time at which the connection was changed
+   */
+  since?: Date
+  /**
+   * whether the device is online
+   */
+  online?: boolean
+  /**
+   * the estimated effective round-trip time of the current connection
+   */
+  rtt?: number
+  /**
+   * type of connection a device is using to communicate with the network
+   */
+  type?: NetworkType
+  /**
+   * true if the user has set a reduced data usage option on the user agent
+   */
+  saveData?: boolean
+  /**
+   * the estimated effective bandwidth (Mb/s)
+   */
+  downlink?: number
+  /**
+   * maximum downlink speed (Mb/s)
+   */
+  downlinkMax?: number
+  /**
+   * the effective type of the connection
+   */
+  effectiveType?: EffectiveType
+}
+```
+
+### `useIdleCallback`
+
+executes a callback using the `requestIdleCallback` API, fallback to `setTimeout`.
+
+auto cleanup, return cleanup function.
+
+see https://developer.mozilla.org/zh-CN/docs/Web/API/Background_Tasks_API
+
 ## License
 
 MIT
