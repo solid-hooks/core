@@ -1,4 +1,4 @@
-import { type Accessor, createSignal } from 'solid-js'
+import { type Accessor, createMemo, createSignal } from 'solid-js'
 import { useEventListener, useWindowListener } from './event-listener'
 
 type NetworkType = 'bluetooth' | 'cellular' | 'ethernet' | 'none' | 'wifi' | 'wimax' | 'other' | 'unknown'
@@ -75,11 +75,24 @@ export function useNetwork(onChanges?: (state: NetworkState) => void): Accessor<
     'offline',
     () => onChanges?.(setState(prev => ({ ...prev, online: false, since: new Date() }))),
   )
-  useEventListener(
-    getConnection(),
+  const conn = getConnection()
+  conn && useEventListener(
+    conn,
     'change',
-    () => onChanges?.(setState(prev => ({ ...prev, ...getState(), online: navigator?.onLine }))),
+    () => onChanges?.(setState(prev => ({ ...prev, ...getState() }))),
   )
+
+  return state
+}
+
+/**
+ * signal of whether the device is online
+ */
+export function useOnLine(): Accessor<boolean> {
+  const [state, setState] = createSignal(true)
+
+  useWindowListener('online', () => setState(true))
+  useWindowListener('offline', () => setState(false))
 
   return state
 }
