@@ -60,7 +60,7 @@ function getState(): NetworkState {
   }
 }
 
-export function useNetwork(): Accessor<NetworkState> {
+export function useNetwork(onChanges?: (state: NetworkState) => void): Accessor<NetworkState> {
   const [state, setState] = createSignal({
     since: undefined,
     online: navigator?.onLine,
@@ -69,16 +69,16 @@ export function useNetwork(): Accessor<NetworkState> {
 
   useWindowListener(
     'online',
-    () => setState(prev => ({ ...prev, online: true, since: new Date() })),
+    () => onChanges?.(setState(prev => ({ ...prev, online: true, since: new Date() }))),
   )
   useWindowListener(
     'offline',
-    () => setState(prev => ({ ...prev, online: false, since: new Date() })),
+    () => onChanges?.(setState(prev => ({ ...prev, online: false, since: new Date() }))),
   )
   useEventListener(
     getConnection(),
     'change',
-    () => setState(prev => ({ ...prev, ...getState(), online: navigator?.onLine })),
+    () => onChanges?.(setState(prev => ({ ...prev, ...getState(), online: navigator?.onLine }))),
   )
 
   return state

@@ -1,5 +1,5 @@
 import type { FlowProps } from 'solid-js'
-import { useResourceTag } from '../src/web'
+import { useNetwork, useResourceTag } from '../src/web'
 import { TestContextProvider } from './components/context-provider'
 import TestDirective from './components/directive'
 import TestEmit from './components/emit'
@@ -20,6 +20,7 @@ function Card(props: FlowProps<{ title: string }>) {
 
 export default function App() {
   useResourceTag('script', 'console.log(`[useResourceTag] test load script`)')
+  const info = useNetwork()
   return (
     <div style={{ 'width': '80%', 'margin': 'auto', 'display': 'grid', 'grid-template-columns': '1fr 1fr', 'gap': '10px' }}>
       <Card title="createContextProvider">
@@ -46,6 +47,7 @@ export default function App() {
       <Card title="useDark">
         <TestDark />
       </Card>
+      <code>{JSON.stringify(info())}</code>
     </div>
   )
 }
