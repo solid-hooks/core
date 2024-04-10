@@ -88,11 +88,11 @@ export function useNetwork(onChanges?: (state: NetworkState) => void): Accessor<
 /**
  * signal of whether the device is online
  */
-export function useOnLine(): Accessor<boolean> {
+export function useOnline(onChanges?: (isOnline: boolean) => void): Accessor<boolean> {
   const [state, setState] = createSignal(true)
 
-  useWindowListener('online', () => setState(true))
-  useWindowListener('offline', () => setState(false))
+  useWindowListener('online', () => onChanges?.(setState(true)))
+  useWindowListener('offline', () => onChanges?.(setState(false)))
 
   return state
 }
