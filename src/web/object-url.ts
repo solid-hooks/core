@@ -31,7 +31,7 @@ export function createObjectURL(
  * @param options signal options
  * @example
  * ```ts
- * import { createObjectURL } from '@solid-hooks/core'
+ * import { createObjectURL } from '@solid-hooks/core/web'
  *
  * const [url, setURL, cleanupURL] = createObjectURL(new Uint8Array(8), { type: 'image/png' })
  * ```

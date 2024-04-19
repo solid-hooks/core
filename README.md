@@ -31,17 +31,6 @@ const audio = new Audio()
 const [time, setCurrentTime] = createReactive(audio, 'currentTime')
 ```
 
-### `createObjectURL`
-
-convert `blob` / `File` / `MediaSource` / `ArrayBuffer` / `ArrayBufferView` / `string` to signal URL, auto revoke on cleanup
-
-```ts
-import { createObjectURL } from '@solid-hooks/core'
-
-const [source, setMediaSource, cleanupSource] = createObjectURL(new MediaSource())
-const [url, setURL, cleanupURL] = createObjectURL(new Uint8Array(8), { type: 'image/png' })
-```
-
 ### `createDirective`
 
 another way to create directive
@@ -274,6 +263,17 @@ export function TestWithEffect() {
 ```
 
 ## `@solid-hooks/core/web`
+
+### `createObjectURL`
+
+convert `blob` / `File` / `MediaSource` / `ArrayBuffer` / `ArrayBufferView` / `string` to signal URL, auto revoke on cleanup
+
+```ts
+import { createObjectURL } from '@solid-hooks/core/web'
+
+const [source, setMediaSource, cleanupSource] = createObjectURL(new MediaSource())
+const [url, setURL, cleanupURL] = createObjectURL(new Uint8Array(8), { type: 'image/png' })
+```
 
 ### `useWorkerFn`
 
