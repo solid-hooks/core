@@ -1,4 +1,4 @@
-type DirectiveFunction<Args extends unknown[] = []> = (ref: globalThis.Element, ...args: Args) => void
+export type DirectiveFunction<Args extends unknown[] = []> = (ref: globalThis.Element, ...args: Args) => void
 
 /**
  * another way to create directive

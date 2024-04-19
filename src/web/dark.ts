@@ -1,6 +1,6 @@
 import { createPrefersDark } from '@solid-primitives/media'
 import { type MaybeAccessor, access } from '@solid-primitives/utils'
-import { type Accessor, type Setter, createEffect, createMemo, createSignal, on, untrack } from 'solid-js'
+import { type Accessor, type Setter, createMemo, createRenderEffect, createSignal, on } from 'solid-js'
 import { useResourceTag } from './resource-tag'
 
 export {
@@ -80,7 +80,7 @@ export function useDark(options: UseDarkOptions = {}): UseDarkReturn {
   const isDark = createMemo(() => {
     switch (mode()) {
       case 'auto':
-        return untrack(preferredDark)
+        return preferredDark()
       case 'light':
         return false
       case 'dark':
@@ -88,7 +88,7 @@ export function useDark(options: UseDarkOptions = {}): UseDarkReturn {
     }
   })
 
-  createEffect(on(isDark, (value) => {
+  createRenderEffect(on(isDark, (value) => {
     const el = document.querySelector(access(selector))
     if (!el) {
       return

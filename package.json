@@ -45,11 +45,11 @@
     "registry": "https://registry.npmjs.org/"
   },
   "peerDependencies": {
-    "solid-js": "^1"
+    "solid-js": "^1.6"
   },
   "dependencies": {
     "@solid-primitives/event-listener": "^2.3.3",
-    "@solid-primitives/media": "^2.2.8",
+    "@solid-primitives/media": "^2.2.9",
     "@solid-primitives/utils": "^6.2.3",
     "@subframe7536/type-utils": "^0.1.6",
     "object-path-access": "^4.0.0"
