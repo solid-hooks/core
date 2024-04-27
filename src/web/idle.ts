@@ -1,4 +1,5 @@
 import { tryOnCleanup } from '@solid-primitives/utils'
+import { type Accessor, createSignal } from 'solid-js'
 
 const runIdleWithFallback = window.requestIdleCallback || ((handler) => {
   let startTime = Date.now()
@@ -22,9 +23,29 @@ const cancelIdleWithFallback = window.cancelIdleCallback || (id => clearTimeout(
  * @see https://developer.mozilla.org/zh-CN/docs/Web/API/Background_Tasks_API
  */
 export function useIdleCallback(
-  fn: () => void,
+  fn: IdleRequestCallback,
   options?: IdleRequestOptions,
-): VoidFunction {
-  const id = runIdleWithFallback(fn, options)
-  return tryOnCleanup(() => cancelIdleWithFallback(id))
+): [running: Accessor<boolean>, start: VoidFunction, stop: VoidFunction] {
+  const [running, setRunning] = createSignal(false)
+  let requestID: number
+
+  const loop: IdleRequestCallback = (deadline) => {
+    requestID = runIdleWithFallback(loop)
+    fn(deadline)
+  }
+
+  const start = () => {
+    if (running()) {
+      return
+    }
+    setRunning(true)
+    requestID = runIdleWithFallback(loop, options)
+  }
+
+  const stop = tryOnCleanup(() => {
+    setRunning(false)
+    cancelIdleWithFallback(requestID)
+  })
+
+  return [running, start, stop]
 }
