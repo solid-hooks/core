@@ -1,7 +1,7 @@
 {
   "name": "@solid-hooks/core",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "useful hooks for solid.js",
   "author": "subframe7536",
   "license": "MIT",
@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "dev": "bun --bunx vite serve dev",
-    "lint": "tsc --noEmit && eslint . --max-warnings 0",
+    "lint": "tsc --noEmit && eslint --max-warnings 0 --fix",
     "format": "eslint . --fix",
     "build": "tsup",
     "release": "bun run lint && bun run test && bun run build && bumpp --all && npm publish",

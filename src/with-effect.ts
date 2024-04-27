@@ -1,4 +1,4 @@
-import type { Accessor, Setter } from 'solid-js'
+import type { Signal } from 'solid-js'
 
 /**
  * add callback for setter
@@ -23,9 +23,9 @@ import type { Accessor, Setter } from 'solid-js'
  * ```
  */
 export function withEffect<T>(
-  signal: [Accessor<T>, Setter<T>],
+  signal: Signal<T>,
   fn: (newValue: T) => void,
-): [Accessor<T>, Setter<T>] {
+): Signal<T> {
   const [val, setVal] = signal
   return [
     val,
@@ -34,5 +34,5 @@ export function withEffect<T>(
       fn(newValue)
       return newValue
     },
-  ] as [Accessor<T>, Setter<T>]
+  ] as Signal<T>
 }
