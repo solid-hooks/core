@@ -66,7 +66,7 @@ export function useResourceTag(
   createRenderEffect(() => {
     const code = access(content)
 
-    const codePropName = type === 'script' && /^(https?:|\w[\.\w-_%]+|)\//.test(code) ? 'src' : 'textContent'
+    const codePropName = type === 'script' && code.startsWith('http') ? 'src' : 'textContent'
 
     if ((element as any)[codePropName] !== code) {
       (element as any)[codePropName] = code
