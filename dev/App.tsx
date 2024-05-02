@@ -21,6 +21,7 @@ function Card(props: FlowProps<{ title: string }>) {
 export default function App() {
   useResourceTag('script', 'console.log(`[useResourceTag] test load script`)')
   const info = useNetwork()
+  console.log('info:', info())
   return (
     <div style={{ 'width': '80%', 'margin': 'auto', 'display': 'grid', 'grid-template-columns': '1fr 1fr', 'gap': '10px' }}>
       <Card title="createContextProvider">

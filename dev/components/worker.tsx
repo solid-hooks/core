@@ -1,5 +1,5 @@
 import { createMemo, createSignal } from 'solid-js'
-import { useWebWorkerFn } from '../../src/web'
+import { useIdleCallback, useWebWorkerFn } from '../../src/web'
 
 function heavyTask() {
   const randomNumber = () => Math.trunc(Math.random() * 5_000_00)
@@ -15,11 +15,10 @@ export default function TestWorker() {
 
   const isRunning = createMemo(() => workerStatus() === 'RUNNING')
 
-  const cb = () => {
+  const [,run] = useIdleCallback(() => {
     setTimeStamp(Date.now())
-    requestAnimationFrame(cb)
-  }
-  requestAnimationFrame(cb)
+  })
+  run()
   return (
     <>
       <div>timeStamp: {timeStamp()}</div>

@@ -1,8 +1,7 @@
-import { type Path, type PathValue, pathGet, pathSet } from 'object-path-access'
 import type { Signal, SignalOptions } from 'solid-js'
 import { createSignal } from 'solid-js'
 
-type ReactiveOptions<T extends object, P extends Path<T>> = SignalOptions<PathValue<T, P>> & {
+type ReactiveOptions<T extends object, K extends keyof T> = SignalOptions<T[K]> & {
   /**
    * custom setter to set original property to new value, useful for handle readonly properties
    * @param source source data
@@ -11,14 +10,14 @@ type ReactiveOptions<T extends object, P extends Path<T>> = SignalOptions<PathVa
    */
   setter?: (
     source: T,
-    newValue: PathValue<T, P>,
-  ) => PathValue<T, P> | void
+    newValue: T[K],
+  ) => T[K] | void
 }
 
 /**
  * make plain object props reactive
  * @param data source object
- * @param path object access path, support array access
+ * @param key object key
  * @param options signal options
  * @example
  * ```ts
@@ -30,15 +29,15 @@ type ReactiveOptions<T extends object, P extends Path<T>> = SignalOptions<PathVa
  */
 export function createReactive<
   T extends object,
-  P extends Path<T>,
+  K extends keyof T,
 >(
   data: T,
-  path: P,
-  options?: ReactiveOptions<T, P>,
-): Signal<PathValue<T, P>> {
+  key: K,
+  options?: ReactiveOptions<T, K>,
+): Signal<T[K]> {
   const { equals, setter, ...rest } = options || {}
   const [track, trigger] = createSignal(undefined, { ...rest, equals: false })
-  const get = () => pathGet(data, path)
+  const get = () => data[key]
 
   const _equals = typeof equals === 'function'
     ? (result: any) => equals(get(), result)
@@ -48,13 +47,13 @@ export function createReactive<
 
   const _setter = setter
     ? (newValue: any) => setter(data, newValue)
-    : (newValue: any) => pathSet(data, path, newValue)
+    : (newValue: any) => data[key] = newValue
   return [
     () => {
       track()
       return get()
     },
-    (arg) => {
+    (arg: any) => {
       const newValue = typeof arg === 'function' ? arg(get()) : arg
       if (!_equals(newValue)) {
         _setter(newValue)
@@ -62,5 +61,5 @@ export function createReactive<
       }
       return newValue
     },
-  ] as Signal<PathValue<T, P>>
+  ] as Signal<T[K]>
 }
