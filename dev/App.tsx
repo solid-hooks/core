@@ -1,5 +1,6 @@
-import type { FlowProps } from 'solid-js'
+import { type FlowProps, createSignal, onMount } from 'solid-js'
 import { useNetwork, useResourceTag } from '../src/web'
+import { useCssVar } from '../src/web/cssvar'
 import { TestContextProvider } from './components/context-provider'
 import TestDirective from './components/directive'
 import TestEmit from './components/emit'
@@ -20,10 +21,23 @@ function Card(props: FlowProps<{ title: string }>) {
 
 export default function App() {
   useResourceTag('script', 'console.log(`[useResourceTag] test load script`)')
+  let codeRef: HTMLElement | undefined
+  const [bg, setBg] = createSignal('red')
   const info = useNetwork()
   console.log('info:', info())
+  onMount(() => {
+    useCssVar('bg-color', bg, codeRef)
+  })
   return (
-    <div style={{ 'width': '80%', 'margin': 'auto', 'display': 'grid', 'grid-template-columns': '1fr 1fr', 'gap': '10px' }}>
+    <div
+      style={{
+        'width': '80%',
+        'margin': 'auto',
+        'display': 'grid',
+        'grid-template-columns': '1fr 1fr',
+        'gap': '10px',
+      }}
+    >
       <Card title="createContextProvider">
         <TestContextProvider />
       </Card>
@@ -48,7 +62,8 @@ export default function App() {
       <Card title="useDark">
         <TestDark />
       </Card>
-      <code>{JSON.stringify(info())}</code>
+      <code ref={codeRef} style={{ color: 'var(--bg-color)' }}>{JSON.stringify(info())}</code>
+      <button onClick={() => setBg(bg => bg === 'red' ? 'green' : 'red')}>change code color</button>
     </div>
   )
 }

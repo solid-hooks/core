@@ -396,6 +396,17 @@ auto cleanup, return cleanup function.
 
 see https://developer.mozilla.org/zh-CN/docs/Web/API/Background_Tasks_API
 
+### `useCssVar`
+
+bind css variable to signal
+
+```ts
+import { useCssVar } from '@solid-hooks/core/web'
+
+const [color, setColor] = createSignal('red')
+useCssVar('bg', color)
+```
+
 ## License
 
 MIT
