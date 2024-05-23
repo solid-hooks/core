@@ -25,6 +25,7 @@ export default function App() {
   const [bg, setBg] = createSignal('red')
   const info = useNetwork()
   console.log('info:', info())
+  useCssVar('bg', bg)
   onMount(() => {
     useCssVar('bg-color', bg, codeRef)
   })

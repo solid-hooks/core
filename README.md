@@ -131,7 +131,8 @@ function Child(props: Emits & BaseProps) {
   }
   return (
     <div>
-      child: {props.num}
+      child:
+      {props.num}
       <button onClick={handleClick}>+</button>
     </div>
   )
@@ -182,11 +183,9 @@ reference from [solid-utils](https://github.com/amoutonbrady/solid-utils#createa
 
 ### `createContextProvider`
 
-object style useContext and Provider
+reference from [@solid-primitives/context](https://github.com/solidjs-community/solid-primitives/tree/main/packages/context#createcontextprovider)
 
 if default value is not defined and use context outside provider, throw `Error` when DEV
-
-reference from [@solid-primitives/context](https://github.com/solidjs-community/solid-primitives/tree/main/packages/context#createcontextprovider)
 
 ```tsx
 import { createSignal } from 'solid-js'

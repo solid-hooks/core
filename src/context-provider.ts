@@ -8,7 +8,7 @@ export type ContextProvider<T, Props extends Record<string, unknown> = {}> = [
 
 /**
  * create Provider and useContext,
- * if call useContext outside Provider, return `undefined` when DEV
+ * if call useContext outside Provider, throw `Error` when DEV
  *
  * @param setup setup context function
  * @example
@@ -89,7 +89,7 @@ export function createContextProvider<T, Props extends Record<string, unknown>>(
           const _ctx = useContext(ctx)
           if (_ctx === undefined) {
             console.error(`Provider is not set in component tree!`)
-            return undefined as any
+            throw new Error(`Provider is not set in component tree!`)
           }
           return _ctx
         }
