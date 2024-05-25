@@ -102,48 +102,43 @@ like `watch`, use `createRendered`
 
 ### `useEmits`
 
-like `defineEmit` in `Vue`, emit event from child component, auto handle optional prop
+like `defineEmits` in `Vue`, emit event from child component
 
 ```tsx
-import { createSignal } from 'solid-js'
-import { useEmits } from '@solid-hooks/core'
+import { type defineEmits, useEmits } from '@solid-hooks/core'
 
-// must start with `$`
-type Emits = {
-  $var: (num: number) => void
-  $update: (d1: string, d2?: string, d3?: string) => void
-  $optional?: (data: { test: number }) => void
-}
-
-type BaseProps = { num: number }
-
-function Child(props: Emits & BaseProps) {
-  const { emit, createEmitSignal } = useEmits<Emits>(props)
-
-  // auto emit after value changing, like `defineModel` in Vue
-  const [variable, setVariable] = createEmitSignal('var', 1)
+type Emits = defineEmits<{
+  var: number
+  /**
+   * test comment
+   */
+  update: [d1: string, d2?: string, d3?: string]
+  fn: (test: string) => void
+}>
+function Child(prop: Emits & { num: number }) {
+  const emit = useEmits(prop)
   const handleClick = () => {
-    setVariable(v => v + 1)
-
-    // manully emit
-    emit('update', `emit from child: ${props.num}`, 'second')
-    emit('optional', { test: 1 })
+    emit('var', { id: 1 })
+    emit('update', `emit from child: ${prop.num}`, 'second param')
+    emit('fn', ['a', 'b'])
   }
   return (
     <div>
-      child:
-      {props.num}
-      <button onClick={handleClick}>+</button>
+      <div>
+        child prop: {prop.num}
+      </div>
+      <button onClick={handleClick}>click and see console</button>
     </div>
   )
 }
-function Father() {
-  const [count] = createSignal('init')
+
+export default function Father() {
   return (
     <Child
-      num={count()}
-      $update={console.log}
-      $var={e => console.log('useEmits:', e)}
+      num={1}
+      $var={e => console.log('[emit] $var:', e)}
+      $update={(d, d1) => console.log(`[emit] $update:`, d, d1)}
+      $fn={test => console.log('[emit] $fn:', test)}
     />
   )
 }

@@ -1,113 +1,79 @@
-import type { AnyFunction, RemoveNeverProps, StringKeys } from '@subframe7536/type-utils'
-import { type NoInfer, type Signal, type SignalOptions, createSignal } from 'solid-js'
+import type { AnyFunction, ParseFunction, ParseParameters, RemoveNeverProps, StringKeys } from '@subframe7536/type-utils'
+
+type Add$Keys<T extends Record<string, any>> = {
+  [K in StringKeys<T> as `$${K}`]: T[K]
+}
 
 type Non$Keys<Emits extends EmitEvents> = StringKeys<Emits> extends `$${infer EventName}` ? EventName : never
 
 type EmitEvents = Record<`$${string}`, AnyFunction>
 
-type FilterOneParameterEvents<Emits extends EmitEvents> = RemoveNeverProps<{
-  [K in StringKeys<Emits>]: Parameters<Extract<Required<Emits>[K], AnyFunction>>['length'] extends 1
-    ? Emits[K]
-    : never
-}>
-
-type EventArgsWithout$<
-  Events extends EmitEvents,
-  K extends Non$Keys<Events> | Non$Keys<FilterOneParameterEvents<Events>>,
-> = Parameters<Extract<Required<Events>[`$${K}`], AnyFunction>>
-
-export type EmitsReturn<Events extends EmitEvents> = {
-  /**
-   * trigger event
-   * @param event trigger event
-   * @param ...data event data
-   */
-  emit: <K extends Non$Keys<Events>>(
-    event: K,
-    ...data: EventArgsWithout$<Events, K>
-  ) => void
-  /**
-   * create a {@link SignalObject} that trigger event after value is set
-   * @param event trigger event (only events with one parameter allowed)
-   * @param value initial value
-   * @param options emit options
-   */
-  createEmitSignal: <
-    K extends Non$Keys<FilterOneParameterEvents<Events>>,
-    V extends EventArgsWithout$<Events, K>[0],
-  >(
-    event: K,
-    value: NoInfer<V>,
-    options?: SignalOptions<V>
-  ) => Signal<V>
+type FilterEmitEvents<T extends Record<string, any>> = {
+  [K in Extract<keyof T, `$${string}`>]: T[K]
 }
 
 /**
- * like `defineEmit` in `Vue`, emit event from child component, auto handle optional prop
+ * trigger event
+ * @param event trigger event
+ * @param ...data event data
+ */
+type EmitsFn<
+  Events extends Record<string, any>,
+  Emits extends EmitEvents = FilterEmitEvents<Events>,
+> = <K extends Non$Keys<Emits>>(
+  event: K,
+  ...data: Parameters<Extract<Required<Emits>[`$${K}`], AnyFunction>>
+) => void
+
+export type defineEmits<T extends Record<string, any>> = Add$Keys<{
+  [K in StringKeys<T>]: T[K] extends infer E
+    ? E extends AnyFunction
+      ? E
+      : ParseFunction<ParseParameters<E>>
+    : never
+}>
+
+/**
+ * like `defineEmits` in `Vue`, emit event from child component
  * @param props conponents props
  * @example
  * ```tsx
- * import { createSignal } from 'solid-js'
- * import { useEmits } from '@solid-hooks/core'
+ * import { type defineEmits, useEmits } from '@solid-hooks/core'
  *
- * // must start with `$`
- * type Emits = {
- *   $var: (num: number) => void
- *   $update: (d1: string, d2?: string, d3?: string) => void
- *   $optional?: (data: { test: number }) => void
- * }
- *
- * type BaseProps = { num: number }
- *
- * function Child(props: Emits & BaseProps) {
- *   const { emit, createEmitSignal } = useEmits<Emits>(props)
- *
- *   // auto emit after value changing, like `defineModel` in Vue
- *   const [variable, setVariable] = createEmitSignal('var', 1)
+ * type Emits = defineEmits<{
+ *   var: number
+ *   update: [d1: string, d2?: string, d3?: string]
+ *   fn: (test: string) => void
+ * }>
+ * function Child(prop: Emits & { num: number }) {
+ *   const emit = useEmits(prop)
  *   const handleClick = () => {
- *     setVariable(v => v + 1)
- *
- *     // manully emit
- *     emit('update', `emit from child: ${props.num}`, 'second')
- *     emit('optional', { test: 1 })
+ *     emit('var', { id: 1 })
+ *     emit('update', `emit from child: ${prop.num}`, 'second param')
+ *     emit('fn', ['a', 'b'])
  *   }
  *   return (
  *     <div>
- *       child: {props.num}
- *       <button onClick={handleClick}>+</button>
+ *       <div>
+ *         child prop: {prop.num}
+ *       </div>
+ *       <button onClick={handleClick}>click and see console</button>
  *     </div>
  *   )
  * }
- * function Father() {
- *   const [count] = createSignal('init')
+ *
+ * export default function Father() {
  *   return (
  *     <Child
- *       num={count()}
- *       $update={console.log}
- *       $var={e => console.log('useEmits:', e)}
+ *       num={1}
+ *       $var={e => console.log('[emit] $var:', e)}
+ *       $update={(d, d1) => console.log(`[emit] $update:`, d, d1)}
+ *       $fn={test => console.log('[emit] $fn:', test)}
  *     />
  *   )
  * }
  * ```
  */
-export function useEmits<Emits extends EmitEvents>(props: EmitEvents): EmitsReturn<Emits> {
-  const emit = (e: string, ...args: any[]) => {
-    // @ts-expect-error emit
-    // eslint-disable-next-line prefer-template
-    props['$' + e]?.(...args)
-  }
-  return {
-    emit,
-    createEmitSignal: (e, value, options) => {
-      const [val, setVal] = createSignal(value, options)
-      return [
-        val,
-        (args) => {
-          const value = setVal(args as any)
-          emit(e, value)
-          return value
-        },
-      ] as Signal<any>
-    },
-  }
+export function useEmits<Props extends Record<string, any>>(props: Props): EmitsFn<Props> {
+  return (e: string, ...args: any[]) => props[`$${e}`](...args)
 }
