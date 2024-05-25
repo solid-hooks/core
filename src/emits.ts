@@ -1,4 +1,4 @@
-import type { AnyFunction, ParseFunction, ParseParameters, RemoveNeverProps, StringKeys } from '@subframe7536/type-utils'
+import type { AnyFunction, ParseFunction, ParseParameters, StringKeys } from '@subframe7536/type-utils'
 
 type Add$Keys<T extends Record<string, any>> = {
   [K in StringKeys<T> as `$${K}`]: T[K]
