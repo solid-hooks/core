@@ -17,20 +17,30 @@ function jobRunner(userFunc: Function) {
       })
   }
 }
-function depsParser(deps: string[]) {
-  if (deps.length === 0) {
+
+function depsParser(deps: string[], func: Function[]) {
+  if (deps.length === 0 && func.length === 0) {
     return ''
   }
 
-  const depsString = deps.map(dep => `'${dep}'`).toString()
-  return `importScripts(${depsString})`
+  const depsString = deps.length === 0 ? '' : 'importScripts(' + deps.map(dep => `'${dep}'`).toString() + ')'
+  const funcString = func
+    .filter(dep => typeof dep === 'function')
+    .map((fn) => {
+      const str = fn.toString()
+      return str.trim().startsWith('function') ? str : 'const ' + fn.name + ' = ' + str
+    })
+    .join(';')
+
+  return depsString + funcString
 }
-function createWorkerBlobUrl(fn: Function, deps: string[]) {
-  const blobCode = `${depsParser(deps)};onmessage=(${jobRunner})(${fn})`
+function createWorkerBlobUrl(fn: Function, deps: string[], func: Function[]) {
+  const blobCode = depsParser(deps, func) + ';onmessage=(' + jobRunner + ')(' + fn + ')'
   const blob = new Blob([blobCode], { type: 'text/javascript' })
   const url = URL.createObjectURL(blob)
   return url
 }
+
 export type WebWorkerStatus =
   | 'PENDING'
   | 'SUCCESS'
@@ -39,10 +49,6 @@ export type WebWorkerStatus =
   | 'TIMEOUT_EXPIRED'
 
 export type UseWebWorkerOptions = {
-  /*
-   * custom `window` instance, e.g. working with iframes or in testing environments.
-   */
-  customWindow?: Window
   /**
    * milliseconds before killing the worker
    *
@@ -52,11 +58,35 @@ export type UseWebWorkerOptions = {
   /**
    * external dependencies array running the worker
    */
-  dependencies?: string[]
+  deps?: string[]
+  /**
+   * local funtions will be use in the worker
+   */
+  func?: Function[]
 }
 
+export type UseWebWorkerReturn<T> = [
+  /**
+   * function to run in worker
+   */
+  run: T,
+  /**
+   * status of worker
+   */
+  {
+    /**
+     * status of worker, possible values: {@link WebWorkerStatus}
+     */
+    status: () => WebWorkerStatus
+    /**
+     * manually terminate the worker
+     */
+    terminate: () => void
+  },
+]
+
 /**
- * run a function in a web worker
+ * run a function in a web worker, support local functions or external dependencies
  * @param fn function to run in worker
  * @param options options
  * @example
@@ -64,15 +94,16 @@ export type UseWebWorkerOptions = {
  * import { createMemo, createSignal } from 'solid-js'
  * import { useWebWorkerFn } from '@solid-hooks/core/web'
  *
+ * const randomNumber = () => Math.trunc(Math.random() * 5_000_00)
+ *
  * function heavyTask() {
- *   const randomNumber = () => Math.trunc(Math.random() * 5_000_00)
  *   const numbers: number[] = Array(5_000_000).fill(undefined).map(randomNumber)
  *   numbers.sort()
  *   return numbers.slice(0, 5)
  * }
  *
  * export default function TestWorker() {
- *   const [fn, status, terminate] = useWebWorkerFn(heavyTask)
+ *   const [fn, { status, terminate }] = useWebWorkerFn(heavyTask, { func: [randomNumber] })
  *   const isRunning = createMemo(() => status() === 'RUNNING')
  *   return (
  *     <>
@@ -87,36 +118,36 @@ export type UseWebWorkerOptions = {
  */
 export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWorkerOptions = {}) {
   const {
-    customWindow = window,
-    dependencies = [],
+    deps = [],
+    func = [],
     timeout,
   } = options
 
-  const [workerStatus, setWorkerStatus] = createSignal<WebWorkerStatus>('PENDING')
+  const [status, setWorkerStatus] = createSignal<WebWorkerStatus>('PENDING')
   let worker: Worker & { _url?: string } | undefined
   let promise: {
     reject?: (result: ReturnType<T> | ErrorEvent) => void
     resolve?: (result: ReturnType<T>) => void
   } = {}
-  let timeoutId: number | undefined
+  let timeoutId: any
 
-  const workerTerminate = (status: WebWorkerStatus = 'PENDING') => {
-    if (worker?._url && customWindow) {
+  const terminate = (status: WebWorkerStatus = 'PENDING') => {
+    if (worker?._url) {
       worker.terminate()
       URL.revokeObjectURL(worker._url)
       promise = {}
       worker = undefined
-      customWindow.clearTimeout(timeoutId)
+      globalThis.clearTimeout(timeoutId)
       setWorkerStatus(status)
     }
   }
 
-  workerTerminate()
+  terminate()
 
-  tryOnCleanup(workerTerminate)
+  tryOnCleanup(terminate)
 
   const generateWorker = () => {
-    const blobUrl = createWorkerBlobUrl(fn, dependencies)
+    const blobUrl = createWorkerBlobUrl(fn, deps, func)
     const newWorker: Worker & { _url?: string } = new Worker(blobUrl)
     newWorker._url = blobUrl
 
@@ -126,11 +157,11 @@ export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWork
       switch (status) {
         case 'SUCCESS':
           promise.resolve?.(result)
-          workerTerminate(status)
+          terminate(status)
           break
         default:
           promise.reject?.(result)
-          workerTerminate('ERROR')
+          terminate('ERROR')
           break
       }
     }
@@ -138,17 +169,17 @@ export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWork
     newWorker.onerror = (e: ErrorEvent) => {
       e.preventDefault()
       promise.reject?.(e)
-      workerTerminate('ERROR')
+      terminate('ERROR')
     }
 
     if (timeout) {
-      timeoutId = customWindow.setTimeout(() => workerTerminate('TIMEOUT_EXPIRED'), timeout)
+      timeoutId = globalThis.setTimeout(() => terminate('TIMEOUT_EXPIRED'), timeout)
     }
     return newWorker
   }
 
   const workerFn = (...fnArgs: Parameters<T>) => {
-    if (workerStatus() === 'RUNNING') {
+    if (status() === 'RUNNING') {
       DEV && console.error(
         '[useWebWorkerFn] You can only run one instance of the worker at a time.',
       )
@@ -164,9 +195,5 @@ export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWork
     })
   }
 
-  return [
-    workerFn,
-    workerStatus,
-    workerTerminate,
-  ] as const
+  return [workerFn, { status, terminate }] as const
 }

@@ -1,19 +1,20 @@
 import { createMemo, createSignal } from 'solid-js'
 import { useIdleCallback, useWebWorkerFn } from '../../src/web'
 
+const randomNumber = () => Math.trunc(Math.random() * 5_000_00)
+
 function heavyTask() {
-  const randomNumber = () => Math.trunc(Math.random() * 5_000_00)
   const numbers: number[] = Array(5_000_000).fill(undefined).map(randomNumber)
   numbers.sort()
   return numbers.slice(0, 5)
 }
 
 export default function TestWorker() {
-  const [workerFn, workerStatus, workerTerminate] = useWebWorkerFn(heavyTask)
+  const [runWorker, { status, terminate }] = useWebWorkerFn(heavyTask, { func: [randomNumber] })
   const [timeStamp, setTimeStamp] = createSignal(Date.now())
   const [data, setData] = createSignal<number[]>([])
 
-  const isRunning = createMemo(() => workerStatus() === 'RUNNING')
+  const isRunning = createMemo(() => status() === 'RUNNING')
 
   const [,run] = useIdleCallback(() => {
     setTimeStamp(Date.now())
@@ -22,13 +23,13 @@ export default function TestWorker() {
   return (
     <>
       <div>timeStamp: {timeStamp()}</div>
-      <div>Status: {workerStatus()}</div>
+      <div>Status: {status()}</div>
       <div>data: {data().toString()}</div>
-      <button onClick={() => setData(heavyTask())}>
+      <button onClick={() => (setData([]), setData(heavyTask()))}>
         sort in main
       </button>
       <button
-        onClick={() => isRunning() ? workerTerminate() : workerFn().then(setData)}
+        onClick={() => (setData([]), isRunning() ? terminate() : runWorker().then(setData))}
       >
         {isRunning() ? 'terminate' : 'sort in worker'}
       </button>

@@ -271,7 +271,7 @@ const [url, setURL, cleanupURL] = createObjectURL(new Uint8Array(8), { type: 'im
 
 ### `useWorkerFn`
 
-run function in worker
+run function in worker, support local functions or external dependencies
 
 reference from [vueuse](https://vueuse.org/core/useWebWorkerFn/)
 
@@ -279,15 +279,16 @@ reference from [vueuse](https://vueuse.org/core/useWebWorkerFn/)
 import { createMemo, createSignal } from 'solid-js'
 import { useWebWorkerFn } from '@solid-hooks/core/web'
 
+const randomNumber = () => Math.trunc(Math.random() * 5_000_00)
+
 function heavyTask() {
-  const randomNumber = () => Math.trunc(Math.random() * 5_000_00)
   const numbers: number[] = Array(5_000_000).fill(undefined).map(randomNumber)
   numbers.sort()
   return numbers.slice(0, 5)
 }
 
 export default function TestWorker() {
-  const [fn, status, terminate] = useWebWorkerFn(heavyTask)
+  const [fn, { status, terminate }] = useWebWorkerFn(heavyTask, { func: [randomNumber] })
   const isRunning = createMemo(() => status() === 'RUNNING')
   return (
     <>

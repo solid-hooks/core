@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js'
+import { catchError, createSignal } from 'solid-js'
 import { createContextProvider } from '../../src'
 
 export const [TestProvider, useTestContext] = createContextProvider((param: { initial: number }) => {
@@ -23,7 +23,9 @@ function Child() {
 }
 
 export function TestContextProvider() {
-  console.log('call useTestContext() outside provider:', useTestContext())
+  catchError(() => {
+    console.log('call useTestContext() outside provider:', useTestContext())
+  }, () => {})
   return (
     <TestProvider initial={0}>
       <Child />
