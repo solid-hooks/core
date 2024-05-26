@@ -17,13 +17,11 @@ type FilterEmitEvents<T extends Record<string, any>> = {
  * @param event trigger event
  * @param ...data event data
  */
-type EmitsFn<
-  Events extends Record<string, any>,
-  Emits extends EmitEvents = FilterEmitEvents<Events>,
-> = <K extends Non$Keys<Emits>>(
-  event: K,
-  ...data: Parameters<Extract<Required<Emits>[`$${K}`], AnyFunction>>
-) => void
+type EmitTrigger<Events extends Record<string, any>> = FilterEmitEvents<Events> extends infer E
+  ? E extends EmitEvents
+    ? <K extends Non$Keys<E>>(event: K, ...data: Parameters<Extract<Required<E>[`$${K}`], AnyFunction>>) => void
+    : never
+  : never
 
 export type defineEmits<T extends Record<string, any>> = Add$Keys<{
   [K in StringKeys<T>]: T[K] extends infer E
@@ -74,6 +72,7 @@ export type defineEmits<T extends Record<string, any>> = Add$Keys<{
  * }
  * ```
  */
-export function useEmits<Props extends Record<string, any>>(props: Props): EmitsFn<Props> {
+export function useEmits<Props extends Record<string, any>>(props: Props): EmitTrigger<Props> {
+  // @ts-expect-error ignore it
   return (e: string, ...args: any[]) => props[`$${e}`](...args)
 }
