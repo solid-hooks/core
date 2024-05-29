@@ -108,11 +108,10 @@ like `defineEmits` in `Vue`, emit event from child component
 import { type defineEmits, useEmits } from '@solid-hooks/core'
 
 type Emits = defineEmits<{
+  // sync
   var: number
-  /**
-   * test comment
-   */
   update: [d1: string, d2?: string, d3?: string]
+  // sync or async
   fn: (test: string) => void
 }>
 function Child(prop: Emits & { num: number }) {
@@ -317,7 +316,7 @@ const [styleElement, cleanupStyle] = useResourceTag('style', style, {/* options 
 
 auto cleanup event listener
 
-use [@solid-primitives/event-listener](https://github.com/solidjs-community/solid-primitives/tree/main/packages/event-listener)
+reference from [@solid-primitives/event-listener](https://github.com/solidjs-community/solid-primitives/tree/main/packages/event-listener)
 
 ### `useDark`
 

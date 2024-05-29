@@ -1,7 +1,7 @@
 import type { AnyFunction, ParseFunction, ParseParameters, StringKeys } from '@subframe7536/type-utils'
 
 type Add$Keys<T extends Record<string, any>> = {
-  [K in StringKeys<T> as `$${K}`]: T[K]
+  [K in keyof T as `$${K & string}`]: T[K]
 }
 
 type Non$Keys<Emits extends EmitEvents> = StringKeys<Emits> extends `$${infer EventName}` ? EventName : never
@@ -39,9 +39,11 @@ export type defineEmits<T extends Record<string, any>> = Add$Keys<{
  * import { type defineEmits, useEmits } from '@solid-hooks/core'
  *
  * type Emits = defineEmits<{
+ *   // sync
  *   var: number
  *   update: [d1: string, d2?: string, d3?: string]
- *   fn: (test: string) => void
+ *   // sync or async
+ *   fn: (test: string) => Promise<void>
  * }>
  * function Child(prop: Emits & { num: number }) {
  *   const emit = useEmits(prop)
