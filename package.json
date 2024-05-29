@@ -1,7 +1,7 @@
 {
   "name": "@solid-hooks/core",
   "type": "module",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "useful hooks for solid.js",
   "author": "subframe7536",
   "license": "MIT",
