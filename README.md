@@ -257,6 +257,49 @@ export function TestWithEffect() {
 
 ## `@solid-hooks/core/web`
 
+### `useHover`
+
+check if element is hovered
+
+```tsx
+import { useHover } from '@solid-hooks/core/web'
+
+function App() {
+  let el
+  const hovered = useHover(() => el)
+  return <div ref={el}>{hovered() ? 'hovered' : 'not hovered'}</div>
+}
+```
+
+### `useFocus`
+
+check if element is focused
+
+```tsx
+import { useFocus } from '@solid-hooks/core/web'
+
+function App() {
+  let el
+  const focused = useFocus(() => el)
+  return <div ref={el}>{focused() ? 'focused' : 'not focused'}</div>
+}
+```
+
+### `useTitle`
+
+reactive document title
+
+```tsx
+import { useTitle } from '@solid-hooks/core/web'
+
+const [title, setTitle] = useTitle()
+
+// or with external signal
+const [title, setTitle] = createSignal('')
+useTitle(title)
+setTitle('new title')
+```
+
 ### `createObjectURL`
 
 convert `blob` / `File` / `MediaSource` / `ArrayBuffer` / `ArrayBufferView` / `string` to signal URL, auto revoke on cleanup

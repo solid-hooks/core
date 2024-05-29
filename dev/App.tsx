@@ -1,14 +1,15 @@
-import { type FlowProps, createSignal, onMount } from 'solid-js'
-import { useNetwork, useResourceTag } from '../src/web'
-import { useCssVar } from '../src/web/cssvar'
+import { type FlowProps, For, createSignal } from 'solid-js'
+import { useResourceTag, useTitle } from '../src/web'
 import { TestContextProvider } from './components/context-provider'
 import TestDirective from './components/directive'
 import TestEmit from './components/emit'
 import TestReactive from './components/reactive'
 import TestWatch from './components/watch'
-import { TestWithEffect } from './components/with-effect'
+import TestWithEffect from './components/with-effect'
 import TestWorker from './components/worker'
 import TestDark from './components/dark'
+import TestNetworkWithCssVar from './components/network'
+import TestElement from './components/element'
 
 function Card(props: FlowProps<{ title: string }>) {
   return (
@@ -21,14 +22,23 @@ function Card(props: FlowProps<{ title: string }>) {
 
 export default function App() {
   useResourceTag('script', 'console.log(`[useResourceTag] test load script`)')
-  let codeRef: HTMLElement | undefined
-  const [bg, setBg] = createSignal('red')
-  const info = useNetwork()
-  console.log('info:', info())
-  useCssVar('bg', bg)
-  onMount(() => {
-    useCssVar('bg-color', bg, codeRef)
-  })
+  const [title, setTitle] = createSignal('test title')
+  useTitle(title)
+  setTimeout(() => {
+    setTitle('change title')
+  }, 1000)
+  const comps = {
+    createContextProvider: <TestContextProvider />,
+    createEmitSignal: <TestEmit />,
+    watch: <TestWatch />,
+    createReactive: <TestReactive />,
+    withEffect: <TestWithEffect />,
+    createDirective: <TestDirective />,
+    useWebWorkerFn: <TestWorker />,
+    useDark: <TestDark />,
+    networkWithCssVar: <TestNetworkWithCssVar />,
+    element: <TestElement />,
+  }
   return (
     <div
       style={{
@@ -39,32 +49,10 @@ export default function App() {
         'gap': '10px',
       }}
     >
-      <Card title="createContextProvider">
-        <TestContextProvider />
-      </Card>
-      <Card title="createEmitSignal">
-        <TestEmit />
-      </Card>
-      <Card title="watch">
-        <TestWatch />
-      </Card>
-      <Card title="createReactive">
-        <TestReactive />
-      </Card>
-      <Card title="withEffect">
-        <TestWithEffect />
-      </Card>
-      <Card title="createDirective">
-        <TestDirective />
-      </Card>
-      <Card title="useWebWorkerFn">
-        <TestWorker />
-      </Card>
-      <Card title="useDark">
-        <TestDark />
-      </Card>
-      <code ref={codeRef} style={{ color: 'var(--bg-color)' }}>{JSON.stringify(info())}</code>
-      <button onClick={() => setBg(bg => bg === 'red' ? 'green' : 'red')}>change code color</button>
+      <For each={Object.entries(comps)}>
+        {item => <Card title={item[0]}>{item[1]}</Card>}
+      </For>
+
     </div>
   )
 }

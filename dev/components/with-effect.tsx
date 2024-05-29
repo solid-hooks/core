@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js'
 import { withEffect } from '../../src/with-effect'
 
-export function TestWithEffect() {
+export default function TestWithEffect() {
   // eslint-disable-next-line solid/reactivity
   const [count, setCount] = withEffect(createSignal(1), value => console.log('[withEffect] value:', value))
   return (

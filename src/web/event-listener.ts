@@ -61,7 +61,7 @@ export function useEventListener<
   EventMap extends EventMapOf<Target>,
   EventType extends keyof EventMap,
 >(
-  target: MaybeAccessor<Target | undefined>,
+  target: MaybeAccessor<Target | undefined | null>,
   type: EventType,
   handler: (event: EventMap[EventType]) => void,
   options?: EventListenerOptions
@@ -70,13 +70,13 @@ export function useEventListener<
   EventMap extends Record<string, Event>,
   EventType extends keyof EventMap,
 >(
-  target: MaybeAccessor<EventTarget | undefined>,
+  target: MaybeAccessor<EventTarget | undefined | null>,
   type: EventType,
   handler: (event: EventMap[EventType]) => void,
   options?: EventListenerOptions
 ): VoidFunction
 export function useEventListener(
-  target: MaybeAccessor<EventTarget | undefined>,
+  target: MaybeAccessor<EventTarget | undefined | null>,
   type: string,
   handler: (event: Event) => void,
   options?: EventListenerOptions,
@@ -114,13 +114,13 @@ type ListenEvent<EventMap extends Record<string, any>> = {
 
 // DOM Events
 export function useEventListenerStack<Target extends TargetWithEventMap, EventMap extends EventMapOf<Target>>(
-  target: MaybeAccessor<Target | undefined>,
+  target: MaybeAccessor<Target | undefined | null>,
   options?: EventListenerOptions,
 ): [listen: ListenEvent<EventMap>, clear: VoidFunction]
 
 // Custom Events
 export function useEventListenerStack<EventMap extends Record<string, Event>>(
-  target: MaybeAccessor<EventTarget | undefined>,
+  target: MaybeAccessor<EventTarget | undefined | null>,
   options?: EventListenerOptions,
 ): [listen: ListenEvent<EventMap>, clear: VoidFunction]
 
