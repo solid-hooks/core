@@ -1,7 +1,7 @@
-import { useDark } from '../../src/web'
+import { useColorMode } from '../../src/web'
 
-export default function TestDark() {
-  const [isDark, mode, setMode] = useDark()
+export default function TestColorMode() {
+  const [mode, setMode, isDark] = useColorMode({ initialMode: 'dark' })
   return (
     <>
       <div>{isDark() ? 'dark' : 'light'} theme</div>

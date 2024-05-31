@@ -7,7 +7,7 @@ import TestReactive from './components/reactive'
 import TestWatch from './components/watch'
 import TestWithEffect from './components/with-effect'
 import TestWorker from './components/worker'
-import TestDark from './components/dark'
+import TestColorMode from './components/color-mode'
 import TestNetworkWithCssVar from './components/network'
 import TestElement from './components/element'
 
@@ -35,7 +35,7 @@ export default function App() {
     withEffect: <TestWithEffect />,
     createDirective: <TestDirective />,
     useWebWorkerFn: <TestWorker />,
-    useDark: <TestDark />,
+    useColorMode: <TestColorMode />,
     networkWithCssVar: <TestNetworkWithCssVar />,
     element: <TestElement />,
   }

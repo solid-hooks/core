@@ -10,29 +10,30 @@ export {
 
 type ColorMode = 'auto' | 'light' | 'dark'
 
-export type UseDarkOptions = {
+export type UseColorModeOptions = {
   /**
    * initial color mode
    * @default 'auto'
    */
   initialMode?: ColorMode
   /**
+   * auto change color scheme
+   */
+  colorScheme?: boolean
+  /**
    * css selector for the target element applying to
    * @default 'html'
    */
   selector?: MaybeAccessor<string>
-
   /**
    * HTML attribute applying the target element
    * @default 'class'
    */
   attribute?: string
-
   /**
    * custom handler for handle the theme change.
    */
   onChanged?: (isDark: boolean) => void
-
   /**
    * disable transition on switch
    * @see https://paco.me/writing/disable-theme-transitions
@@ -41,7 +42,11 @@ export type UseDarkOptions = {
   disableTransition?: boolean
 }
 
-type UseDarkReturn = [isDark: Accessor<boolean>, mode: Accessor<ColorMode>, setMode: Setter<ColorMode>]
+type UseColorModeReturn = [
+  mode: Accessor<ColorMode>,
+  setMode: Setter<ColorMode>,
+  isDark: Accessor<boolean>,
+]
 
 const disableTransitionStyle = '*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}'
 
@@ -51,10 +56,10 @@ const disableTransitionStyle = '*,*::before,*::after{-webkit-transition:none!imp
  * disable transition by default
  * @example
  * ```tsx
- * import { useDark } from '@solid-hooks/core/web'
+ * import { useColorMode } from '@solid-hooks/core/web'
  *
- * export default function TestDark() {
- *   const [isDark, mode, setMode] = useDark()
+ * export default function TestColorMode() {
+ *   const [mode, setMode, isDark] = useColorMode()
  *   return (
  *     <>
  *       <div>{isDark() ? 'dark' : 'light'} theme</div>
@@ -65,13 +70,14 @@ const disableTransitionStyle = '*,*::before,*::after{-webkit-transition:none!imp
  * }
  * ```
  */
-export function useDark(options: UseDarkOptions = {}): UseDarkReturn {
+export function useColorMode(options: UseColorModeOptions = {}): UseColorModeReturn {
   const {
     onChanged,
     initialMode = 'auto',
     selector = 'html',
     attribute = 'class',
     disableTransition = true,
+    colorScheme,
   } = options
 
   const preferredDark = createPrefersDark()
@@ -88,8 +94,8 @@ export function useDark(options: UseDarkOptions = {}): UseDarkReturn {
     }
   })
 
-  createRenderEffect(on(isDark, (value) => {
-    const el = document.querySelector(access(selector))
+  createRenderEffect(on(isDark, (is) => {
+    const el = document.querySelector(access(selector)) as HTMLElement
     if (!el) {
       return
     }
@@ -98,15 +104,20 @@ export function useDark(options: UseDarkOptions = {}): UseDarkReturn {
       ? useResourceTag('style', disableTransitionStyle)[1]
       : undefined
 
+    const _mode = is ? 'dark' : 'light'
     if (attribute === 'class') {
-      value ? el.classList.add('dark') : el.classList.remove('dark')
+      el.classList.remove('light', 'dark')
+      el.classList.add(_mode)
     } else {
-      el.setAttribute(attribute, 'dark')
+      el.setAttribute(attribute, _mode)
     }
-    onChanged?.(value)
+    if (colorScheme) {
+      el.style.colorScheme = _mode
+    }
+    onChanged?.(is)
 
     cleanup?.()
   }))
 
-  return [isDark, mode, setMode]
+  return [mode, setMode, isDark]
 }

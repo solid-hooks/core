@@ -361,15 +361,15 @@ auto cleanup event listener
 
 reference from [@solid-primitives/event-listener](https://github.com/solidjs-community/solid-primitives/tree/main/packages/event-listener)
 
-### `useDark`
+### `useColorMode`
 
 auto color mode with attribute toggle, disable transition by default
 
 ```tsx
-import { useDark } from '@solid-hooks/core/web'
+import { useColorMode } from '@solid-hooks/core/web'
 
-export default function TestDark() {
-  const [isDark, mode, setMode] = useDark()
+export default function TestColorMode() {
+  const [mode, setMode, isDark] = useColorMode()
   return (
     <>
       <div>{isDark() ? 'dark' : 'light'} theme</div>
