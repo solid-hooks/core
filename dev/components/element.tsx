@@ -1,12 +1,13 @@
-import { useClickOutside, useHover } from '../../src/web'
+import { useClickOutside, useHover, useLongPress } from '../../src/web'
 
 export default function TestElement() {
   let containerRef: HTMLDivElement | undefined
-  const isClicked = useClickOutside(() => containerRef)
-  const isHovered = useHover(() => containerRef)
+  const [isClickOutside] = useClickOutside(() => containerRef)
+  const [isHovered] = useHover(() => containerRef)
+  const [isLongPressed] = useLongPress(() => containerRef, { delay: 1000 })
 
   return (
-    <div>
+    <div style={{ display: 'flex' }}>
       <div
         ref={containerRef}
         style={{
@@ -23,8 +24,9 @@ export default function TestElement() {
           'padding-top': '20px',
         }}
       >
-        <div>is container clicked:{isClicked() ? 'yes' : 'no'}</div>
-        <div>is container hovered:{isHovered() ? 'yes' : 'no'}</div>
+        <div>is container clicked outside: {isClickOutside() ? 'yes' : 'no'}</div>
+        <div>is container hovered: {isHovered() ? 'yes' : 'no'}</div>
+        <div>is container long pressed: {isLongPressed() ? 'yes' : 'no'}</div>
       </div>
     </div>
   )

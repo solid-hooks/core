@@ -144,7 +144,7 @@ function baseWatch<T>(
  *   count,
  *   (value, oldValue, callTimes) => {
  *     console.log(value, oldValue, callTimes)
- *     const cleanup = () => {}
+ *     const cleanup = () => { }
  *     return cleanup
  *   },
  *   {

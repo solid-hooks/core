@@ -70,7 +70,7 @@ const { pause, resume, isWatching, callTimes, ignoreUpdate } = watch(
   count,
   (value, oldValue, callTimes) => {
     console.log(value, oldValue, callTimes)
-    const cleanup = () => {}
+    const cleanup = () => { }
     return cleanup
   },
   {
@@ -266,22 +266,36 @@ import { useHover } from '@solid-hooks/core/web'
 
 function App() {
   let el
-  const hovered = useHover(() => el)
+  const [hovered] = useHover(() => el)
   return <div ref={el}>{hovered() ? 'hovered' : 'not hovered'}</div>
 }
 ```
 
-### `useFocus`
+### `useClickoutside`
 
-check if element is focused
+check if element is clicked outside
 
 ```tsx
-import { useFocus } from '@solid-hooks/core/web'
+import { useClickoutside } from '@solid-hooks/core/web'
 
 function App() {
   let el
-  const focused = useFocus(() => el)
-  return <div ref={el}>{focused() ? 'focused' : 'not focused'}</div>
+  const [isClickOutside] = useClickoutside(() => el)
+  return <div ref={el}>{isClickOutside() ? 'clicked outside' : 'clicked inside'}</div>
+}
+```
+
+### `useLongPress`
+
+check if element is long pressed
+
+```tsx
+import { useLongPress } from '@solid-hooks/core/web'
+
+function App() {
+  let el
+  const [isLongPress] = useLongPress(() => el)
+  return <div ref={el}>{isLongPress() ? 'long pressed' : 'not long pressed'}</div>
 }
 ```
 
