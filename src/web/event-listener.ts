@@ -4,8 +4,8 @@ import {
   type TargetWithEventMap,
   makeEventListener,
 } from '@solid-primitives/event-listener'
-import { type MaybeAccessor, access, createCallbackStack } from '@solid-primitives/utils'
-import { createEffect, createRenderEffect, onCleanup } from 'solid-js'
+import { type Many, type MaybeAccessor, access, asArray, createCallbackStack } from '@solid-primitives/utils'
+import { createEffect, createRenderEffect, on, onCleanup } from 'solid-js'
 
 export {
   preventDefault,
@@ -48,7 +48,7 @@ export function useDocumentListener<
 /**
  * Creates an event listener, that will be automatically disposed on cleanup.
  * @param target ref to HTMLElement, EventTarget
- * @param type name of the handled event
+ * @param types names of the handled event
  * @param handler event handler
  * @param options addEventListener options
  * @example
@@ -62,7 +62,7 @@ export function useEventListener<
   EventType extends keyof EventMap,
 >(
   target: MaybeAccessor<Target | undefined | null>,
-  type: EventType,
+  types: Many<EventType>,
   handler: (event: EventMap[EventType]) => void,
   options?: EventListenerOptions
 ): VoidFunction
@@ -71,30 +71,34 @@ export function useEventListener<
   EventType extends keyof EventMap,
 >(
   target: MaybeAccessor<EventTarget | undefined | null>,
-  type: EventType,
+  types: Many<EventType>,
   handler: (event: EventMap[EventType]) => void,
   options?: EventListenerOptions
 ): VoidFunction
 export function useEventListener(
   target: MaybeAccessor<EventTarget | undefined | null>,
-  type: string,
+  types: Many<string>,
   handler: (event: Event) => void,
   options?: EventListenerOptions,
 ): VoidFunction {
-  let cleanup: VoidFunction = () => {}
-  (typeof target === 'function' ? createEffect : createRenderEffect)(() => {
-    const el = access(target)
-    if (el) {
-      cleanup = makeEventListener(el, type, handler, options)
-    }
-  })
+  const { execute, push } = createCallbackStack()
+  ; (typeof target === 'function' ? createEffect : createRenderEffect)(
+    () => {
+      const el = access(target)
+      if (el) {
+        for (const t of asArray(types)) {
+          push(makeEventListener(el, t, handler, options))
+        }
+      }
+    },
+  )
 
-  return cleanup
+  return execute
 }
 
 type ListenEvent<EventMap extends Record<string, any>> = {
   <T extends keyof EventMap>(
-    type: T,
+    types: Many<T>,
     handler: (event: EventMap[T]) => void,
     options?: EventListenerOptions,
   ): VoidFunction
