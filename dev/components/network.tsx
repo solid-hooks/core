@@ -1,21 +1,22 @@
 import { createSignal, onMount } from 'solid-js'
 import { useCssVar, useNetwork } from '../../src/web'
+import { createRef } from '../../src'
 
 export default function TestNetworkWithCssVar() {
   let codeRef: HTMLElement | undefined
-  const [bg, setBg] = createSignal('red')
+  const background = createRef('red')
   const info = useNetwork()
   console.log('info:', info())
 
-  useCssVar('bg', bg)
+  useCssVar('bg', background)
   onMount(() => {
-    useCssVar('bg-color', bg, codeRef)
+    useCssVar('bg-color', background, codeRef)
   })
 
   return (
     <>
       <code ref={codeRef} style={{ color: 'var(--bg-color)' }}>{JSON.stringify(info())}</code>
-      <button onClick={() => setBg(bg => bg === 'red' ? 'green' : 'red')}>change code color</button>
+      <button onClick={() => background(bg => bg === 'red' ? 'green' : 'red')}>change code color</button>
     </>
   )
 }

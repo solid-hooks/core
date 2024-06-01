@@ -1,17 +1,23 @@
-import { type Accessor, type Setter, createRenderEffect, createSignal } from 'solid-js'
-import { createDirective } from '../../src'
+import { createRenderEffect } from 'solid-js'
+import { createDirective, watch } from '../../src'
+import { type RefSignal, createRef } from '../../src/ref'
 
-const model = createDirective((ref: Element, getter: Accessor<string>, setter: Setter<string>) => {
-  createRenderEffect(() => ((ref as HTMLInputElement).value = getter()))
-  ref.addEventListener('input', e => setter((e.target as HTMLInputElement | null)?.value ?? ''))
+const model = createDirective((ref: Element, atom: RefSignal<string>) => {
+  createRenderEffect(() => ((ref as HTMLInputElement).value = atom()))
+  ref.addEventListener('input', e => atom((e.target as HTMLInputElement | null)?.value ?? ''))
 })
 
 export default function TestDirective() {
-  const [text, setText] = createSignal('synchronized value')
+  const text = createRef('synchronized value')
+  const inputRef = createRef<HTMLInputElement>()
+  watch(text, (t) => {
+    inputRef()!.value = t
+  }, { defer: false })
   return (
     <>
-      <input type="text" ref={model(text, setText)} />
+      <input type="text" ref={model(text)} />
       <div>{text()}</div>
+      <input type="text" ref={inputRef} disabled />
     </>
   )
 }

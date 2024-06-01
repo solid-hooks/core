@@ -1,10 +1,11 @@
+import { createRef } from '../../src/ref'
 import { useClickOutside, useHover, useLongPress } from '../../src/web'
 
 export default function TestElement() {
-  let containerRef: HTMLDivElement | undefined
-  const [isClickOutside] = useClickOutside(() => containerRef)
-  const [isHovered] = useHover(() => containerRef)
-  const [isLongPressed] = useLongPress(() => containerRef, { delay: 1000 })
+  const containerRef = createRef<HTMLDivElement>()
+  const [isClickOutside] = useClickOutside(containerRef)
+  const [isHovered] = useHover(containerRef)
+  const [isLongPressed] = useLongPress(containerRef, { delay: 1000 })
 
   return (
     <div style={{ display: 'flex' }}>

@@ -1,9 +1,9 @@
-import { catchError, createSignal } from 'solid-js'
-import { createContextProvider } from '../../src'
+import { catchError } from 'solid-js'
+import { createContextProvider, createRef } from '../../src'
 
 export const [TestProvider, useTestContext] = createContextProvider((param: { initial: number }) => {
-  const [count, setCount] = createSignal(param.initial)
-  const increment = () => setCount(count() + 1)
+  const count = createRef(param.initial)
+  const increment = () => count(c => c + 1)
 
   return {
     count,

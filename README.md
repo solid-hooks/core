@@ -6,6 +6,9 @@
 
 useful hooks for solid.js
 
+> [!WARNING]
+> Breaking change expected. Use at your own risk.
+
 ## Install
 
 ```shell
@@ -19,6 +22,25 @@ pnpm add @solid-hooks/core
 ```
 
 ## Usage
+
+### `createRef`
+
+read / write signal in one function
+
+```tsx
+import { onMounted } from 'solid-js'
+import { createRef } from '@solid-hooks/core'
+
+function Counter() {
+  const counter = createRef(0)
+  return <button onClick={() => counter(c => c + 1)}>{counter()}</button>
+}
+
+function Test() {
+  const divRef = createRef<HTMLDivElement>()
+  return <div ref={divRef} />
+}
+```
 
 ### `createReactive`
 
@@ -232,27 +254,6 @@ const handleClick = useCallback(() => {
   console.log('after 100 ms!')
 })
 setTimeOut(handleClick, 100)
-```
-
-### `withEffect`
-
-add callback for setter
-
-```tsx
-import { createSignal } from 'solid-js'
-import { withEffect } from '@solid-hooks/core'
-
-export function TestWithEffect() {
-  // eslint-disable-next-line solid/reactivity
-  const [count, setCount] = withEffect(createSignal(1), value => console.log('[withEffect] value:', value))
-  return (
-    <>
-      <h1>Test <code>withEffect</code> :</h1>
-      <button onClick={() => setCount(c => c + 1)}>click and see console</button>
-      <div>count: {count()}</div>
-    </>
-  )
-}
 ```
 
 ## `@solid-hooks/core/web`
