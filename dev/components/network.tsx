@@ -1,4 +1,4 @@
-import { createSignal, onMount } from 'solid-js'
+import { onMount } from 'solid-js'
 import { useCssVar, useNetwork } from '../../src/web'
 import { createRef } from '../../src'
 

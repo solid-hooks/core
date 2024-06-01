@@ -1,4 +1,3 @@
-/* eslint-disable solid/reactivity */
 import { createSignal } from 'solid-js'
 import { watch } from '../../src'
 
