@@ -37,12 +37,10 @@ export function createRef<T>(initialValue: T, options?: SignalOptions<T>): RefSi
  * @param existSignal existing signal
  * @example
  * ```tsx
- * import { onMounted } from 'solid-js'
  * import { createRef } from '@solid-hooks/core'
  *
- * function Counter() {
- *   const counter = createRef(createSignal(0))
- *   return <button onClick={() => counter(c => c + 1)}>{counter()}</button>
+ * function useSomethingRef() {
+ *   return createRef(useSomething())
  * }
  * ```
  */

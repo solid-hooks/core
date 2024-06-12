@@ -31,14 +31,18 @@ read / write signal in one function
 import { onMounted } from 'solid-js'
 import { createRef } from '@solid-hooks/core'
 
+function Test() {
+  const divRef = createRef<HTMLDivElement>()
+  return <div ref={divRef} />
+}
+
 function Counter() {
   const counter = createRef(0)
   return <button onClick={() => counter(c => c + 1)}>{counter()}</button>
 }
 
-function Test() {
-  const divRef = createRef<HTMLDivElement>()
-  return <div ref={divRef} />
+function useSomethingRef() {
+  return createRef(useSomething())
 }
 ```
 
