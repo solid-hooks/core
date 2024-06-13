@@ -18,6 +18,19 @@ export type RefSignal<T, Set = Setter<T>> = Accessor<T> & Set
  */
 export function createRef<T>(): RefSignal<T | undefined>
 /**
+ * read / write signal in one function with existing signal
+ * @param existSignal existing signal
+ * @example
+ * ```tsx
+ * import { createRef } from '@solid-hooks/core'
+ *
+ * function useSomethingRef() {
+ *   return createRef(useSomething())
+ * }
+ * ```
+ */
+export function createRef<T, Set extends AnyFunction = Setter<T>>(existSignal: [Accessor<T>, Set]): RefSignal<T, Set>
+/**
  * read / write signal in one function with initial value
  * @param initialValue initial value
  * @param options signal options
@@ -32,19 +45,6 @@ export function createRef<T>(): RefSignal<T | undefined>
  * ```
  */
 export function createRef<T>(initialValue: T, options?: SignalOptions<T>): RefSignal<T>
-/**
- * read / write signal in one function with existing signal
- * @param existSignal existing signal
- * @example
- * ```tsx
- * import { createRef } from '@solid-hooks/core'
- *
- * function useSomethingRef() {
- *   return createRef(useSomething())
- * }
- * ```
- */
-export function createRef<T, Set extends AnyFunction = Setter<T>>(existSignal: [Accessor<T>, Set]): RefSignal<T, Set>
 export function createRef<T>(initialValue?: any, options?: SignalOptions<T | undefined>): RefSignal<T> {
   const [value, setValue] = Array.isArray(initialValue) && typeof initialValue[0] === 'function'
     ? initialValue as Signal<T>
