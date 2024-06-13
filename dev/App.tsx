@@ -9,6 +9,7 @@ import TestWorker from './components/worker'
 import TestColorMode from './components/color-mode'
 import TestNetworkWithCssVar from './components/network'
 import TestElement from './components/element'
+import TestArray from './components/array'
 
 function Card(props: FlowProps<{ title: string }>) {
   return (
@@ -36,6 +37,7 @@ export default function App() {
     useColorMode: <TestColorMode />,
     networkWithCssVar: <TestNetworkWithCssVar />,
     element: <TestElement />,
+    array: <TestArray />,
   }
   return (
     <div

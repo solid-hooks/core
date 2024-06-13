@@ -57,6 +57,20 @@ const audio = new Audio()
 const [time, setCurrentTime] = createReactive(audio, 'currentTime')
 ```
 
+### `createArray`
+
+create array signal
+
+```ts
+import { createArray } from '@solid-hooks/core'
+
+const [array, setArray] = createArray(['a', 'b', 'c'])
+
+const push = setArray(l => l.push('d'))
+const pop = setArray(l => l.pop())
+const reset = setArray(['a', 'b', 'c'])
+```
+
 ### `createDirective`
 
 another way to create directive
