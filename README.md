@@ -390,7 +390,7 @@ const [styleElement, cleanupStyle] = useResourceTag('style', style, {/* options 
 
 ### `useEventListener` / `useEventListenerStack` / `useDocumentListener` / `useWindowListener`
 
-auto cleanup event listener
+auto cleanup event listener, allow nullish target
 
 reference from [@solid-primitives/event-listener](https://github.com/solidjs-community/solid-primitives/tree/main/packages/event-listener)
 
@@ -413,15 +413,22 @@ export default function TestColorMode() {
 }
 ```
 
-### `useNetwork` / `useOnline`
+### `useNetwork`
 
 signals of network status, with `onChanges` callback
 
 ```ts
+import { useNetwork } from '@solid-hooks/core/web'
+
+const net = useNetwork()
+const isOnline = net.online
+```
+
+types:
+```ts
 type NetworkType = 'bluetooth' | 'cellular' | 'ethernet' | 'none' | 'wifi' | 'wimax' | 'other' | 'unknown'
 
 type EffectiveType = 'slow-2g' | '2g' | '3g' | '4g'
-
 export type NetworkState = {
   /**
    * the time at which the connection was changed
