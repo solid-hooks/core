@@ -484,6 +484,30 @@ const [color, setColor] = createSignal('red')
 useCssVar('bg', color)
 ```
 
+### `useCopy` / `usePaste` / `createClipboardItemSignal`
+
+hooks that paste from clipboard
+
+```tsx
+import { createClipboardItemSignal, useCopy, usePaste } from '@solid-hooks/web'
+
+export default () => {
+  const [data, setData] = createClipboardItemSignal('test')
+  const { copied, copy } = useCopy()
+
+  const paste = usePaste((data, mime) => {
+    console.log(data, mime)
+  })
+  return (
+    <>
+      <div>is copied: {copied() ? 'true' : 'false'}</div>
+      <button onClick={() => copy(data())}>copy</button>
+      <button onClick={paste}>paste</button>
+    </>
+  )
+}
+```
+
 ## License
 
 MIT
