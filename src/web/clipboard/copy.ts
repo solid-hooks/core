@@ -43,7 +43,7 @@ export type UseCopyReturn = {
 export function useCopy(options: UseCopyOptions = {}): UseCopyReturn {
   const { copiedDuration = 1500, legacy } = options
   const clipboard = globalThis.navigator?.clipboard
-  const isSupported = !!clipboard || !!document?.queryCommandSupported?.('copy')
+  const isSupported = !!clipboard || !!globalThis.document?.queryCommandSupported?.('copy')
 
   const [isCopied, setCopied] = createSignal(false)
   let timer: ReturnType<typeof setTimeout>
@@ -53,32 +53,31 @@ export function useCopy(options: UseCopyOptions = {}): UseCopyReturn {
     copy: isSupported
       ? async (data: string | Many<ClipboardItem>) => {
         const isString = typeof data === 'string'
-        try {
-          if (legacy) {
-            const ta = document.createElement('textarea')
-            ta.value = isString ? data : JSON.stringify(data)
-            ta.ariaHidden = 'true'
-            ta.style.position = 'absolute'
-            ta.style.opacity = '0'
-            document.body.appendChild(ta)
-            ta.select()
-            document.execCommand('copy')
-            ta.remove()
-          } else {
-            isString
-              ? await clipboard.writeText(data)
-              : await clipboard.write(asArray(data))
+        if (legacy) {
+          const ta = document.createElement('textarea')
+          ta.value = isString ? data : JSON.stringify(data)
+          ta.ariaHidden = 'true'
+          ta.style.position = 'absolute'
+          ta.style.opacity = '0'
+          document.body.appendChild(ta)
+          ta.select()
+          const result = document.execCommand('copy')
+          ta.remove()
+          if (!result) {
+            throw new Error('"copy" command is unsupported')
           }
-
-          setCopied(true)
-          timer && clearTimeout(timer)
-          timer = setTimeout(() => setCopied(false), copiedDuration)
-        } catch (e) {
-          DEV && console.error('fail to copy to clipboard', e)
+        } else {
+          isString
+            ? await clipboard.writeText(data)
+            : await clipboard.write(asArray(data))
         }
+
+        setCopied(true)
+        timer && clearTimeout(timer)
+        timer = setTimeout(() => setCopied(false), copiedDuration)
       }
-      : async (data) => {
-        DEV && console.warn('copy' + JSON.stringify(data) + ' to clipboard is not supported')
+      : async () => {
+        DEV && console.warn('copy into to clipboard is unsupported')
       },
   }
 }

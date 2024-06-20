@@ -1,5 +1,5 @@
 import { DEV } from 'solid-js'
-import { useWindowListener } from '../event-listener'
+import { useDocumentListener, useWindowListener } from '../event-listener'
 
 type OnPasteOptions<T extends boolean> = {
   /**
@@ -18,7 +18,7 @@ type OnPasteOptions<T extends boolean> = {
    */
   legacy?: T
   /**
-   * check if `data` is text
+   * check if `data`'s type is string
    * @param mime data's mimetype
    * @default mime => mime.startsWith('text/')
    */
@@ -40,44 +40,47 @@ type OnPasteOptions<T extends boolean> = {
  * }
  * ```
  */
-export function usePaste<T extends boolean = false>(options: OnPasteOptions<T>): VoidFunction {
+export function usePaste<T extends boolean = false>(options: OnPasteOptions<T>): () => Promise<void> {
   const { onPaste, legacy, isText = mime => mime.startsWith('text/') } = options
   const clipboard = globalThis.navigator?.clipboard
-  const isSupported = !!clipboard || !!document?.queryCommandSupported?.('paste')
+  const isSupported = !!clipboard || !!globalThis.document?.queryCommandSupported?.('paste')
 
-  isSupported && legacy && useWindowListener('paste', (e) => {
+  isSupported && legacy && useDocumentListener('paste', (e) => {
     const clipboardData = e.clipboardData
     if (!clipboardData) {
       return
     }
     for (const item of clipboardData.items) {
-      if (isText(item.type)) {
-        item.getAsString(data => onPaste(data, item.type))
+      // mime type will change after getting, so get it first
+      const mime = item.type
+      if (isText(mime)) {
+        item.getAsString((data) => {
+          onPaste(data, mime)
+        })
       } else {
         const file = item.getAsFile()
-        onPaste(file, item.type)
+        onPaste(file, mime)
       }
     }
   })
   return isSupported
     ? async () => {
-      try {
-        if (legacy) {
-          document.execCommand('paste')
-        } else {
-          const items = await clipboard.read()
-          for (const item of items) {
-            for (const mime of item.types) {
-              const data = await item.getType(mime)
-              onPaste(isText(mime) ? await data.text() : data as any, mime)
-            }
+      if (legacy) {
+        const result = document.execCommand('paste')
+        if (!result) {
+          throw new Error('"paste" command is unsupported')
+        }
+      } else {
+        const items = await clipboard.read()
+        for (const item of items) {
+          for (const mime of item.types) {
+            const data = await item.getType(mime)
+            onPaste(isText(mime) ? await data.text() : data as any, mime)
           }
         }
-      } catch (e) {
-        DEV && console.error('fail to paste from clipboard', e)
       }
     }
     : async () => {
-      DEV && console.warn('paste from clipboard is not supported')
+      DEV && console.warn('paste from clipboard is unsupported')
     }
 }

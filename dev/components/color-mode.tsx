@@ -8,9 +8,11 @@ export default function TestColorModeAndClipboard() {
   const { copy, isCopied } = useCopy({ legacy: true })
   const paste = usePaste({
     onPaste: (data, mimeType) => {
+      console.log(data, mimeType)
       typeof data === 'string' && str(data)
       mime(mimeType)
     },
+    legacy: true,
   })
   return (
     <>
