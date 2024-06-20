@@ -6,7 +6,7 @@ import TestEmit from './components/emit'
 import TestReactive from './components/reactive'
 import TestWatch from './components/watch'
 import TestWorker from './components/worker'
-import TestColorMode from './components/color-mode'
+import TestColorModeAndClipboard from './components/color-mode'
 import TestNetworkWithCssVar from './components/network'
 import TestElement from './components/element'
 import TestArray from './components/array'
@@ -28,17 +28,18 @@ export default function App() {
     setTitle('change title')
   }, 1000)
   const comps = {
-    createContextProvider: <TestContextProvider />,
-    createEmitSignal: <TestEmit />,
-    watch: <TestWatch />,
-    createReactive: <TestReactive />,
-    createDirective: <TestDirective />,
-    useWebWorkerFn: <TestWorker />,
-    useColorMode: <TestColorMode />,
-    networkWithCssVar: <TestNetworkWithCssVar />,
-    element: <TestElement />,
-    array: <TestArray />,
+    'createContextProvider': <TestContextProvider />,
+    'createEmitSignal': <TestEmit />,
+    'watch': <TestWatch />,
+    'createReactive': <TestReactive />,
+    'createDirective': <TestDirective />,
+    'useWebWorkerFn': <TestWorker />,
+    'useColorMode, useCopy and usePaste': <TestColorModeAndClipboard />,
+    'networkWithCssVar': <TestNetworkWithCssVar />,
+    'element': <TestElement />,
+    'array': <TestArray />,
   }
+
   return (
     <div
       style={{
@@ -52,7 +53,6 @@ export default function App() {
       <For each={Object.entries(comps)}>
         {item => <Card title={item[0]}>{item[1]}</Card>}
       </For>
-
     </div>
   )
 }

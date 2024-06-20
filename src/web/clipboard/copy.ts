@@ -8,7 +8,7 @@ export type UseCopyOptions = {
    */
   copiedDuration?: number
   /**
-   * whether to only use `document.execCommand('copy')` to copy
+   * whether force to use `document.execCommand('copy')` to copy
    */
   legacy?: boolean
 }
