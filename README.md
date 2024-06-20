@@ -493,14 +493,14 @@ import { createClipboardItemSignal, useCopy, usePaste } from '@solid-hooks/web'
 
 export default () => {
   const [data, setData] = createClipboardItemSignal('test')
-  const { copied, copy } = useCopy()
+  const { isCopied, copy } = useCopy()
 
-  const paste = usePaste((data, mime) => {
-    console.log(data, mime)
+  const paste = usePaste({
+    onPaste: (data, mime) => console.log(data, mime)
   })
   return (
     <>
-      <div>is copied: {copied() ? 'true' : 'false'}</div>
+      <div>is copied: {isCopied() ? 'true' : 'false'}</div>
       <button onClick={() => copy(data())}>copy</button>
       <button onClick={paste}>paste</button>
     </>
