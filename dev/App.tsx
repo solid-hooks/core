@@ -1,5 +1,5 @@
 import { type FlowProps, For, createSignal } from 'solid-js'
-import { useResourceTag, useTitle } from '../src/web'
+import { useExternal, useTitle } from '../src/web'
 import { TestContextProvider } from './components/context-provider'
 import TestDirective from './components/directive'
 import TestEmit from './components/emit'
@@ -21,7 +21,7 @@ function Card(props: FlowProps<{ title: string }>) {
 }
 
 export default function App() {
-  useResourceTag('script', 'console.log(`[useResourceTag] test load script`)')
+  useExternal('script', 'console.log(`[useExternal] test load script`)')
   const [title, setTitle] = createSignal('test title')
   useTitle(title)
   setTimeout(() => {

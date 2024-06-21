@@ -81,7 +81,7 @@ type WatchReturn = {
    * run function without effects
    * @param updater update function
    */
-  ignoreUpdates: (updater: VoidFunction) => void
+  ignoreUpdate: (updater: VoidFunction) => void
 }
 
 function baseWatch<T>(
@@ -121,9 +121,9 @@ function baseWatch<T>(
     resume: () => setIsWatching(true),
     isWatching,
     callTimes,
-    ignoreUpdates: (mutator: VoidFunction) => {
+    ignoreUpdate: (updater: VoidFunction) => {
       setIsWatching(false)
-      batch(mutator)
+      batch(updater)
       setIsWatching(true)
     },
   }

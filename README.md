@@ -71,6 +71,22 @@ const pop = setArray(l => l.pop())
 const reset = setArray(['a', 'b', 'c'])
 ```
 
+### `createToggle`
+
+create toggle signal
+
+```ts
+import { createToggle } from '@solid-hooks/core'
+
+const [state, toggle] = createToggle(
+  false,
+  value => console.log(value)
+)
+toggle()
+toggle(true)
+toggle(false)
+```
+
 ### `createDirective`
 
 another way to create directive
@@ -229,32 +245,24 @@ export const [TestProvider, useTestContext] = createContextProvider((param: { in
   const [count, setCount] = createSignal(param.initial)
   const increment = () => setCount(count() + 1)
 
-  return {
-    count,
-    increment,
-  }
+  return { count, increment }
 })
 
 function Child() {
   const { count, increment } = useTestContext()
   return (
-    <>
-      <button class="btn" onClick={increment}>
-        {count()}
-      </button>
-    </>
+    <button onClick={increment}>
+      {count()}
+    </button>
   )
 }
 
 export function TestContextProvider() {
   console.log('call useTestContext() outside provider:', useTestContext())
   return (
-    <>
-      <h1>Test <code>createContextProvider</code> :</h1>
-      <TestProvider initial={0}>
-        <Child />
-      </TestProvider>
-    </>
+    <TestProvider initial={0}>
+      <Child />
+    </TestProvider>
   )
 }
 ```
@@ -376,16 +384,16 @@ export default function TestWorker() {
 }
 ```
 
-### `useResourceTag`
+### `useExternal`
 
 load external CSS/JS
 
 ```ts
-import { useResourceTag } from '@solid-hooks/core/web'
+import { useExternal } from '@solid-hooks/core/web'
 
 const script = 'console.log(`test load script`)'
-const [scriptElement, cleanupScript] = useResourceTag('script', script, {/* options */})
-const [styleElement, cleanupStyle] = useResourceTag('style', style, {/* options */})
+const [scriptElement, cleanupScript] = useExternal('script', script, {/* options */})
+const [styleElement, cleanupStyle] = useExternal('style', style, {/* options */})
 ```
 
 ### `useEventListener` / `useEventListenerStack` / `useDocumentListener` / `useWindowListener`
@@ -484,15 +492,15 @@ const [color, setColor] = createSignal('red')
 useCssVar('bg', color)
 ```
 
-### `useCopy` / `usePaste` / `createClipboardItemSignal`
+### `useCopy` / `usePaste` / `createClipboardItem`
 
 hooks that paste from clipboard
 
 ```tsx
-import { createClipboardItemSignal, useCopy, usePaste } from '@solid-hooks/web'
+import { createClipboardItem, useCopy, usePaste } from '@solid-hooks/web'
 
 export default () => {
-  const [data, setData] = createClipboardItemSignal('test')
+  const [data, setData] = createClipboardItem('test')
   const { isCopied, copy } = useCopy()
 
   const paste = usePaste({

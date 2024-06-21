@@ -20,32 +20,24 @@ export type ContextProvider<T, Props extends Record<string, unknown> = {}> = [
  *   const [count, setCount] = createSignal(param.initial)
  *   const increment = () => setCount(count() + 1)
  *
- *   return {
- *     count,
- *     increment,
- *   }
+ *   return { count, increment }
  * })
  *
  * function Child() {
  *   const { count, increment } = useTestContext()
  *   return (
- *     <>
- *       <button class="btn" onClick={increment}>
- *         {count()}
- *       </button>
- *     </>
+ *     <button onClick={increment}>
+ *       {count()}
+ *     </button>
  *   )
  * }
  *
  * export function TestContextProvider() {
  *   console.log('call useTestContext() outside provider:', useTestContext())
  *   return (
- *     <>
- *       <h1>Test <code>createContextProvider</code> :</h1>
- *       <TestProvider initial={0}>
- *         <Child />
- *       </TestProvider>
- *     </>
+ *     <TestProvider initial={0}>
+ *       <Child />
+ *     </TestProvider>
  *   )
  * }
  * ```

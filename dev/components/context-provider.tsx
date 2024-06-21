@@ -24,7 +24,7 @@ function Child() {
 
 export function TestContextProvider() {
   catchError(() => {
-    console.log('call useTestContext() outside provider:', useTestContext())
+    console.log('[useContextProvider] call useTestContext() outside provider:', useTestContext())
   }, () => { })
   return (
     <TestProvider initial={0}>

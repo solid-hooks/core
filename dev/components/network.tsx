@@ -6,7 +6,7 @@ export default function TestNetworkWithCssVar() {
   let codeRef: HTMLElement | undefined
   const background = createRef('red')
   const info = useNetwork()
-  console.log('info:', info())
+  console.log('[useNetwork] info:', info())
 
   useCssVar('bg', background)
   onMount(() => {

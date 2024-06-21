@@ -8,7 +8,7 @@ const FOO = {
 export default function TestReactive() {
   const [obj, setObj] = createReactive(FOO, 'bar')
   createEffect(on(obj, () => {
-    console.log('[reactive] source object Foo.bar:', FOO.bar)
+    console.log('[createReactive] source object Foo.bar:', FOO.bar)
   }, { defer: true }))
   return (
     <>

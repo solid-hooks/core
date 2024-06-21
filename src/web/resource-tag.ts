@@ -27,13 +27,13 @@ export type StyleOption = Pick<
  * @param options other options
  * @example
  * ```ts
- * import { useResourceTag } from '@solid-hooks/core/web'
+ * import { useExternal } from '@solid-hooks/core/web'
  *
  * const script = 'console.log(`test load script`)'
- * const [scriptElement, cleanupScript] = useResourceTag('script', script, { options })
+ * const [scriptElement, cleanupScript] = useExternal('script', script, { options })
  * ```
  */
-export function useResourceTag(
+export function useExternal(
   type: 'script',
   content: MaybeAccessor<string>,
   options?: ScriptOptions,
@@ -45,18 +45,18 @@ export function useResourceTag(
  * @param options other options
  * @example
  * ```ts
- * import { useResourceTag } from '@solid-hooks/core/web'
+ * import { useExternal } from '@solid-hooks/core/web'
  *
  * const style = 'div { color: red }'
- * const [styleElement, cleanupStyle] = useResourceTag('style', style, { options })
+ * const [styleElement, cleanupStyle] = useExternal('style', style, { options })
  * ```
  */
-export function useResourceTag(
+export function useExternal(
   type: 'style',
   content: MaybeAccessor<string>,
   options?: StyleOption,
 ): [element: HTMLStyleElement, cleanup: VoidFunction]
-export function useResourceTag(
+export function useExternal(
   type: 'script' | 'style',
   content: MaybeAccessor<string>,
   options?: ScriptOptions | StyleOption,

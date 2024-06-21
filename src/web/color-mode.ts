@@ -1,7 +1,7 @@
 import { createPrefersDark } from '@solid-primitives/media'
 import { type MaybeAccessor, access } from '@solid-primitives/utils'
 import { type Accessor, type Setter, createMemo, createRenderEffect, createSignal, on } from 'solid-js'
-import { useResourceTag } from './resource-tag'
+import { useExternal } from './resource-tag'
 
 export {
   makeMediaQueryListener as useMediaQueryListener,
@@ -101,7 +101,7 @@ export function useColorMode(options: UseColorModeOptions = {}): UseColorModeRet
     }
 
     let cleanup = disableTransition
-      ? useResourceTag('style', disableTransitionStyle)[1]
+      ? useExternal('style', disableTransitionStyle)[1]
       : undefined
 
     const _mode = is ? 'dark' : 'light'

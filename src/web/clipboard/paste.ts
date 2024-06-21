@@ -1,5 +1,5 @@
 import { DEV } from 'solid-js'
-import { useDocumentListener, useWindowListener } from '../event-listener'
+import { useDocumentListener } from '../event-listener'
 
 type OnPasteOptions<T extends boolean> = {
   /**

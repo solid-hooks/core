@@ -3,7 +3,7 @@ import { type Accessor, createSignal } from 'solid-js'
 export type ArraySignal<T extends Array<unknown>> = [
   accessor: Accessor<T>,
   setter: {
-    (patcher: (data: T) => any): T
+    (patcher: (data: T) => void): T
     (patcher: T): T
   },
 ]

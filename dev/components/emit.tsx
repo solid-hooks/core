@@ -29,9 +29,9 @@ export default function TestEmit() {
   return (
     <Child
       num={1}
-      $var={e => console.log('[emit] $var:', e)}
-      $update={(d, d1) => console.log(`[emit] $update:`, d, d1)}
-      $fn={test => console.log('[emit] $fn:', test)}
+      $var={e => console.log('[useEmit] $var:', e)}
+      $update={(d, d1) => console.log(`[useEmit] $update:`, d, d1)}
+      $fn={test => console.log('[useEmit] $fn:', test)}
     />
   )
 }

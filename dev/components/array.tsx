@@ -11,7 +11,7 @@ export default function TestArray() {
       <div style={{ display: 'flex' }}>
         <For each={list()}>
           {(item) => {
-            console.log(item)
+            console.log('[createArray]', item)
             return <p>{item}</p>
           }}
         </For>

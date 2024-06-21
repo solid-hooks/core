@@ -6,7 +6,7 @@ export default function TestWatch() {
 
   const {
     callTimes,
-    ignoreUpdates,
+    ignoreUpdate,
     isWatching,
     pause,
     resume,
@@ -20,7 +20,7 @@ export default function TestWatch() {
       <div>callTimes: {callTimes()}</div>
       <div>isWatching: {`${isWatching()}`}</div>
       <button onClick={() => setCount(c => c + 1)}>click and see console</button>
-      <button onClick={() => ignoreUpdates(() => setCount(c => c + 1))}>without trigger watch</button>
+      <button onClick={() => ignoreUpdate(() => setCount(c => c + 1))}>without trigger watch</button>
       <button onClick={pause}>pause</button>
       <button onClick={resume}>resume</button>
     </>
