@@ -1,13 +1,12 @@
 import { type Accessor, createSignal } from 'solid-js'
-import { type Many, asArray } from '@solid-primitives/utils'
 
-export type ClipboardItemSignal<T> = [accessor: Accessor<ClipboardItem>, set: (data: Many<T>) => ClipboardItem]
+export type ClipboardItemSignal<T> = [accessor: Accessor<ClipboardItem>, set: (data: T) => ClipboardItem]
 
-function generate(part: Many<any>, mime: string): ClipboardItem {
-  return new ClipboardItem({ [mime]: new Blob(asArray(part), { type: mime }) })
+export function generateClipboardItem(part: BlobPart, mime: string): ClipboardItem {
+  return new ClipboardItem({ [mime]: new Blob([part], { type: mime }) })
 }
 
-export function createClipboardItem<T extends BlobPart>(part: Many<T>, mime: string): ClipboardItemSignal<T> {
-  const [item, setItem] = createSignal(generate(part, mime))
-  return [item, data => setItem(generate(data, mime))]
+export function createClipboardItem<T extends BlobPart>(part: T, mime: string): ClipboardItemSignal<T> {
+  const [item, setItem] = createSignal(generateClipboardItem(part, mime))
+  return [item, data => setItem(generateClipboardItem(data, mime))]
 }
