@@ -25,7 +25,7 @@ const cancelIdleWithFallback = window.cancelIdleCallback || (id => clearTimeout(
 export function useIdleCallback(
   fn: IdleRequestCallback,
   options?: IdleRequestOptions,
-): [running: Accessor<boolean>, start: VoidFunction, stop: VoidFunction] {
+): { running: Accessor<boolean>, start: VoidFunction, stop: VoidFunction } {
   const [running, setRunning] = createSignal(false)
   let requestID: number
 
@@ -47,5 +47,5 @@ export function useIdleCallback(
     cancelIdleWithFallback(requestID)
   })
 
-  return [running, start, stop]
+  return { running, start, stop }
 }

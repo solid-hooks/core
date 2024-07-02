@@ -16,10 +16,10 @@ export default function TestWorker() {
 
   const isRunning = createMemo(() => status() === 'RUNNING')
 
-  const [,run] = useIdleCallback(() => {
+  const { start } = useIdleCallback(() => {
     setTimeStamp(Date.now())
   })
-  run()
+  start()
   return (
     <>
       <div>timeStamp: {timeStamp()}</div>
