@@ -169,7 +169,7 @@ export function watch<T>(
  * @param fn {@link WatchCallback callback function}
  * @param options watch options
  */
-export function watchInstant<T>(
+export function watchImmediate<T>(
   deps: Accessor<T> | AccessorArray<T>,
   fn: WatchCallback<T>,
   options: WatchOptions = {},

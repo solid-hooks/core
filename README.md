@@ -148,7 +148,7 @@ const [count, setCount] = createSignal(0)
 watchOnce(count, (value))
 ```
 
-#### `watchInstant`
+#### `watchImmediate`
 
 like `watch`, use `createComputed`
 
