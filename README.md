@@ -145,7 +145,7 @@ watch once, using `createReaction`
 import { watchOnce } from '@solid-hooks/core'
 
 const [count, setCount] = createSignal(0)
-watchOnce(count, (value))
+watchOnce(count, console.log)
 ```
 
 #### `watchImmediate`
@@ -283,6 +283,15 @@ setTimeOut(handleClick, 100)
 ```
 
 ## `@solid-hooks/core/web`
+
+### `cls`
+
+merge classes
+
+```ts
+cls(true && 'foo', false && 'bar', 'baz')
+// => 'foo baz'
+```
 
 ### `useHover`
 
