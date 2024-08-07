@@ -55,7 +55,7 @@ export function useLongPress(
     modifiers,
   } = options
 
-  const clear = () => {
+  const clear = (): void => {
     if (timeout) {
       clearTimeout(timeout)
       timeout = undefined
@@ -65,7 +65,7 @@ export function useLongPress(
     setIsLongPressed(false)
   }
 
-  const onRelease = (ev: PointerEvent) => {
+  const onRelease = (ev: PointerEvent): void => {
     const [_startTimestamp, _posStart, _hasLongPressed] = [startTimestamp, posStart, isLongPressed]
     clear()
 
@@ -79,7 +79,7 @@ export function useLongPress(
     onPressEnd(ev.timeStamp - _startTimestamp, distance, isLongPressed())
   }
 
-  const onDown = (ev: PointerEvent) => {
+  const onDown = (ev: PointerEvent): void => {
     clear()
 
     posStart = {
@@ -93,7 +93,7 @@ export function useLongPress(
     }, delay)
   }
 
-  const onMove = (ev: PointerEvent) => {
+  const onMove = (ev: PointerEvent): void => {
     if (!posStart || distanceThreshold === false) {
       return
     }

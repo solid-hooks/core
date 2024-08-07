@@ -1,11 +1,14 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createRoot, createSignal } from 'solid-js'
+import type { AnyFunction } from '@subframe7536/type-utils'
 import { watch } from '../src/watch'
 
-function debounce(fn: Function, delay: number) {
+function debounce(fn: AnyFunction, delay: number) {
   let timeoutId: string | number | NodeJS.Timeout | undefined
   return function (this: any, ...args: any[]) {
-    timeoutId && clearTimeout(timeoutId)
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
     timeoutId = setTimeout(() => fn.apply(this, args), delay)
   }
 }

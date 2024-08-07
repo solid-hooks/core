@@ -67,17 +67,20 @@ export function useCopy(options: UseCopyOptions = {}): UseCopyReturn {
             throw new Error('"copy" command is unsupported')
           }
         } else {
-          isString
-            ? await clipboard.writeText(data)
-            : await clipboard.write(asArray(data))
+          if (isString) {
+            await clipboard.writeText(data)
+          } else {
+            await clipboard.write(asArray(data))
+          }
         }
 
         setCopied(true)
-        timer && clearTimeout(timer)
+        if (timer) {
+          clearTimeout(timer)
+        }
         timer = setTimeout(() => setCopied(false), copiedDuration)
       }
-      : async () => {
-        DEV && console.warn('copy into to clipboard is unsupported')
-      },
+      : async () => DEV && console.warn('copy into to clipboard is unsupported')
+    ,
   }
 }

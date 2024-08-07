@@ -10,7 +10,7 @@ function heavyTask() {
 }
 
 export default function TestWorker() {
-  const [runWorker, { status, terminate }] = useWebWorkerFn(heavyTask, { func: [randomNumber] })
+  const [runWorker, status, terminate] = useWebWorkerFn(heavyTask, { func: [randomNumber] })
   const [timeStamp, setTimeStamp] = createSignal(Date.now())
   const [data, setData] = createSignal<number[]>([])
 

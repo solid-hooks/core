@@ -60,7 +60,7 @@ export function useExternal(
   type: 'script' | 'style',
   content: MaybeAccessor<string>,
   options?: ScriptOptions | StyleOption,
-) {
+): any {
   const element = document.createElement(type)
   spread(element, options, false, true)
   createRenderEffect(() => {
@@ -74,7 +74,9 @@ export function useExternal(
     }
   })
   const cleanup = tryOnCleanup(() => {
-    document.head.contains(element) && document.head.removeChild(element)
+    if (document.head.contains(element)) {
+      document.head.removeChild(element)
+    }
   })
 
   return [element, cleanup]

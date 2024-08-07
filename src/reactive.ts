@@ -37,7 +37,7 @@ export function createReactive<
 ): Signal<T[K]> {
   const { equals, setter, ...rest } = options || {}
   const [track, trigger] = createSignal(undefined, { ...rest, equals: false })
-  const get = () => data[key]
+  const get = (): any => data[key]
 
   const _equals = typeof equals === 'function'
     ? (result: any) => equals(get(), result)

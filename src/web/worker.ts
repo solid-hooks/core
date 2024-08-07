@@ -1,9 +1,9 @@
 import { tryOnCleanup } from '@solid-primitives/utils'
 import type { AnyFunction } from '@subframe7536/type-utils'
-import { DEV, createSignal } from 'solid-js'
+import { type Accessor, DEV, createSignal } from 'solid-js'
 
 // https://vueuse.org/core/useWebWorker/
-function jobRunner(userFunc: Function) {
+function jobRunner(userFunc: AnyFunction) {
   return (e: MessageEvent) => {
     const userFuncArgs = e.data[0]
 
@@ -18,7 +18,7 @@ function jobRunner(userFunc: Function) {
   }
 }
 
-function depsParser(deps: string[], func: Function[]) {
+function depsParser(deps: string[], func: AnyFunction[]): string {
   if (deps.length === 0 && func.length === 0) {
     return ''
   }
@@ -34,7 +34,7 @@ function depsParser(deps: string[], func: Function[]) {
 
   return depsString + funcString
 }
-function createWorkerBlobUrl(fn: Function, deps: string[], func: Function[]) {
+function createWorkerBlobUrl(fn: AnyFunction, deps: string[], func: AnyFunction[]): string {
   const blobCode = depsParser(deps, func) + ';onmessage=(' + jobRunner + ')(' + fn + ')'
   const blob = new Blob([blobCode], { type: 'text/javascript' })
   const url = URL.createObjectURL(blob)
@@ -62,27 +62,22 @@ export type UseWebWorkerOptions = {
   /**
    * local funtions will be use in the worker
    */
-  func?: Function[]
+  func?: AnyFunction[]
 }
 
-export type UseWebWorkerReturn<T> = [
+export type UseWebWorkerReturn<T extends AnyFunction> = [
   /**
    * function to run in worker
    */
-  run: T,
+  run: (...args: Parameters<T>) => Promise<ReturnType<T>>,
   /**
-   * status of worker
+   * status of worker, possible values: {@link WebWorkerStatus}
    */
-  {
-    /**
-     * status of worker, possible values: {@link WebWorkerStatus}
-     */
-    status: () => WebWorkerStatus
-    /**
-     * manually terminate the worker
-     */
-    terminate: () => void
-  },
+  status: Accessor<WebWorkerStatus>,
+  /**
+   * manually terminate the worker
+   */
+  terminate: Accessor<void>,
 ]
 
 /**
@@ -116,7 +111,7 @@ export type UseWebWorkerReturn<T> = [
  * }
  * ```
  */
-export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWorkerOptions = {}) {
+export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWorkerOptions = {}): UseWebWorkerReturn<T> {
   const {
     deps = [],
     func = [],
@@ -131,7 +126,7 @@ export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWork
   } = {}
   let timeoutId: any
 
-  const terminate = (status: WebWorkerStatus = 'PENDING') => {
+  const terminate = (status: WebWorkerStatus = 'PENDING'): void => {
     if (worker?._url) {
       worker.terminate()
       URL.revokeObjectURL(worker._url)
@@ -146,7 +141,7 @@ export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWork
 
   tryOnCleanup(terminate)
 
-  const generateWorker = () => {
+  const generateWorker = (): any => {
     const blobUrl = createWorkerBlobUrl(fn, deps, func)
     const newWorker: Worker & { _url?: string } = new Worker(blobUrl)
     newWorker._url = blobUrl
@@ -178,11 +173,13 @@ export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWork
     return newWorker
   }
 
-  const workerFn = (...fnArgs: Parameters<T>) => {
+  const workerFn = (...fnArgs: Parameters<T>): any => {
     if (status() === 'RUNNING') {
-      DEV && console.error(
-        '[useWebWorkerFn] You can only run one instance of the worker at a time.',
-      )
+      if (DEV) {
+        console.error(
+          '[useWebWorkerFn] You can only run one instance of the worker at a time.',
+        )
+      }
       return Promise.reject(new Error('another workerFn must not be called while running'))
     }
 
@@ -195,5 +192,5 @@ export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWork
     })
   }
 
-  return [workerFn, { status, terminate }] as const
+  return [workerFn as T, status, terminate] as const
 }

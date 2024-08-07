@@ -44,7 +44,7 @@ export function createObjectURL(
   value: any,
   { endings, type, ...rest }: SignalOptions<string> & BlobPropertyBag = {},
 ): ObjectURLSignal {
-  const generate = (data: ObjectTypes) => URL.createObjectURL(
+  const generate = (data: ObjectTypes): string => URL.createObjectURL(
     data instanceof ArrayBuffer || typeof data === 'string'
       ? new Blob([data], { endings, type })
       : data,

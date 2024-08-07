@@ -18,7 +18,7 @@ export function useCssVar(
   name: string,
   value: MaybeAccessor<string | null>,
   ref?: MaybeAccessor<HTMLElement | undefined>,
-) {
+): void {
   const varName = '--' + name
   createRenderEffect(() => {
     const el = access(ref) ?? document.documentElement

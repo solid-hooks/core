@@ -1,5 +1,5 @@
 import type { RemoveNeverProps, StringKeys } from '@subframe7536/type-utils'
-import type { FlowComponent, JSX } from 'solid-js'
+import type { Accessor, FlowComponent, JSX } from 'solid-js'
 import { DEV } from 'solid-js'
 import { createComponent, render } from 'solid-js/web'
 
@@ -40,7 +40,7 @@ type MergeParams = {
   providers: Provider<any>[]
 }
 
-function mergeProviders({ app, props = {}, providers }: MergeParams) {
+function mergeProviders({ app, props = {}, providers }: MergeParams): Accessor<JSX.Element> {
   return providers.reduce(
     (application, [provider, opts = {}]) => () =>
       createComponent(provider, {

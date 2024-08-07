@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from 'solid-js'
+import { type Accessor, createEffect, createSignal } from 'solid-js'
 
 /**
  * create toggle signal
@@ -17,8 +17,13 @@ import { createEffect, createSignal } from 'solid-js'
  * toggle(false)
  * ```
  */
-export function createToggle(initialValue: boolean = false, onChange?: (value: boolean) => void) {
+export function createToggle(
+  initialValue: boolean = false,
+  onChange?: (value: boolean) => void,
+): [Accessor<boolean>, (value?: boolean) => boolean] {
   const [val, set] = createSignal(initialValue)
-  onChange && createEffect(() => onChange(val()))
+  if (onChange) {
+    createEffect(() => onChange(val()))
+  }
   return [val, (value?: boolean) => set(value ?? !val())] as const
 }

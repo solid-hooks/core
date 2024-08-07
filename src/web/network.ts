@@ -40,7 +40,7 @@ export type NetworkState = {
   effectiveType?: EffectiveType
 }
 
-function getConnection() {
+function getConnection(): any {
   // @ts-expect-error exist api
   return navigator?.connection || navigator?.mozConnection || navigator?.webkitConnection
 }
@@ -76,11 +76,13 @@ export function useNetwork(onChanges?: (state: NetworkState) => void): Accessor<
     () => onChanges?.(setState(prev => ({ ...prev, online: false, since: new Date() }))),
   )
   const conn = getConnection()
-  conn && useEventListener(
-    conn,
-    'change',
-    () => onChanges?.(setState(prev => ({ ...prev, ...getState() }))),
-  )
+  if (conn) {
+    useEventListener(
+      conn,
+      'change',
+      () => onChanges?.(setState(prev => ({ ...prev, ...getState() }))),
+    )
+  }
 
   return state
 }

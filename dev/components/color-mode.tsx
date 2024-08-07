@@ -9,7 +9,9 @@ export default function TestColorModeAndClipboard() {
   const paste = usePaste({
     onPaste: (data, mimeType) => {
       console.log('[usePaste]', data, mimeType)
-      typeof data === 'string' && str(data)
+      if (typeof data === 'string') {
+        str(data)
+      }
       mime(mimeType)
     },
     legacy: true,

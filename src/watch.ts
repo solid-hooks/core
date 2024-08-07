@@ -96,7 +96,7 @@ function baseWatch<T>(
   let oldValue: T
   let { defer = true, eventFilter, count = -1 } = options
 
-  const _fn = (_value: T, _oldValue: T | undefined) => {
+  const _fn = (_value: T, _oldValue: T | undefined): Cleanupable => {
     const times = setCallTimes(time => ++time)
     const result = fn(_value, _oldValue, times)
     oldValue = _value
@@ -113,7 +113,9 @@ function baseWatch<T>(
       return
     }
     const cleanup = run(value, oldValue)
-    cleanup && onCleanup(cleanup)
+    if (cleanup) {
+      onCleanup(cleanup)
+    }
   })
 
   return {
@@ -197,7 +199,7 @@ export function watchRendered<T>(
  * @param fn {@link WatchOnceCallback callback function}
  * @param options watch options
  */
-export function watchOnce<T>(deps: Accessor<T>, fn: WatchOnceCallback<T>, options?: EffectOptions) {
+export function watchOnce<T>(deps: Accessor<T>, fn: WatchOnceCallback<T>, options?: EffectOptions): void {
   const old = deps()
   return createReaction(() => fn(deps(), old), options)(deps)
 }

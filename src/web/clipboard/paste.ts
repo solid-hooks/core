@@ -45,24 +45,26 @@ export function usePaste<T extends boolean = false>(options: OnPasteOptions<T>):
   const clipboard = globalThis.navigator?.clipboard
   const isSupported = !!clipboard || !!globalThis.document?.queryCommandSupported?.('paste')
 
-  isSupported && legacy && useDocumentListener('paste', (e) => {
-    const clipboardData = e.clipboardData
-    if (!clipboardData) {
-      return
-    }
-    for (const item of clipboardData.items) {
-      // mime type will change after getting, so get it first
-      const mime = item.type
-      if (isText(mime)) {
-        item.getAsString((data) => {
-          onPaste(data, mime)
-        })
-      } else {
-        const file = item.getAsFile()
-        onPaste(file, mime)
+  if (isSupported && legacy) {
+    useDocumentListener('paste', (e) => {
+      const clipboardData = e.clipboardData
+      if (!clipboardData) {
+        return
       }
-    }
-  })
+      for (const item of clipboardData.items) {
+      // mime type will change after getting, so get it first
+        const mime = item.type
+        if (isText(mime)) {
+          item.getAsString((data) => {
+            onPaste(data, mime)
+          })
+        } else {
+          const file = item.getAsFile()
+          onPaste(file, mime)
+        }
+      }
+    })
+  }
   return isSupported
     ? async () => {
       if (legacy) {
@@ -80,7 +82,5 @@ export function usePaste<T extends boolean = false>(options: OnPasteOptions<T>):
         }
       }
     }
-    : async () => {
-      DEV && console.warn('paste from clipboard is unsupported')
-    }
+    : async () => DEV && console.warn('paste from clipboard is unsupported')
 }

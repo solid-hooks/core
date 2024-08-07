@@ -34,7 +34,7 @@ export function useIdleCallback(
     fn(deadline)
   }
 
-  const start = () => {
+  const start = (): void => {
     if (running()) {
       return
     }
