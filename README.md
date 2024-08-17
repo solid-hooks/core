@@ -286,9 +286,11 @@ setTimeOut(handleClick, 100)
 
 ### `cls`
 
-merge classes
+merge classes, lightweight version of `clsx`
 
 ```ts
+import { cls } from '@solid-hooks/core/web'
+
 cls(true && 'foo', false && 'bar', 'baz')
 // => 'foo baz'
 ```

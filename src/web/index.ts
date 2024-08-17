@@ -1,5 +1,5 @@
 export * from './color-mode'
-export * from './resource-tag'
+export * from './external'
 export * from './worker'
 export * from './network'
 export * from './event-listener'
