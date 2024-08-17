@@ -1,19 +1,6 @@
 import { tryOnCleanup } from '@solid-primitives/utils'
 import { type Accessor, createSignal } from 'solid-js'
 
-const runIdleWithFallback = window.requestIdleCallback || ((handler) => {
-  let startTime = Date.now()
-
-  return setTimeout(() => handler({
-    didTimeout: false,
-    timeRemaining() {
-      return Math.max(0, 50.0 - (Date.now() - startTime))
-    },
-  }), 1)
-})
-
-const cancelIdleWithFallback = window.cancelIdleCallback || (id => clearTimeout(id))
-
 /**
  * executes a callback using the {@link requestIdleCallback} API, fallback to {@link setTimeout}.
  *
@@ -26,6 +13,18 @@ export function useIdleCallback(
   fn: IdleRequestCallback,
   options?: IdleRequestOptions,
 ): { running: Accessor<boolean>, start: VoidFunction, stop: VoidFunction } {
+  const runIdleWithFallback = window.requestIdleCallback || ((handler) => {
+    let startTime = Date.now()
+
+    return setTimeout(() => handler({
+      didTimeout: false,
+      timeRemaining() {
+        return Math.max(0, 50.0 - (Date.now() - startTime))
+      },
+    }), 1)
+  })
+
+  const cancelIdleWithFallback = window.cancelIdleCallback || (id => clearTimeout(id))
   const [running, setRunning] = createSignal(false)
   let requestID: number
 
