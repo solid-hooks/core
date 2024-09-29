@@ -1,6 +1,6 @@
 import { createRenderEffect } from 'solid-js'
 import { createDirective, watch } from '../../src'
-import { type RefSignal, createRef } from '../../src/ref'
+import { createRef, type RefSignal } from '../../src/ref'
 
 const model = createDirective((ref: Element, atom: RefSignal<string>) => {
   createRenderEffect(() => ((ref as HTMLInputElement).value = atom()))

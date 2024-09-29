@@ -1,5 +1,5 @@
 import type { AnyFunction } from '@solid-primitives/utils'
-import { type Accessor, type Setter, type Signal, type SignalOptions, createSignal } from 'solid-js'
+import { type Accessor, createSignal, type Setter, type Signal, type SignalOptions } from 'solid-js'
 
 export type RefSignal<T, Set = Setter<T>> = Accessor<T> & Set
 

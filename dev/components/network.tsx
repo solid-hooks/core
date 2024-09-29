@@ -1,6 +1,6 @@
 import { onMount } from 'solid-js'
-import { useCssVar, useNetwork } from '../../src/web'
 import { createRef } from '../../src'
+import { useCssVar, useNetwork } from '../../src/web'
 
 export default function TestNetworkWithCssVar() {
   let codeRef: HTMLElement | undefined

@@ -1,6 +1,6 @@
-import { type MaybeAccessor, type Position, access, noop } from '@solid-primitives/utils'
-import { type Accessor, createSignal } from 'solid-js'
 import type { EventListenerOptions } from '@solid-primitives/event-listener'
+import { access, type MaybeAccessor, noop, type Position } from '@solid-primitives/utils'
+import { type Accessor, createSignal } from 'solid-js'
 import { useEventListenerStack } from '../event-listener'
 
 export type UseLongPressOptions = {

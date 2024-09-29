@@ -1,6 +1,6 @@
-import { tryOnCleanup } from '@solid-primitives/utils'
 import type { AnyFunction } from '@subframe7536/type-utils'
-import { type Accessor, DEV, createSignal } from 'solid-js'
+import { tryOnCleanup } from '@solid-primitives/utils'
+import { type Accessor, createSignal, DEV } from 'solid-js'
 
 // https://vueuse.org/core/useWebWorker/
 function jobRunner(userFunc: AnyFunction) {

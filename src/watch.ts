@@ -1,18 +1,18 @@
+import type { Prettify } from '@subframe7536/type-utils'
 import {
   type Accessor,
   type AccessorArray,
-  type EffectOptions,
-  type OnOptions,
   batch,
   createComputed,
   createEffect,
   createReaction,
   createRenderEffect,
   createSignal,
+  type EffectOptions,
   onCleanup,
+  type OnOptions,
   untrack,
 } from 'solid-js'
-import type { Prettify } from '@subframe7536/type-utils'
 
 export type WatchOptions = Prettify<
   Omit<BaseWatchOptions, 'effectFn'> & {

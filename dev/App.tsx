@@ -1,15 +1,15 @@
-import { type FlowProps, For, createSignal } from 'solid-js'
+import { createSignal, type FlowProps, For } from 'solid-js'
 import { useExternal, useTitle } from '../src/web'
+import TestArray from './components/array'
+import TestColorModeAndClipboard from './components/color-mode'
 import { TestContextProvider } from './components/context-provider'
 import TestDirective from './components/directive'
+import TestElement from './components/element'
 import TestEmit from './components/emit'
+import TestNetworkWithCssVar from './components/network'
 import TestReactive from './components/reactive'
 import TestWatch from './components/watch'
 import TestWorker from './components/worker'
-import TestColorModeAndClipboard from './components/color-mode'
-import TestNetworkWithCssVar from './components/network'
-import TestElement from './components/element'
-import TestArray from './components/array'
 
 function Card(props: FlowProps<{ title: string }>) {
   return (

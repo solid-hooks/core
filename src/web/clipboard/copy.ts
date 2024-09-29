@@ -1,5 +1,5 @@
-import { type Accessor, DEV, createSignal } from 'solid-js'
-import { type Many, asArray } from '@solid-primitives/utils'
+import { asArray, type Many } from '@solid-primitives/utils'
+import { type Accessor, createSignal, DEV } from 'solid-js'
 
 export type UseCopyOptions = {
   /**

@@ -4,7 +4,7 @@ import { useIdleCallback, useWebWorkerFn } from '../../src/web'
 const randomNumber = () => Math.trunc(Math.random() * 5_000_00)
 
 function heavyTask() {
-  const numbers: number[] = Array(5_000_000).fill(undefined).map(randomNumber)
+  const numbers: number[] = Array.from({ length: 5_000_000 }).fill(undefined).map(randomNumber)
   numbers.sort()
   return numbers.slice(0, 5)
 }

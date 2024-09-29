@@ -28,8 +28,8 @@ pnpm add @solid-hooks/core
 read / write signal in one function
 
 ```tsx
-import { onMounted } from 'solid-js'
 import { createRef } from '@solid-hooks/core'
+import { onMounted } from 'solid-js'
 
 function Test() {
   const divRef = createRef<HTMLDivElement>()
@@ -93,7 +93,7 @@ another way to create directive
 
 ```tsx
 import { createDirective } from '@solid-hooks/core'
-import { type Accessor, type Setter, createRenderEffect, createSignal } from 'solid-js'
+import { type Accessor, createRenderEffect, createSignal, type Setter } from 'solid-js'
 
 const model = createDirective((ref: Element, getter: Accessor<string>, setter: Setter<string>) => {
   createRenderEffect(() => ((ref as HTMLInputElement).value = getter()))
@@ -118,8 +118,8 @@ reference from [voby](https://github.com/vobyjs/voby?tab=readme-ov-file#createdi
 filterable and pausable `createEffect(on())` like, defer by default
 
 ```ts
-import { throttle } from '@solid-primitives/scheduled'
 import { watch } from '@solid-hooks/core'
+import { throttle } from '@solid-primitives/scheduled'
 
 const [count, setCount] = createSignal(0)
 const { pause, resume, isWatching, callTimes, ignoreUpdate } = watch(
@@ -238,8 +238,8 @@ reference from [@solid-primitives/context](https://github.com/solidjs-community/
 if default value is not defined and use context outside provider, throw `Error` when DEV
 
 ```tsx
-import { createSignal } from 'solid-js'
 import { createContextProvider } from '@solid-hooks/core'
+import { createSignal } from 'solid-js'
 
 export const [TestProvider, useTestContext] = createContextProvider((param: { initial: number }) => {
   const [count, setCount] = createSignal(param.initial)
@@ -370,13 +370,13 @@ run function in worker, support local functions or external dependencies
 reference from [vueuse](https://vueuse.org/core/useWebWorkerFn/)
 
 ```tsx
-import { createMemo, createSignal } from 'solid-js'
 import { useWebWorkerFn } from '@solid-hooks/core/web'
+import { createMemo, createSignal } from 'solid-js'
 
 const randomNumber = () => Math.trunc(Math.random() * 5_000_00)
 
 function heavyTask() {
-  const numbers: number[] = Array(5_000_000).fill(undefined).map(randomNumber)
+  const numbers: number[] = Array.from({ length: 5_000_000 }).fill(undefined).map(randomNumber)
   numbers.sort()
   return numbers.slice(0, 5)
 }

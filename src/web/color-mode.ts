@@ -1,11 +1,11 @@
 import { createPrefersDark } from '@solid-primitives/media'
-import { type MaybeAccessor, access } from '@solid-primitives/utils'
-import { type Accessor, type Setter, createMemo, createRenderEffect, createSignal, on } from 'solid-js'
+import { access, type MaybeAccessor } from '@solid-primitives/utils'
+import { type Accessor, createMemo, createRenderEffect, createSignal, on, type Setter } from 'solid-js'
 import { useExternal } from './external'
 
 export {
-  makeMediaQueryListener as useMediaQueryListener,
   createMediaQuery as useMediaQuery,
+  makeMediaQueryListener as useMediaQueryListener,
 } from '@solid-primitives/media'
 
 type ColorMode = 'auto' | 'light' | 'dark'
