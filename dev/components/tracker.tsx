@@ -1,14 +1,14 @@
 import { createEffect, on } from 'solid-js'
-import { createReactive } from '../../src'
+import { createTracker } from '../../src'
 
 const FOO = {
   bar: 1,
 }
 
 export default function TestReactive() {
-  const [obj, setObj] = createReactive(FOO, 'bar')
+  const [obj, setObj] = createTracker(FOO, 'bar')
   createEffect(on(obj, () => {
-    console.log('[createReactive] source object Foo.bar:', FOO.bar)
+    console.log('[createTracker] track source object Foo.bar:', FOO.bar)
   }, { defer: true }))
   return (
     <>

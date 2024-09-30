@@ -1,39 +1,33 @@
 import type { Signal, SignalOptions } from 'solid-js'
 import { createSignal } from 'solid-js'
 
-type ReactiveOptions<T extends object, K extends keyof T> = SignalOptions<T[K]> & {
+type TrackerOptions<T extends object, K extends keyof T> = SignalOptions<T[K]> & {
   /**
    * custom setter to set original property to new value, useful for handle readonly properties
    * @param source source data
    * @param newValue new value
    * @returns if return value, it will be used to check equal, if return nothing, it will always to update
    */
-  setter?: (
-    source: T,
-    newValue: T[K],
-  ) => T[K] | void
+  setter?: (source: T, newValue: T[K]) => T[K] | void
 }
 
 /**
- * make plain object props reactive
+ * Track plain object property, make it reactive
  * @param data source object
  * @param key object key
  * @param options signal options
  * @example
  * ```ts
- * import { createReactive } from '@solid-hooks/core'
+ * import { createTracker } from '@solid-hooks/core'
  *
  * const audio = new Audio()
- * const [time, setCurrentTime] = createReactive(audio, 'currentTime')
+ * const [time, setCurrentTime] = createTracker(audio, 'currentTime')
  * ```
  */
-export function createReactive<
-  T extends object,
-  K extends keyof T,
->(
+export function createTracker<T extends object, K extends keyof T>(
   data: T,
   key: K,
-  options?: ReactiveOptions<T, K>,
+  options?: TrackerOptions<T, K>,
 ): Signal<T[K]> {
   const { equals, setter, ...rest } = options || {}
   const [track, trigger] = createSignal(undefined, { ...rest, equals: false })
@@ -63,3 +57,8 @@ export function createReactive<
     },
   ] as Signal<T[K]>
 }
+
+/**
+ * @deprecated Use {@link createTracker} instead
+ */
+export const createReactive = createTracker

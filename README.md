@@ -46,16 +46,18 @@ function useSomethingRef() {
 }
 ```
 
-### `createReactive`
+### `createTracker`
 
-make plain object props reactive
+Track plain object property, make it reactive
 
 ```ts
-import { createReactive } from '@solid-hooks/core'
+import { createTracker } from '@solid-hooks/core'
 
 const audio = new Audio()
-const [time, setCurrentTime] = createReactive(audio, 'currentTime')
+const [time, setCurrentTime] = createTracker(audio, 'currentTime')
 ```
+
+Before v0.4.0 is `createReactive`
 
 ### `createArray`
 
