@@ -7,7 +7,7 @@ import TestDirective from './components/directive'
 import TestElement from './components/element'
 import TestEmit from './components/emit'
 import TestNetworkWithCssVar from './components/network'
-import TestReactive from './components/reactive'
+import TestReactive from './components/tracker'
 import TestWatch from './components/watch'
 import TestWorker from './components/worker'
 

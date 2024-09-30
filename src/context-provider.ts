@@ -80,8 +80,8 @@ export function createContextProvider<T, Props extends Record<string, unknown>>(
       ? () => {
           const _ctx = useContext(ctx)
           if (_ctx === undefined) {
-            console.error(`Provider is not set in component tree!`)
-            throw new Error(`Provider is not set in component tree!`)
+            console.warn('<Provider /> does not exists in component tree!')
+            throw new Error('<Provider /> does not exists in component tree!')
           }
           return _ctx
         }
