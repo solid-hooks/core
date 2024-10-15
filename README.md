@@ -311,16 +311,16 @@ function App() {
 }
 ```
 
-### `useClickoutside`
+### `useClickOutside`
 
 check if element is clicked outside
 
 ```tsx
-import { useClickoutside } from '@solid-hooks/core/web'
+import { useClickOutside } from '@solid-hooks/core/web'
 
 function App() {
   let el
-  const [isClickOutside] = useClickoutside(() => el)
+  const [isClickOutside] = useClickOutside(() => el)
   return <div ref={el}>{isClickOutside() ? 'clicked outside' : 'clicked inside'}</div>
 }
 ```
