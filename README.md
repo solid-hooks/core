@@ -293,7 +293,7 @@ merge classes, lightweight version of `clsx`
 ```ts
 import { cls } from '@solid-hooks/core/web'
 
-cls(true && 'foo', false && 'bar', 'baz')
+cls('foo', true && 'bar', false && ['bar', true && 'baz'], 1)
 // => 'foo baz'
 ```
 

@@ -17,6 +17,14 @@ describe('clsx', () => {
     expect(cls(false && 'foo', 'bar', 'baz', '')).toBe('bar baz')
   })
 
+  it('arrays', () => {
+    expect(cls([''])).toBe('')
+    expect(cls(true && ['foo'])).toBe('foo')
+    expect(cls(['foo', 'bar'])).toBe('foo bar')
+    expect(cls('foo', 'bar', ['baz'])).toBe('foo bar baz')
+    expect(cls('foo', 'bar', false && [true && 'baz'])).toBe('foo bar')
+  })
+
   it('emptys', () => {
     expect(cls('')).toBe('')
     expect(cls(undefined)).toBe('')
