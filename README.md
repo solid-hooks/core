@@ -415,7 +415,18 @@ auto cleanup event listener, allow nullish target
 
 reference from [@solid-primitives/event-listener](https://github.com/solidjs-community/solid-primitives/tree/main/packages/event-listener)
 
-### `useColorMode`
+### `useMediaQuery`
+
+create media query signal
+
+```tsx
+import { useMediaQuery, usePrefersDark } from '@solid-hooks/core/web'
+
+const isLg = useMediaQuery('(min-width: 1024px)')
+const isDark = usePrefersDark()
+```
+
+#### `useColorMode`
 
 auto color mode with attribute toggle, disable transition by default
 

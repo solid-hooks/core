@@ -1,12 +1,32 @@
-import { createPrefersDark } from '@solid-primitives/media'
-import { access, type MaybeAccessor } from '@solid-primitives/utils'
+import { access, type MaybeAccessor, noop } from '@solid-primitives/utils'
 import { type Accessor, createMemo, createRenderEffect, createSignal, on, type Setter } from 'solid-js'
+import { useEventListener } from './event-listener'
 import { useExternal } from './external'
 
-export {
-  createMediaQuery as useMediaQuery,
-  makeMediaQueryListener as useMediaQueryListener,
-} from '@solid-primitives/media'
+/**
+ * Create media query signal
+ * @param query media query string
+ * @param listener custom listener
+ */
+export function useMediaQuery(
+  query: string,
+  listener: (currentState: boolean, event: MediaQueryListEvent) => void = noop,
+): Accessor<boolean> {
+  const mql = globalThis.matchMedia(query)
+  const [state, setState] = createSignal(mql.matches)
+  const handler = (event: MediaQueryListEvent): void => listener(setState(event.matches), event)
+  if ('addEventListener' in mql) {
+    useEventListener(mql, 'change', handler)
+  } else {
+    // @ts-expect-error deprecated API
+    mql.addListener(handler)
+  }
+  return state
+}
+
+export function usePrefersDark(): Accessor<boolean> {
+  return useMediaQuery('(prefers-color-scheme: dark)')
+}
 
 type ColorMode = 'auto' | 'light' | 'dark'
 
@@ -80,7 +100,7 @@ export function useColorMode(options: UseColorModeOptions = {}): UseColorModeRet
     colorScheme,
   } = options
 
-  const preferredDark = createPrefersDark()
+  const preferredDark = usePrefersDark()
   const [mode, setMode] = createSignal<ColorMode>(initialMode)
 
   const isDark = createMemo(() => {

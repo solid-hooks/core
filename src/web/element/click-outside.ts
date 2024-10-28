@@ -37,9 +37,9 @@ export function useClickOutside(
   // How it works: https://stackoverflow.com/a/39712411
   if (isIOS && !_iOSWorkaround) {
     _iOSWorkaround = true
-    Array.from(window.document.body.children)
+    Array.from(globalThis.document.body.children)
       .forEach(el => el.addEventListener('click', noop))
-    window.document.documentElement.addEventListener('click', noop)
+    globalThis.document.documentElement.addEventListener('click', noop)
   }
 
   const cleanup = useWindowListener('pointerdown', (event) => {

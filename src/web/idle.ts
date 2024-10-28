@@ -13,7 +13,7 @@ export function useIdleCallback(
   fn: IdleRequestCallback,
   options?: IdleRequestOptions,
 ): { running: Accessor<boolean>, start: VoidFunction, stop: VoidFunction } {
-  const runIdleWithFallback = window.requestIdleCallback || ((handler) => {
+  const runIdleWithFallback = globalThis.requestIdleCallback || ((handler) => {
     let startTime = Date.now()
 
     return setTimeout(() => handler({
@@ -24,7 +24,7 @@ export function useIdleCallback(
     }), 1)
   })
 
-  const cancelIdleWithFallback = window.cancelIdleCallback || (id => clearTimeout(id))
+  const cancelIdleWithFallback = globalThis.cancelIdleCallback || (id => clearTimeout(id))
   const [running, setRunning] = createSignal(false)
   let requestID: number
 
