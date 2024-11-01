@@ -288,6 +288,9 @@ setTimeOut(handleClick, 100)
 
 ### `cls`
 
+> [!WARNING]
+> DEPRECATED, use `cls-variant` instead
+
 merge classes, lightweight version of `clsx`
 
 ```ts

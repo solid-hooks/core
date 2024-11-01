@@ -2,6 +2,7 @@ import type { Arrayable } from '@subframe7536/type-utils'
 
 /* eslint-disable one-var */
 /**
+ * @deprecated use `cls-variant` instead
  * Concatenate classes
  * @param args classes
  */
