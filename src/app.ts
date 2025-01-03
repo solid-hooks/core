@@ -1,6 +1,6 @@
 import type { RemoveNeverProps, StringKeys } from '@subframe7536/type-utils'
-import type { Accessor, FlowComponent, JSX } from 'solid-js'
-import { DEV } from 'solid-js'
+import type { Accessor, Component, FlowComponent, JSX } from 'solid-js'
+import { isDev } from '@solid-primitives/utils'
 import { createComponent, render } from 'solid-js/web'
 
 type RequiredKeysOfObject<T> = StringKeys<RemoveNeverProps<{
@@ -15,7 +15,7 @@ type App = {
    * @param provider provider to add to the list
    * @param props provider options
    */
-  use: <Props>(
+  use: <Props extends Record<string, any>>(
     provider: FlowComponent<Props>,
     ...props: RequiredKeysOfObject<Props> extends never ? [props?: Props] : [props: Props]
   ) => App
@@ -34,13 +34,10 @@ type Provider<Props extends Record<string, any>> = [
   props?: Props,
 ]
 
-type MergeParams = {
-  app: (props?: any) => JSX.Element
-  props?: Record<string, any>
-  providers: Provider<any>[]
-}
-
-function mergeProviders({ app, props = {}, providers }: MergeParams): Accessor<JSX.Element> {
+export function mergeProviders(
+  app: () => JSX.Element,
+  providers: Provider<any>[],
+): Accessor<JSX.Element> {
   return providers.reduce(
     (application, [provider, opts = {}]) => () =>
       createComponent(provider, {
@@ -49,7 +46,7 @@ function mergeProviders({ app, props = {}, providers }: MergeParams): Accessor<J
           return application()
         },
       }),
-    () => createComponent(app, props),
+    app,
   )
 }
 
@@ -85,7 +82,7 @@ function mergeProviders({ app, props = {}, providers }: MergeParams): Accessor<J
  * ```
  */
 export function createApp<AppProps extends Record<string, any> = {}>(
-  app: FlowComponent<AppProps>,
+  app: Component<AppProps>,
   ...appProps: RequiredKeysOfObject<AppProps> extends never ? [appProps?: AppProps] : [appProps: AppProps]
 ): App {
   const providers: Provider<any>[] = []
@@ -97,9 +94,9 @@ export function createApp<AppProps extends Record<string, any> = {}>(
     },
 
     mount: (dom) => {
-      const application = mergeProviders({ app, props: appProps[0], providers })
+      const application = mergeProviders(() => createComponent(app, appProps[0] || {} as AppProps), providers)
       const root = document.querySelector(dom)
-      if (DEV && !root) {
+      if (isDev && !root) {
         throw new Error(`root node "${dom}" is null`)
       }
       return render(application, root!)
