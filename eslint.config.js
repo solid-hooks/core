@@ -4,11 +4,11 @@ export default defineEslintConfig({
   overrideRules: {
     'prefer-template': 'off',
   },
-})
-  .append({
+  ignoreRuleOnFile: [{
     files: ['README.md/**.{ts,tsx}', 'dev/**/*.tsx'],
-    rules: {
-      'ts/explicit-function-return-type': 'off',
-      'no-constant-binary-expression': 'off',
-    },
-  })
+    rules: [
+      'ts/explicit-function-return-type',
+      'no-constant-binary-expression',
+    ],
+  }],
+})
