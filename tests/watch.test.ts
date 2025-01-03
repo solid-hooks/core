@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { watch } from '../src/watch'
 
 function debounce(fn: AnyFunction, delay: number) {
-  let timeoutId: string | number | NodeJS.Timeout | undefined
+  let timeoutId: any
   return function (this: any, ...args: any[]) {
     if (timeoutId) {
       clearTimeout(timeoutId)
