@@ -1,5 +1,6 @@
 import type { Accessor, FlowProps, JSXElement } from 'solid-js'
-import { createComponent, createContext, DEV, useContext } from 'solid-js'
+import { isDev } from '@solid-primitives/utils'
+import { createComponent, createContext, useContext } from 'solid-js'
 
 export type ContextProvider<T, Props extends Record<string, unknown> = {}> = [
   Provider: (props: FlowProps<Props>) => JSXElement,
@@ -76,7 +77,7 @@ export function createContextProvider<T, Props extends Record<string, unknown>>(
         return props.children
       },
     }),
-    DEV
+    isDev
       ? () => {
           const _ctx = useContext(ctx)
           if (_ctx === undefined) {

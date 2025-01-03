@@ -1,4 +1,4 @@
-import { DEV } from 'solid-js'
+import { isDev } from '@solid-primitives/utils'
 import { useDocumentListener } from '../event-listener'
 
 type OnPasteOptions<T extends boolean> = {
@@ -82,5 +82,7 @@ export function usePaste<T extends boolean = false>(options: OnPasteOptions<T>):
         }
       }
     }
-    : async () => DEV && console.warn('paste from clipboard is unsupported')
+    : async () => {
+      isDev && console.warn('paste from clipboard is unsupported')
+    }
 }

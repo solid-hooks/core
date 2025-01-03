@@ -1,6 +1,6 @@
 import type { AnyFunction } from '@subframe7536/type-utils'
-import { tryOnCleanup } from '@solid-primitives/utils'
-import { type Accessor, createSignal, DEV } from 'solid-js'
+import { isDev, tryOnCleanup } from '@solid-primitives/utils'
+import { type Accessor, createSignal } from 'solid-js'
 
 // https://vueuse.org/core/useWebWorker/
 function jobRunner(userFunc: AnyFunction) {
@@ -175,7 +175,7 @@ export function useWebWorkerFn<T extends AnyFunction>(fn: T, options: UseWebWork
 
   const workerFn = (...fnArgs: Parameters<T>): any => {
     if (status() === 'RUNNING') {
-      if (DEV) {
+      if (isDev) {
         console.error(
           '[useWebWorkerFn] You can only run one instance of the worker at a time.',
         )

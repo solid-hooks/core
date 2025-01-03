@@ -1,5 +1,5 @@
-import { asArray, type Many } from '@solid-primitives/utils'
-import { type Accessor, createSignal, DEV } from 'solid-js'
+import { asArray, isDev, type Many } from '@solid-primitives/utils'
+import { type Accessor, createSignal } from 'solid-js'
 
 export type UseCopyOptions = {
   /**
@@ -80,7 +80,8 @@ export function useCopy(options: UseCopyOptions = {}): UseCopyReturn {
         }
         timer = setTimeout(() => setCopied(false), copiedDuration)
       }
-      : async () => DEV && console.warn('copy into to clipboard is unsupported')
-    ,
+      : async () => {
+        isDev && console.warn('copy into to clipboard is unsupported')
+      },
   }
 }
