@@ -1,4 +1,6 @@
-import { access, type MaybeAccessor } from '@solid-primitives/utils'
+import type { MaybeAccessor } from '@solid-primitives/utils'
+
+import { access } from '@solid-primitives/utils'
 import { createRenderEffect } from 'solid-js'
 
 /**

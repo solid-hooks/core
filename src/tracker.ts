@@ -1,4 +1,5 @@
 import type { Signal, SignalOptions } from 'solid-js'
+
 import { createSignal } from 'solid-js'
 
 type TrackerOptions<T extends object, K extends keyof T> = SignalOptions<T[K]> & {

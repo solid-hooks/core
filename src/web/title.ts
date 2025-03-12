@@ -1,4 +1,6 @@
-import { type Accessor, createEffect, createSignal, onCleanup, type Setter, type Signal } from 'solid-js'
+import type { Accessor, Setter, Signal } from 'solid-js'
+
+import { createEffect, createSignal, onCleanup } from 'solid-js'
 
 /**
  * signal that indicate document's title

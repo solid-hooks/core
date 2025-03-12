@@ -1,5 +1,8 @@
+import type { Accessor } from 'solid-js'
+
 import { isClient, noop } from '@solid-primitives/utils'
-import { type Accessor, createSignal } from 'solid-js'
+import { createSignal } from 'solid-js'
+
 import { useWindowListener } from '../event-listener'
 
 export const isIOS = isClient && ((/iP(?:ad|hone|od)/.test(globalThis.navigator.userAgent))

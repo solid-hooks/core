@@ -1,4 +1,7 @@
-import { createSignal, type FlowProps, For } from 'solid-js'
+import type { FlowProps } from 'solid-js'
+
+import { createSignal, For } from 'solid-js'
+
 import { useExternal, useTitle } from '../src/web'
 import TestArray from './components/array'
 import TestColorModeAndClipboard from './components/color-mode'

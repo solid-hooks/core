@@ -1,5 +1,7 @@
+import type { Accessor } from 'solid-js'
+
 import { tryOnCleanup } from '@solid-primitives/utils'
-import { type Accessor, createSignal } from 'solid-js'
+import { createSignal } from 'solid-js'
 
 /**
  * executes a callback using the {@link requestIdleCallback} API, fallback to {@link setTimeout}.

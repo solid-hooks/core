@@ -1,5 +1,9 @@
-import { access, type MaybeAccessor, noop } from '@solid-primitives/utils'
-import { type Accessor, createMemo, createRenderEffect, createSignal, on, type Setter } from 'solid-js'
+import type { MaybeAccessor } from '@solid-primitives/utils'
+import type { Accessor, Setter } from 'solid-js'
+
+import { access, noop } from '@solid-primitives/utils'
+import { createMemo, createRenderEffect, createSignal, on } from 'solid-js'
+
 import { useEventListener } from './event-listener'
 import { useExternal } from './external'
 

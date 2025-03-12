@@ -1,5 +1,6 @@
 import type { AnyFunction } from '@subframe7536/type-utils'
 import type { Owner } from 'solid-js'
+
 import { getOwner, runWithOwner } from 'solid-js'
 
 /**

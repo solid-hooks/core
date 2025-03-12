@@ -1,4 +1,5 @@
 import { isDev } from '@solid-primitives/utils'
+
 import { useDocumentListener } from '../event-listener'
 
 type OnPasteOptions<T extends boolean> = {

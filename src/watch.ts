@@ -1,16 +1,17 @@
 import type { Prettify } from '@subframe7536/type-utils'
+import type { Accessor, AccessorArray, EffectOptions, OnOptions } from 'solid-js'
+
 import {
-  type Accessor,
-  type AccessorArray,
+
   batch,
   createComputed,
   createEffect,
   createReaction,
   createRenderEffect,
   createSignal,
-  type EffectOptions,
+
   onCleanup,
-  type OnOptions,
+
   untrack,
 } from 'solid-js'
 

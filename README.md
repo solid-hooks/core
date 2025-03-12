@@ -94,8 +94,10 @@ toggle(false)
 another way to create directive
 
 ```tsx
+import type { Accessor, Setter } from 'solid-js'
+
 import { createDirective } from '@solid-hooks/core'
-import { type Accessor, createRenderEffect, createSignal, type Setter } from 'solid-js'
+import { createRenderEffect, createSignal } from 'solid-js'
 
 const model = createDirective((ref: Element, getter: Accessor<string>, setter: Setter<string>) => {
   createRenderEffect(() => ((ref as HTMLInputElement).value = getter()))
@@ -163,7 +165,9 @@ like `watch`, use `createRendered`
 like `defineEmits` in `Vue`, emit event from child component
 
 ```tsx
-import { type defineEmits, useEmits } from '@solid-hooks/core'
+import type { defineEmits } from '@solid-hooks/core'
+
+import { useEmits } from '@solid-hooks/core'
 
 type Emits = defineEmits<{
   // sync
@@ -207,6 +211,7 @@ like `createApp()` in `Vue`
 
 ```ts
 import { createApp } from '@solid-hooks/core'
+
 import App from './App'
 
 createApp(App)

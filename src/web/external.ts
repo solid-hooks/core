@@ -1,5 +1,7 @@
+import type { MaybeAccessor } from '@solid-primitives/utils'
 import type { ComponentProps } from 'solid-js'
-import { access, type MaybeAccessor, tryOnCleanup } from '@solid-primitives/utils'
+
+import { access, tryOnCleanup } from '@solid-primitives/utils'
 import { createRenderEffect } from 'solid-js'
 import { spread } from 'solid-js/web'
 

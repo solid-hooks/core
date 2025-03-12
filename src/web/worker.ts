@@ -1,6 +1,8 @@
 import type { AnyFunction } from '@subframe7536/type-utils'
+import type { Accessor } from 'solid-js'
+
 import { isDev, tryOnCleanup } from '@solid-primitives/utils'
-import { type Accessor, createSignal } from 'solid-js'
+import { createSignal } from 'solid-js'
 
 // https://vueuse.org/core/useWebWorker/
 function jobRunner(userFunc: AnyFunction) {

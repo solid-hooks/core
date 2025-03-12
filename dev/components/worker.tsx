@@ -1,4 +1,5 @@
 import { createMemo, createSignal } from 'solid-js'
+
 import { useIdleCallback, useWebWorkerFn } from '../../src/web'
 
 const randomNumber = () => Math.trunc(Math.random() * 5_000_00)

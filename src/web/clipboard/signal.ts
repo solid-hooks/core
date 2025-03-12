@@ -1,4 +1,6 @@
-import { type Accessor, createSignal } from 'solid-js'
+import type { Accessor } from 'solid-js'
+
+import { createSignal } from 'solid-js'
 
 export type ClipboardItemSignal<T> = [accessor: Accessor<ClipboardItem>, set: (data: T) => ClipboardItem]
 

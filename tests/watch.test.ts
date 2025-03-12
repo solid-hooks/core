@@ -1,6 +1,8 @@
 import type { AnyFunction } from '@subframe7536/type-utils'
+
 import { createRoot, createSignal } from 'solid-js'
 import { describe, expect, it, vi } from 'vitest'
+
 import { watch } from '../src/watch'
 
 function debounce(fn: AnyFunction, delay: number) {

@@ -1,4 +1,6 @@
-import { type defineEmits, useEmits } from '../../src'
+import type { defineEmits } from '../../src'
+
+import { useEmits } from '../../src'
 
 type Emits = defineEmits<{
   var: { id: number }

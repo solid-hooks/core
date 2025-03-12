@@ -1,4 +1,5 @@
 import { createEffect, on } from 'solid-js'
+
 import { createTracker } from '../../src'
 
 const FOO = {

@@ -1,10 +1,12 @@
+import type { EventListenerOptions, EventMapOf, TargetWithEventMap } from '@solid-primitives/event-listener'
+import type { Many, MaybeAccessor } from '@solid-primitives/utils'
+
 import {
-  type EventListenerOptions,
-  type EventMapOf,
+
   makeEventListener,
-  type TargetWithEventMap,
+
 } from '@solid-primitives/event-listener'
-import { access, asArray, createCallbackStack, type Many, type MaybeAccessor } from '@solid-primitives/utils'
+import { access, asArray, createCallbackStack } from '@solid-primitives/utils'
 import { createEffect, createRenderEffect, onCleanup } from 'solid-js'
 
 export {

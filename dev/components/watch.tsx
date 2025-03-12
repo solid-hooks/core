@@ -1,4 +1,5 @@
 import { createSignal } from 'solid-js'
+
 import { watch } from '../../src'
 
 export default function TestWatch() {

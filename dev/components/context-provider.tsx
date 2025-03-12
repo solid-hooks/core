@@ -1,4 +1,5 @@
 import { catchError } from 'solid-js'
+
 import { createContextProvider, createRef } from '../../src'
 
 export const [TestProvider, useTestContext] = createContextProvider((param: { initial: number }) => {
