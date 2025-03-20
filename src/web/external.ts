@@ -5,22 +5,9 @@ import { access, tryOnCleanup } from '@solid-primitives/utils'
 import { createRenderEffect } from 'solid-js'
 import { spread } from 'solid-js/web'
 
-export type ScriptOptions = Pick<
-  ComponentProps<'script'>,
-  | 'defer'
-  | 'crossOrigin'
-  | 'noModule'
-  | 'referrerPolicy'
-  | 'type'
-  | 'async'
-  | 'onLoad'
->
+export type ScriptOptions = ComponentProps<'script'>
 
-export type StyleOption = Pick<
-  ComponentProps<'style'>,
-  | 'media'
-  | 'onLoad'
->
+export type StyleOptions = ComponentProps<'style'>
 
 /**
  * load js
@@ -56,12 +43,12 @@ export function useExternal(
 export function useExternal(
   type: 'style',
   content: MaybeAccessor<string>,
-  options?: StyleOption,
+  options?: StyleOptions,
 ): [element: HTMLStyleElement, cleanup: VoidFunction]
 export function useExternal(
   type: 'script' | 'style',
   content: MaybeAccessor<string>,
-  options?: ScriptOptions | StyleOption,
+  options?: ScriptOptions | StyleOptions,
 ): any {
   const element = document.createElement(type)
   spread(element, options, false, true)
