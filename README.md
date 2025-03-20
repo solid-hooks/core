@@ -165,17 +165,15 @@ like `watch`, use `createRendered`
 like `defineEmits` in `Vue`, emit event from child component
 
 ```tsx
-import type { defineEmits } from '@solid-hooks/core'
-
 import { useEmits } from '@solid-hooks/core'
 
-type Emits = defineEmits<{
+type Emits = {
   // sync
-  var: number
-  update: [d1: string, d2?: string, d3?: string]
-  // sync or async
-  fn: (test: string) => void
-}>
+  $var: (data: number) => void
+  $update: (d1: string, d2?: string, d3?: string) => void
+  // or async
+  fn: (test: string) => Promise<void>
+}
 function Child(prop: Emits & { num: number }) {
   const emit = useEmits(prop)
   const handleClick = () => {

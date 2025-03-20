@@ -23,6 +23,9 @@ type EmitTrigger<Events extends Record<string, any>> = FilterEmitEvents<Events> 
     : never
   : never
 
+/**
+ * @deprecated
+ */
 export type defineEmits<T extends Record<string, any>> = Add$Keys<{
   [K in StringKeys<T>]: T[K] extends infer E
     ? E extends AnyFunction
@@ -38,13 +41,13 @@ export type defineEmits<T extends Record<string, any>> = Add$Keys<{
  * ```tsx
  * import { type defineEmits, useEmits } from '@solid-hooks/core'
  *
- * type Emits = defineEmits<{
+ * type Emits = {
  *   // sync
- *   var: number
- *   update: [d1: string, d2?: string, d3?: string]
- *   // sync or async
+ *   $var: (data: number) => void
+ *   $update: (d1: string, d2?: string, d3?: string) => void
+ *   // or async
  *   fn: (test: string) => Promise<void>
- * }>
+ * }
  * function Child(prop: Emits & { num: number }) {
  *   const emit = useEmits(prop)
  *   const handleClick = () => {
