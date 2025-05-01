@@ -84,7 +84,7 @@ export function useCopy(options: UseCopyOptions = {}): UseCopyReturn {
         timer = setTimeout(() => setCopied(false), copiedDuration)
       }
       : async () => {
-        isDev && console.warn('copy into to clipboard is unsupported')
+        isDev && console.warn('Copy into to clipboard is unsupported')
       },
   }
 }

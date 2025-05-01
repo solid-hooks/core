@@ -14,20 +14,24 @@ type OnPasteOptions<T extends boolean> = {
     mime: string,
   ) => void
   /**
-   * whether force to use `document.execCommand('paste')` to paste
+   * Whether force to use `document.execCommand('paste')` to paste
    * and listen `paste` event on `window`
    */
   legacy?: T
   /**
-   * check if `data`'s type is string
+   * Check if `data`'s type is string
    * @param mime data's mimetype
    * @default mime => mime.startsWith('text/')
    */
   isText?: (mime: string) => boolean
+  /**
+   * Whether to listen document's `paste` event
+   */
+  listen?: boolean
 }
 
 /**
- * hooks that paste from clipboard
+ * Hook for handling clipboard paste operations
  * @param options paste options
  * @example
  * ```tsx
@@ -42,26 +46,23 @@ type OnPasteOptions<T extends boolean> = {
  * ```
  */
 export function usePaste<T extends boolean = false>(options: OnPasteOptions<T>): () => Promise<void> {
-  const { onPaste, legacy, isText = mime => mime.startsWith('text/') } = options
+  const { onPaste, legacy, listen, isText = mime => mime.startsWith('text/') } = options
   const clipboard = globalThis.navigator?.clipboard
   const isSupported = !!clipboard || !!globalThis.document?.queryCommandSupported?.('paste')
 
-  if (isSupported && legacy) {
+  if (isSupported && (legacy || listen)) {
     useDocumentListener('paste', (e) => {
       const clipboardData = e.clipboardData
       if (!clipboardData) {
         return
       }
       for (const item of clipboardData.items) {
-      // mime type will change after getting, so get it first
+        // mime type will change after getting, so get it first
         const mime = item.type
-        if (isText(mime)) {
-          item.getAsString((data) => {
-            onPaste(data, mime)
-          })
+        if (item.kind === 'file') {
+          onPaste(item.getAsFile(), mime)
         } else {
-          const file = item.getAsFile()
-          onPaste(file, mime)
+          item.getAsString(data => onPaste(data, mime))
         }
       }
     })
