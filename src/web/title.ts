@@ -1,6 +1,6 @@
 import type { Accessor, Setter, Signal } from 'solid-js'
 
-import { createEffect, createSignal, onCleanup } from 'solid-js'
+import { createRenderEffect, createSignal, onCleanup } from 'solid-js'
 
 /**
  * Signal that indicate document's title
@@ -19,7 +19,7 @@ export function useTitle(title?: Accessor<string>): Signal<string> | void {
   } else {
     [acc, set] = createSignal(originalTitle)
   }
-  createEffect(() => {
+  createRenderEffect(() => {
     document.title = acc()
     onCleanup(() => {
       document.title = originalTitle
