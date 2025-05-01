@@ -12,12 +12,12 @@ export const isIOS = isClient && ((/iP(?:ad|hone|od)/.test(globalThis.navigator.
 
 export type UseClickOutsideOptions = {
   /**
-   * listener options
+   * Listener options
    * @default { passive: true }
    */
   modifiers?: AddEventListenerOptions
   /**
-   * callback when the ref element is clicked outside
+   * Callback when the ref element is clicked outside
    */
   onClickOutside?: (ev: PointerEvent) => void
 }
@@ -25,7 +25,7 @@ export type UseClickOutsideOptions = {
 let _iOSWorkaround = false
 
 /**
- * check if element is clicked outside
+ * State of whether element is clicked outside
  * @param ref element accessor
  * @param options listen options with callback
  */
@@ -54,5 +54,6 @@ export function useClickOutside(
       }
     }
   }, { passive: true, ...modifiers })
+
   return [isClicked, cleanup]
 }

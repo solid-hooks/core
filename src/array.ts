@@ -11,7 +11,7 @@ export type ArraySignal<T extends Array<unknown>> = [
 ]
 
 /**
- * create array signal
+ * Create array signal
  * @param initialValue initial value
  * @example
  *  ```ts

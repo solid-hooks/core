@@ -4,7 +4,7 @@ import { tryOnCleanup } from '@solid-primitives/utils'
 import { createSignal } from 'solid-js'
 
 /**
- * executes a callback using the {@link requestIdleCallback} API, fallback to {@link setTimeout}.
+ * Executes a callback using the {@link requestIdleCallback} API, fallback to {@link setTimeout}.
  *
  * auto cleanup, return cleanup function
  * @param fn callback function.

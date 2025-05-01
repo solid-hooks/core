@@ -10,35 +10,35 @@ type EffectiveType = 'slow-2g' | '2g' | '3g' | '4g'
 
 export type NetworkState = {
   /**
-   * the time at which the connection was changed
+   * The time at which the connection was changed
    */
   since?: Date
   /**
-   * whether the device is online
+   * Whether the device is online
    */
   online?: boolean
   /**
-   * the estimated effective round-trip time of the current connection
+   * The estimated effective round-trip time of the current connection
    */
   rtt?: number
   /**
-   * type of connection a device is using to communicate with the network
+   * Type of connection a device is using to communicate with the network
    */
   type?: NetworkType
   /**
-   * true if the user has set a reduced data usage option on the user agent
+   * True if the user has set a reduced data usage option on the user agent
    */
   saveData?: boolean
   /**
-   * the estimated effective bandwidth (Mb/s)
+   * The estimated effective bandwidth (Mb/s)
    */
   downlink?: number
   /**
-   * maximum downlink speed (Mb/s)
+   * Maximum downlink speed (Mb/s)
    */
   downlinkMax?: number
   /**
-   * the effective type of the connection
+   * The effective type of the connection
    */
   effectiveType?: EffectiveType
 }

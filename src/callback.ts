@@ -4,7 +4,7 @@ import type { Owner } from 'solid-js'
 import { getOwner, runWithOwner } from 'solid-js'
 
 /**
- * create callback with `runWithOwner`, auto get current owner
+ * Create callback with `runWithOwner`, auto get current owner
  * @param callback callback function
  * @param owner owner that run with
  * @example

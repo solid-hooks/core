@@ -22,7 +22,7 @@ type App = {
   ) => App
 
   /**
-   * merges all the Providers and then uses the `render` function
+   * Merges all the Providers and then uses the `render` function
    * to mount the application.
    *
    * @param domElement HTML Element or selector

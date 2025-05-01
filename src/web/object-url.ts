@@ -12,7 +12,7 @@ export type ObjectURLSignal = [
 ]
 
 /**
- * convert `blob` / `File` / `MediaSource` to signal URL, auto revoke on cleanup
+ * Convert `Blob` / `File` / `MediaSource` to signal URL, auto revoke on cleanup
  * @param value initial value
  * @param options signal options
  * @example
@@ -27,7 +27,7 @@ export function createObjectURL(
   options?: SignalOptions<string>
 ): ObjectURLSignal
 /**
- * convert `ArrayBuffer` / `ArrayBufferView` / `string` to signal URL, auto revoke on cleanup
+ * Convert `ArrayBuffer` / `ArrayBufferView` / `string` to signal URL, auto revoke on cleanup
  * @param value initial value
  * @param options signal options
  * @example

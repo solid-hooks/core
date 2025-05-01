@@ -36,16 +36,16 @@ type ColorMode = 'auto' | 'light' | 'dark'
 
 export type UseColorModeOptions = {
   /**
-   * initial color mode
+   * Initial color mode
    * @default 'auto'
    */
   initialMode?: ColorMode
   /**
-   * auto change color scheme
+   * Auto change color scheme
    */
   colorScheme?: boolean
   /**
-   * css selector for the target element applying to
+   * CSS selector for the target element applying to
    * @default 'html'
    */
   selector?: MaybeAccessor<string>
@@ -55,11 +55,11 @@ export type UseColorModeOptions = {
    */
   attribute?: string
   /**
-   * custom handler for handle the theme change.
+   * Custom handler for handle the theme change.
    */
   onChanged?: (isDark: boolean) => void
   /**
-   * disable transition on switch
+   * Disable transition on switch
    * @see https://paco.me/writing/disable-theme-transitions
    * @default true
    */
@@ -75,9 +75,9 @@ type UseColorModeReturn = [
 const disableTransitionStyle = '*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}'
 
 /**
- * auto color mode with attribute toggle
+ * Auto color mode with attribute toggle
  *
- * disable transition by default
+ * Disable transition by default
  * @example
  * ```tsx
  * import { useColorMode } from '@solid-hooks/core/web'

@@ -133,7 +133,7 @@ function baseWatch<T>(
 }
 
 /**
- * filterable and pausable wrapper for {@link createEffect}, defer by default
+ * Filterable and pausable wrapper for {@link createEffect}, defer by default
  * @param deps Accessor that need to be watch
  * @param fn {@link WatchCallback callback function}
  * @param options watch options
@@ -167,7 +167,7 @@ export function watch<T>(
 }
 
 /**
- * filterable and pausable wrapper for {@link createComputed}, defer by default
+ * Filterable and pausable wrapper for {@link createComputed}, defer by default
  * @param deps Accessor that need to be watch
  * @param fn {@link WatchCallback callback function}
  * @param options watch options
@@ -181,7 +181,7 @@ export function watchImmediate<T>(
 }
 
 /**
- * filterable and pausable wrapper for {@link createRenderEffect}, defer by default
+ * Filterable and pausable wrapper for {@link createRenderEffect}, defer by default
  * @param deps Accessor that need to be watch
  * @param fn {@link WatchCallback callback function}
  * @param options watch options
@@ -195,7 +195,7 @@ export function watchRendered<T>(
 }
 
 /**
- * wrapper for {@link createReaction}
+ * Wrapper for {@link createReaction}
  * @param deps Accessor that need to be watch
  * @param fn {@link WatchOnceCallback callback function}
  * @param options watch options

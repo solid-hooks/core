@@ -52,38 +52,38 @@ export type WebWorkerStatus =
 
 export type UseWebWorkerOptions = {
   /**
-   * milliseconds before killing the worker
+   * Milliseconds before killing the worker
    *
    * @default undefined
    */
   timeout?: number
   /**
-   * external dependencies array running the worker
+   * External dependencies array running the worker
    */
   deps?: string[]
   /**
-   * local funtions will be use in the worker
+   * Local funtions will be use in the worker
    */
   func?: AnyFunction[]
 }
 
 export type UseWebWorkerReturn<T extends AnyFunction> = [
   /**
-   * function to run in worker
+   * Function to run in worker
    */
   run: (...args: Parameters<T>) => Promise<ReturnType<T>>,
   /**
-   * status of worker, possible values: {@link WebWorkerStatus}
+   * Status of worker, possible values: {@link WebWorkerStatus}
    */
   status: Accessor<WebWorkerStatus>,
   /**
-   * manually terminate the worker
+   * Manually terminate the worker
    */
   terminate: Accessor<void>,
 ]
 
 /**
- * run a function in a web worker, support local functions or external dependencies
+ * Run a function in a web worker, support local functions or external dependencies
  * @param fn function to run in worker
  * @param options options
  * @example

@@ -35,7 +35,7 @@ export type defineEmits<T extends Record<string, any>> = Add$Keys<{
 }>
 
 /**
- * like `defineEmits` in `Vue`, emit event from child component
+ * Emit event to parent component like `defineEmits` in `Vue`
  * @param props conponents props
  * @example
  * ```tsx

@@ -9,7 +9,7 @@ export type ContextProvider<T, Props extends Record<string, unknown> = {}> = [
 ]
 
 /**
- * create Provider and useContext,
+ * Create Provider and useContext,
  * if call useContext outside Provider, throw `Error` when DEV
  *
  * @param setup setup context function
@@ -48,7 +48,7 @@ export function createContextProvider<T, Props extends Record<string, unknown>>(
   setup: (props: Props) => T,
 ): ContextProvider<T, Props>
 /**
- * create Provider and useContext with initial value
+ * Create Provider and useContext with initial value
  *
  * @param setup setup context function
  * @param initialValue fallback value when context is not provided

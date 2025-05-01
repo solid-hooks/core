@@ -3,7 +3,7 @@ import type { Accessor } from 'solid-js'
 import { createEffect, createSignal } from 'solid-js'
 
 /**
- * create toggle signal
+ * Create toggle signal
  * @param initialValue initial value
  * @param onChange on change callback
  * @example

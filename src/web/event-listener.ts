@@ -1,11 +1,7 @@
 import type { EventListenerOptions, EventMapOf, TargetWithEventMap } from '@solid-primitives/event-listener'
 import type { Many, MaybeAccessor } from '@solid-primitives/utils'
 
-import {
-
-  makeEventListener,
-
-} from '@solid-primitives/event-listener'
+import { makeEventListener } from '@solid-primitives/event-listener'
 import { access, asArray, createCallbackStack } from '@solid-primitives/utils'
 import { createEffect, createRenderEffect, onCleanup } from 'solid-js'
 
@@ -16,7 +12,7 @@ export {
 } from '@solid-primitives/event-listener'
 
 /**
- * listen event on `window`, auto cleanup
+ * Listen event on `window`, auto cleanup
  *
  * return cleanup function
  */
@@ -32,7 +28,7 @@ export function useWindowListener<
 }
 
 /**
- * listen event on `document`, auto cleanup
+ * Listen event on `document`, auto cleanup
  *
  * return cleanup function
  */

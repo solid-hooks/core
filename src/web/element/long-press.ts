@@ -21,15 +21,15 @@ export type UseLongPressOptions = {
    */
   distanceThreshold?: number | false
   /**
-   * listener options
+   * Listener options
    */
   modifiers?: EventListenerOptions
   /**
-   * callback when the ref element is pressed.
+   * Callback when the ref element is pressed.
    */
   onPressed?: (ev: PointerEvent) => void
   /**
-   * callback when the ref element is released.
+   * Callback when the ref element is released.
    * @param duration how long the element was pressed in ms
    * @param distance distance from the pointerdown position
    * @param isLongPress whether the action was a long press or not
@@ -38,7 +38,7 @@ export type UseLongPressOptions = {
 }
 
 /**
- * check if element is long pressed
+ * State of whether element is long pressed
  * @param ref element
  * @param options listen options
  */

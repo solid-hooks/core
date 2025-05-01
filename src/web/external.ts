@@ -10,7 +10,7 @@ export type ScriptOptions = ComponentProps<'script'>
 export type StyleOptions = ComponentProps<'style'>
 
 /**
- * load js
+ * Load js
  * @param type script tag
  * @param content js content
  * @param options other options
@@ -28,7 +28,7 @@ export function useExternal(
   options?: ScriptOptions,
 ): [element: HTMLScriptElement, cleanup: VoidFunction]
 /**
- * load css
+ * Load css
  * @param type style tag
  * @param content css content
  * @param options other options

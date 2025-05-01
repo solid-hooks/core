@@ -6,12 +6,12 @@ import { createSignal } from 'solid-js'
 
 export type UseCopyOptions = {
   /**
-   * duration of copied state
+   * Duration of copied state
    * @default 1500
    */
   copiedDuration?: number
   /**
-   * whether force to use `document.execCommand('copy')` to copy
+   * Whether force to use `document.execCommand('copy')` to copy
    */
   legacy?: boolean
 }

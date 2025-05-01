@@ -7,18 +7,18 @@ import { useEventListenerStack } from '../event-listener'
 
 export type UseHoverOptions = {
   /**
-   * listener options,
+   * Listener options,
    * @default { passive: true }
    */
   modifiers?: AddEventListenerOptions
   /**
-   * callback when the ref element is hovered
+   * Callback when the ref element is hovered
    */
   onHover?: (isHovered: boolean) => void
 }
 
 /**
- * check if element is hovered
+ * State of whether element is hovered
  * @param ref element
  * @param options listen options
  */

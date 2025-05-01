@@ -3,11 +3,11 @@ import type { Accessor, Setter, Signal } from 'solid-js'
 import { createEffect, createSignal, onCleanup } from 'solid-js'
 
 /**
- * signal that indicate document's title
+ * Signal that indicate document's title
  */
 export function useTitle(): Signal<string>
 /**
- * reactive document title with external signal
+ * Reactive document title with external signal
  * @param title external signal
  */
 export function useTitle(title: Accessor<string>): void

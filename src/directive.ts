@@ -1,7 +1,7 @@
 export type DirectiveFunction<Args extends unknown[] = []> = (ref: globalThis.Element, ...args: Args) => void
 
 /**
- * another way to create directive
+ * Another way to create directive
  * @example
  * import { createDirective } from '@solid-hooks/core'
  * import { type Accessor, type Setter, createRenderEffect, createSignal } from 'solid-js'

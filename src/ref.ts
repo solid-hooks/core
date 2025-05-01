@@ -6,7 +6,7 @@ import { createSignal } from 'solid-js'
 export type RefSignal<T, Set = Setter<T>> = Accessor<T> & Set
 
 /**
- * read / write signal in one function
+ * Read / Write signal in one function
  * @example
  * ```tsx
  * import { onMounted } from 'solid-js'
