@@ -12,8 +12,8 @@ export const [TestProvider, useTestContext] = createContextProvider((param: { in
   }
 })
 
-function Child(props: { data: number }) {
-  const [pick] = useProps(props, ['data'])
+function Child(props: { data?: number, countFromProps: number }) {
+  const [pick] = useProps(props, ['data', 'countFromProps'], { data: -1 })
   const { count, increment } = useTestContext()
   return (
     <>
@@ -21,7 +21,10 @@ function Child(props: { data: number }) {
         context: {count()}
       </button>
       <div>
-        props: {pick().data + ''}
+        useProps: {pick().data + ''}
+      </div>
+      <div>
+        other value from useProps: {pick().countFromProps + ''}
       </div>
     </>
   )
@@ -34,8 +37,8 @@ export function TestContextProvider() {
   }, () => { })
   return (
     <TestProvider initial={0}>
-      <button onClick={() => data(val => val * 2)}>click to test props</button>
-      <Child data={data()} />
+      <button onClick={() => data(val => val + 1)}>click to test props</button>
+      <Child data={data() % 2 === 0 ? data() : undefined} countFromProps={useTestContext().count()} />
     </TestProvider>
   )
 }

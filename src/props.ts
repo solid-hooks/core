@@ -21,17 +21,17 @@ export function useProps<T extends object, K extends keyof T>(
   props: T,
   keys: K[],
   defaults: Partial<Pick<T, K>> = {},
-): [picked: Accessor<Pick<T, K>>, rest: Accessor<Omit<T, K>>] {
+): [pick: Accessor<Pick<T, K>>, rest: Accessor<Omit<T, K>>] {
+  const pick: Pick<T, K> = {} as Pick<T, K>
+  const rest: Omit<T, K> = {} as Omit<T, K>
   const set = new Set(keys)
-  const omittedKeys = Object.keys(props)
-    .filter(k => !set.has(k as any)) as Exclude<keyof T, K>[]
-
-  return [
-    createMemo(
-      () => Object.fromEntries(keys.map(k => [k, (k in props ? props : defaults)[k]])) as Pick<T, K>,
-    ),
-    createMemo(
-      () => Object.fromEntries(omittedKeys.map(k => [k, props[k]])) as Omit<T, K>,
-    ),
-  ]
+  for (const key of keys) {
+    const memo = createMemo(() => (/* console.log(key), */ props[key] ?? defaults[key]))
+    Object.defineProperty(
+      set.has(key) ? pick : rest,
+      key,
+      { get: memo, enumerable: true },
+    )
+  }
+  return [() => pick, () => rest]
 }
