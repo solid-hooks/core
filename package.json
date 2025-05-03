@@ -33,10 +33,10 @@
     "dist"
   ],
   "scripts": {
-    "dev": "bunx vite serve dev",
+    "dev": "bun --bun vite serve dev",
     "lint": "tsc --noEmit && eslint --max-warnings 0 --fix",
     "format": "eslint . --fix",
-    "build": "tsup",
+    "build": "bun --bun tsup",
     "release": "bun run lint && bun run test && bun run build && bumpp --all && npm publish",
     "test": "vitest --run"
   },
