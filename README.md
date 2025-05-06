@@ -286,6 +286,19 @@ const handleClick = useCallback(() => {
 })
 setTimeOut(handleClick, 100)
 ```
+### `useProps`
+Splits props object into two parts based on given keys.
+
+```ts
+import { accessProps, useProps } from '@solid-hooks/core'
+
+function TestComponent(props: { name: string, age: number, role?: 'admin' | 'user' }) {
+  const [picked, rest] = useProps(props, ['name', 'age'], { role: 'user' })
+  picked.name() // 'John'
+  rest.role() // 'user'
+  accessProps(picked) // { name: 'John', age: 18 }
+}
+```
 
 ## `@solid-hooks/core/web`
 
