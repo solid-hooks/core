@@ -1,4 +1,3 @@
-import type { Prettify } from '@subframe7536/type-utils'
 import type { Accessor } from 'solid-js'
 
 import { createMemo } from 'solid-js'
