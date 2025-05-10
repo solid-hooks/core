@@ -15,7 +15,7 @@ import {
   untrack,
 } from 'solid-js'
 
-export type WatchOptions = Prettify<
+export interface WatchOptions extends Prettify<
   Omit<BaseWatchOptions, 'effectFn'> & {
     /**
      * {@link OnOptions}
@@ -23,7 +23,7 @@ export type WatchOptions = Prettify<
      */
     defer?: boolean
   }
->
+> {}
 export type Cleanupable = void | VoidFunction
 
 /**
@@ -46,7 +46,7 @@ export type WatchCallback<S> = (
   callTimes: number
 ) => Cleanupable
 
-type BaseWatchOptions = OnOptions & {
+interface BaseWatchOptions extends OnOptions {
   /**
    * function for filter watcher, like `debounce`, `throttle`, etc.
    * @param fn watcher
@@ -61,7 +61,7 @@ type BaseWatchOptions = OnOptions & {
   count?: number
 }
 
-type WatchReturn = {
+interface WatchReturn {
   /**
    * pause watch
    */

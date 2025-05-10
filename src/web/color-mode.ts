@@ -34,7 +34,7 @@ export function usePrefersDark(): Accessor<boolean> {
 
 type ColorMode = 'auto' | 'light' | 'dark'
 
-export type UseColorModeOptions = {
+export interface UseColorModeOptions {
   /**
    * Initial color mode
    * @default 'auto'

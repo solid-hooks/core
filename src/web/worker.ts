@@ -50,7 +50,7 @@ export type WebWorkerStatus =
   | 'ERROR'
   | 'TIMEOUT_EXPIRED'
 
-export type UseWebWorkerOptions = {
+export interface UseWebWorkerOptions {
   /**
    * Milliseconds before killing the worker
    *

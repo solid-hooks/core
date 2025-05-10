@@ -8,7 +8,7 @@ type RequiredKeysOfObject<T> = StringKeys<RemoveNeverProps<{
   [K in keyof T]-?: {} extends Pick<T, K> ? never : K
 }>>
 
-type App = {
+interface SolidApp {
   /**
    * Add a Provider to the app. The list of provider will be merged
    * at mount time.
@@ -19,7 +19,7 @@ type App = {
   use: <Props extends Record<string, any>>(
     provider: FlowComponent<Props>,
     ...props: RequiredKeysOfObject<Props> extends never ? [props?: Props] : [props: Props]
-  ) => App
+  ) => SolidApp
 
   /**
    * Merges all the Providers and then uses the `render` function
@@ -85,10 +85,10 @@ export function mergeProviders(
 export function createApp<AppProps extends Record<string, any> = {}>(
   app: Component<AppProps>,
   ...appProps: RequiredKeysOfObject<AppProps> extends never ? [appProps?: AppProps] : [appProps: AppProps]
-): App {
+): SolidApp {
   const providers: Provider<any>[] = []
 
-  const _app: App = {
+  const _app: SolidApp = {
     use: (provider, ...props) => {
       providers.push([provider, props[0]])
       return _app

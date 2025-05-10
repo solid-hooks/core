@@ -7,7 +7,7 @@ import { createSignal } from 'solid-js'
 
 import { useEventListenerStack } from '../event-listener'
 
-export type UseLongPressOptions = {
+export interface UseLongPressOptions {
   /**
    * Time in ms till `longpress` gets called
    *

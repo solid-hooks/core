@@ -8,7 +8,7 @@ type NetworkType = 'bluetooth' | 'cellular' | 'ethernet' | 'none' | 'wifi' | 'wi
 
 type EffectiveType = 'slow-2g' | '2g' | '3g' | '4g'
 
-export type NetworkState = {
+export interface NetworkState {
   /**
    * The time at which the connection was changed
    */

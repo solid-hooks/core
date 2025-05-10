@@ -10,7 +10,7 @@ export const isIOS = isClient && ((/iP(?:ad|hone|od)/.test(globalThis.navigator.
   // https://github.com/vueuse/vueuse/issues/3577
   || (globalThis.navigator.maxTouchPoints > 2 && /iPad|Macintosh/.test(globalThis.navigator.userAgent)))
 
-export type UseClickOutsideOptions = {
+export interface UseClickOutsideOptions {
   /**
    * Listener options
    * @default { passive: true }

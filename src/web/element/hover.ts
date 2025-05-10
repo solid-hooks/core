@@ -5,7 +5,7 @@ import { createSignal } from 'solid-js'
 
 import { useEventListenerStack } from '../event-listener'
 
-export type UseHoverOptions = {
+export interface UseHoverOptions {
   /**
    * Listener options,
    * @default { passive: true }
