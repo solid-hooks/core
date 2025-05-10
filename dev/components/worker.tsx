@@ -17,7 +17,7 @@ export default function TestWorker() {
 
   const isRunning = createMemo(() => status() === 'RUNNING')
 
-  const { start } = useIdleCallback(() => {
+  const [start] = useIdleCallback(() => {
     setTimeStamp(Date.now())
   })
   start()

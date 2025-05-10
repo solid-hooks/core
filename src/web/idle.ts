@@ -14,7 +14,7 @@ import { createSignal } from 'solid-js'
 export function useIdleCallback(
   fn: IdleRequestCallback,
   options?: IdleRequestOptions,
-): { running: Accessor<boolean>, start: VoidFunction, stop: VoidFunction } {
+): [running: Accessor<boolean>, start: VoidFunction, stop: VoidFunction] {
   const runIdleWithFallback = globalThis.requestIdleCallback || ((handler) => {
     let startTime = Date.now()
 
@@ -48,5 +48,5 @@ export function useIdleCallback(
     cancelIdleWithFallback(requestID)
   })
 
-  return { running, start, stop }
+  return [running, start, stop]
 }
