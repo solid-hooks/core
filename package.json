@@ -50,20 +50,20 @@
   "dependencies": {
     "@solid-primitives/event-listener": "^2.4.1",
     "@solid-primitives/utils": "^6.3.1",
-    "@subframe7536/type-utils": "^0.1.6"
+    "@subframe7536/type-utils": "^0.2.0"
   },
   "devDependencies": {
     "@subframe7536/eslint-config": "^1.2.4",
-    "@vitest/eslint-plugin": "^1.1.43",
+    "@vitest/eslint-plugin": "^1.1.44",
     "bumpp": "^10.1.0",
-    "bun-types": "^1.2.11",
-    "eslint": "^9.25.1",
+    "bun-types": "^1.2.12",
+    "eslint": "^9.26.0",
     "eslint-plugin-solid": "^0.14.5",
     "jsdom": "^26.1.0",
     "solid-js": "^1.9.6",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
-    "vite": "^6.3.4",
+    "vite": "^6.3.5",
     "vite-plugin-solid": "^2.11.6",
     "vitest": "^3.1.2"
   }
