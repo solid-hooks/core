@@ -1,5 +1,4 @@
 export * from './clipboard'
-export * from './cls'
 export * from './color-mode'
 export * from './cssvar'
 export * from './element'
