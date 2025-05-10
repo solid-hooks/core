@@ -1,6 +1,6 @@
 import { catchError } from 'solid-js'
 
-import { accessProps, createContextProvider, createRef, useProps } from '../../src'
+import { createContextProvider, createRef } from '../../src'
 
 export const [TestProvider, useTestContext] = createContextProvider((param: { initial: number }) => {
   const count = createRef(param.initial)
@@ -13,18 +13,14 @@ export const [TestProvider, useTestContext] = createContextProvider((param: { in
 })
 
 function Child(props: { data?: number, countFromProps: number, restValue?: string }) {
-  const [
-    { data, countFromProps },
-    rest,
-  ] = useProps(props, ['data', 'countFromProps'], { data: -1, restValue: 'Optional' })
   const { count, increment } = useTestContext()
   return (
     <>
       <button class="btn" onClick={increment}>
         context: {count()}
       </button>
-      <div {...accessProps(rest)}>
-        useProps: {data() + ''} {countFromProps() + ''}
+      <div>
+        useProps: {props.data + ''} {props.countFromProps + ''}
       </div>
     </>
   )
