@@ -2,12 +2,8 @@ import type { Accessor } from 'solid-js'
 
 import { createMemo } from 'solid-js'
 
-type DefaultValues<T> = {
-  [K in keyof T as (null extends T[K] ? K : never) | (undefined extends T[K] ? K : never)]-?: Exclude<T[K], null | undefined>;
-}
-
-type ParseProps<T> = {
-  [Key in keyof T]-?: Exclude<T[Key], null | undefined>
+type WithDefaults<T, D extends Partial<T>> = Omit<T, keyof D> & {
+  [K in keyof D]: NonNullable<D[K]>
 }
 
 type UsePropsReturn<T extends Record<any, any>, K extends keyof T> = [
@@ -19,11 +15,11 @@ export function useProps<T extends Record<any, any>, K extends keyof T>(
   props: T,
   keys: K[],
 ): UsePropsReturn<T, K>
-export function useProps<T extends Record<any, any>, K extends keyof T, D extends DefaultValues<T>>(
+export function useProps<T extends Record<any, any>, K extends keyof T, D extends Partial<T>>(
   props: T,
   keys: K[],
   defaults: D,
-): UsePropsReturn<ParseProps<T>, K>
+): UsePropsReturn<WithDefaults<T, D>, K>
 /**
  * Splits props object into two parts based on given keys.
  * @param props - The original props object to split
@@ -45,7 +41,7 @@ export function useProps<T extends Record<any, any>, K extends keyof T, D extend
 export function useProps<T extends Record<any, any>, K extends keyof T>(
   props: T,
   keys: K[],
-  defaults?: DefaultValues<T>,
+  defaults?: Partial<T>,
 ): any {
   const pick = {}
   const rest = {}
