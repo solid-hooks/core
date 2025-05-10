@@ -10,16 +10,16 @@ type ParseProps<T> = {
   [Key in keyof T]-?: Exclude<T[Key], null | undefined>
 }
 
-type UsePropsReturn<T extends Record<string, unknown>, K extends keyof T> = [
+type UsePropsReturn<T extends Record<any, any>, K extends keyof T> = [
   pick: { [Key in K]: Accessor<T[Key]> },
   rest: { [Key in keyof Omit<T, K>]: Accessor<T[Key]> },
 ]
 
-export function useProps<T extends Record<string, unknown>, K extends keyof T>(
+export function useProps<T extends Record<any, any>, K extends keyof T>(
   props: T,
   keys: K[],
 ): UsePropsReturn<T, K>
-export function useProps<T extends Record<string, unknown>, K extends keyof T, D extends DefaultValues<T>>(
+export function useProps<T extends Record<any, any>, K extends keyof T, D extends DefaultValues<T>>(
   props: T,
   keys: K[],
   defaults: D,
@@ -42,7 +42,7 @@ export function useProps<T extends Record<string, unknown>, K extends keyof T, D
  * }
  * ```
  */
-export function useProps<T extends Record<string, unknown>, K extends keyof T>(
+export function useProps<T extends Record<any, any>, K extends keyof T>(
   props: T,
   keys: K[],
   defaults?: DefaultValues<T>,
@@ -57,7 +57,7 @@ export function useProps<T extends Record<string, unknown>, K extends keyof T>(
   return [pick, rest]
 }
 
-export function accessProps<T extends Record<string, Accessor<unknown>>>(
+export function accessProps<T extends Record<any, Accessor<any>>>(
   parsedProps: T,
 ): { [K in keyof T]: ReturnType<T[K]> } {
   return Object.fromEntries(Object.entries(parsedProps).map(([k, v]) => [k, v()])) as any
