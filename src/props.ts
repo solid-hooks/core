@@ -1,14 +1,15 @@
+import type { MakePropOptional, Prettify, RemoveNeverProps } from '@subframe7536/type-utils'
 import type { Accessor } from 'solid-js'
 
 import { createMemo } from 'solid-js'
 
-type WithDefaults<T, D extends Partial<T>> = Omit<T, keyof D> & {
-  [K in keyof D]: NonNullable<D[K]>
+type WithDefaults<T, P extends keyof T> = Omit<T, P> & {
+  [K in P]-?: NonNullable<T[K]>
 }
 
 type UsePropsReturn<T extends Record<any, any>, K extends keyof T> = [
-  pick: { [Key in K]-?: Accessor<T[Key]> },
-  rest: { [Key in keyof Omit<T, K>]-?: Accessor<T[Key]> },
+  pick: { [Key in K]: Accessor<T[Key]> },
+  rest: { [Key in keyof Omit<T, K>]: Accessor<T[Key]> },
 ]
 
 export function useProps<T extends Record<any, any>, K extends keyof T>(
@@ -19,7 +20,7 @@ export function useProps<T extends Record<any, any>, K extends keyof T, D extend
   props: T,
   keys: K[],
   defaults: D,
-): UsePropsReturn<WithDefaults<T, D>, K>
+): UsePropsReturn<WithDefaults<T, keyof D>, K>
 /**
  * Splits props object into two parts based on given keys.
  * @param props - The original props object to split
@@ -53,8 +54,18 @@ export function useProps<T extends Record<any, any>, K extends keyof T>(
   return [pick, rest]
 }
 
+type NullableKeys<T> = keyof RemoveNeverProps<{
+  [K in keyof T]: null extends T[K] ? true : undefined extends T[K] ? K : never;
+}>
+
+type AccessPropsReturn<T extends Record<any, Accessor<any>>> = {
+  [K in keyof T]: ReturnType<T[K]>
+} extends infer U
+  ? Prettify<MakePropOptional<U, NullableKeys<U>>>
+  : never
+
 export function accessProps<T extends Record<any, Accessor<any>>>(
   parsedProps: T,
-): { [K in keyof T]: ReturnType<T[K]> } {
+): AccessPropsReturn<T> {
   return Object.fromEntries(Object.entries(parsedProps).map(([k, v]) => [k, v()])) as any
 }
