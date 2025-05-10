@@ -11,8 +11,8 @@ type ParseProps<T> = {
 }
 
 type UsePropsReturn<T extends Record<any, any>, K extends keyof T> = [
-  pick: { [Key in K]: Accessor<T[Key]> },
-  rest: { [Key in keyof Omit<T, K>]: Accessor<T[Key]> },
+  pick: { [Key in K]-?: Accessor<T[Key]> },
+  rest: { [Key in keyof Omit<T, K>]-?: Accessor<T[Key]> },
 ]
 
 export function useProps<T extends Record<any, any>, K extends keyof T>(
